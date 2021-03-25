@@ -1,0 +1,85 @@
+.target-label{
+    color: #20558B;
+    font-size: 16px;
+  }
+  .target-count{
+    color:#FF0000;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .target-count-label{
+    font-size:16px;
+    color:#ff0000;
+  }
+  
+  .wrap-claim-details{
+    background-color: white;
+    border-radius: 8px;
+    position: relative;
+    padding:30px;
+    width: 50%;
+    height: 0px;
+    overflow: hidden;
+    visibility: hidden;
+    transition: all 0.5s ease;
+    &.enabled {
+        height: 100%;
+        width: 70%;
+        visibility: visible;
+        overflow: hidden;
+    }
+    &.w-details {
+        height: 100%;
+        width: 100%;
+        visibility: visible;
+        overflow: hidden;
+    }
+  }
+  .claim-id-head{
+    color:#20557F;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+    &.no-hover {
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+  .claim-label{
+    font-size: 14px;
+    color: #9FA2B4;
+  }
+  .claim-value{
+    font-size: 16px;
+    color: #323C47;
+  }
+  .route{
+    color: #C5B200;
+    border-color: #C5B200;
+  }
+  .route:hover{
+    color: white;
+    background-color: #C5B200;
+  }
+  
+  .pend{
+    color: #FF5C5D;
+    border-color: #FF5C5D;
+  }
+  .pend:hover{
+    color:white;
+    background-color: #FF5C5D;
+  }
+  
+  .complete{
+    color: #00B33D;
+    border-color: #00B33D;
+  }
+  .complete:hover{
+    color: white;
+    background-color: #00B33D;
+  }

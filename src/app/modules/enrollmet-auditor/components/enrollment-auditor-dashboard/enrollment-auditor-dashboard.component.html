@@ -1,0 +1,98 @@
+<div class="tab-wrapper bottom-border mt-60">
+  <div class="tab-container">
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab1"
+      class="tab-menu-radio"
+      checked
+      #tab1
+    />
+    <label for="tab1" class="tab-menu px-4">Audit Dashboard</label>
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab2"
+      class="tab-menu-radio"
+      #tab2
+    />
+    <label for="tab2" class="tab-menu px-4">Audit Trend Dashboard</label>
+  </div>
+</div>
+
+<ng-container *ngIf="tab1.checked">
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="mt-29">
+        <app-audit-summary-by-audit-status
+          #auditsumm
+        ></app-audit-summary-by-audit-status>
+      </div>
+    </div>
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="mt-29">
+        <app-audited-count-by-work-category
+          #auditcountwrkcat
+        ></app-audited-count-by-work-category>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Rebuttal Status</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="rebuttalsts.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-rebuttal-status #rebuttalsts></app-rebuttal-status>
+      </div>
+    </div>
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">My Hourly Productivity</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="hrlyprod.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-my-hourly-productivity #hrlyprod></app-my-hourly-productivity>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Audit Status By Specialist</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="auditstsspl.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-auditor-audit-status-by-specialist
+          #auditstsspl
+        ></app-auditor-audit-status-by-specialist>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="tab2.checked">
+  <app-audit-trend-dashboard></app-audit-trend-dashboard>
+</ng-container>

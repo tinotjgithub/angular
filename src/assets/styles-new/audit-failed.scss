@@ -1,0 +1,536 @@
+
+/*---------------------Accordian------------------*/
+
+.tabs {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 4px -2px rgba(0, 0, 0, 0.5);
+  }
+   
+  .tab {
+    width: 100%;
+    color: white;
+    overflow: hidden;
+    padding: 15px 30px;
+    background-color: white;
+  }
+  .tab-label {
+    display: -webkit-box;
+    display: flex;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .tab-first-content{
+    background-color: white;
+  }
+  .rebuttal-style{
+    color:#FF0000;
+  }
+  .tab-content {
+    max-height: 0;
+    padding: 0 1em;
+    color: #2c3e50;
+    background: white;
+    -webkit-transition: all .35s;
+    transition: all .35s;
+  }
+  
+  /*---------------------Accordian Ends-----------------*/
+
+  
+.wrap-claim-details{
+    background-color: white;
+    border-radius: 8px;
+    position: relative;
+    padding:30px;
+    width: 100%;
+  }
+  .claim-id-head{
+    color:#20557F;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .claim-label{
+    font-size: 14px;
+    color: #9FA2B4;
+  }
+  .claim-value{
+    font-size: 16px;
+    color: #323C47;
+  }
+  input.claim-value {
+    opacity: 1 !important;
+  }
+  .pend{
+    color: #FF5C5D;
+    border-color: #FF5C5D;
+  }
+  .pend:hover{
+    color:white;
+    background-color: #FF5C5D;
+  }
+  
+  .complete{
+    color: #00B33D;
+    border-color: #00B33D;
+  }
+  .complete:hover{
+    color: white;
+    background-color: #00B33D;
+  }
+  .route{
+    color: #20557F;
+    border-color:  #20557F;
+  }
+  .route:hover{
+    color:white;
+    background-color: #20557f;
+  }
+  
+  /*Aditor Review*/
+  .left-content{
+    width:60%;
+  }
+  .wrap-auditor-review{
+    background-color: white;
+    border-radius: 8px;
+    position: relative;
+    padding:30px;
+    height: fit-content;
+  }
+  .wrap-rebuttal-accept{
+    width:40%;
+    background-color: white;
+    border-radius: 8px;
+    position: relative;
+    padding:30px;
+    height: fit-content;
+  }
+  .wrap-lead-review, .wrap-manager-review{
+    width:50%;
+    background-color: white;
+    border-radius: 8px;
+    position: relative;
+    padding:15px;
+    overflow: hidden;
+  }
+  .previous-comment{
+    margin-top: 60px;
+  }
+  
+  /*Auditor Review Ends*/
+  
+  /*vertical timeline starts*/
+ol {
+  list-style-type: none;
+
+  li {
+    position: relative;
+    margin: 0;
+    padding-bottom: 30px;
+    padding-left: 160px;
+    padding-right: 30px;
+    font-size: 12px;
+    &.level::after {
+      display: none;
+    }
+  }
+  
+  li:before {
+    content: '';
+    background-color: #252733;
+    position: absolute;
+    bottom: 0;
+    top: 2px;
+    left: 137px;
+    width: 1px;
+  }
+  li:last-child::before {
+    content: '';
+    background-color: transparent;
+  }
+  
+  
+  li:after {
+    content: '';
+      position: absolute;
+      left: 125px;
+      top: -3px;
+      height: 24px;
+      width: 24px;
+      background-color: white;
+      border: 1px solid #20558B;
+      border-radius: 15px;
+  }
+}
+.legend-list {
+  display: flex;
+  margin-top: 15px;
+  li {
+    font-size: 12px;
+    position: relative;
+    padding: 0;
+    padding-left: 30px;
+    margin-right: 12px;
+    list-style: none;
+    &::before {
+      display: none;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: -3px;
+      height: 24px;
+      width: 24px;
+      background-color: white;
+      border: 1px solid #20558B;
+      border-radius: 15px;
+    }
+  }
+}
+li.manager::after{
+  background-image: url('src/assets/images-new/manager-tl.png');
+  background-size: cover;
+  border: 1px solid green;
+}
+.lead {
+  .wrap-attachment {
+    font-size: 12px;
+  }
+}
+li.lead::after{
+  background-image: url('src/assets/images-new/lead-tl.png');
+  background-size: cover;
+  border: 1px solid #F3B002;
+}
+li.auditor::after{
+  background-image: url('src/assets/images-new/auditor-tl.png');
+  background-size: cover;
+  border: 1px solid #FF5C5D;
+}
+li.examiner::after{
+  background-image: url('src/assets/images-new/examiner-tl.png');
+  background-size: cover;
+  border: 1px solid #3394CB;
+}
+li.wrap-rebuttal-level{
+  padding-bottom: 60px;
+}
+li.wrap-rebuttal-level::after{
+  content: '';
+  position: relative;
+  height: 24px;
+  width: 24px;
+  background-color: transparent;
+  border: transparent;
+  border-radius: 15px;
+}
+/* li:first-child::after {
+  content: '';
+  position: relative;
+  top:0px;
+  height: 24px;
+  width: 24px;
+  background-color: transparent;
+  border: transparent;
+  border-radius: 15px;
+} */
+.wrap-attachment{
+  width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+.attachment-comment{
+  color:#323C47;
+  font-size: 12px;
+  text-align: justify; 
+}
+.new{
+  font-weight: 600;
+}
+.timeline-date{
+  position: absolute;
+  left:0px;
+  top:3px;
+  text-align: right;
+  width:120px
+}
+.level-wrapper {
+  position: absolute;
+  top: -15px;
+  left: 100px;
+  border: 10px solid white;
+}
+.tl-rebutal-level{
+  background-color: red;
+  font-size: 12px;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 50px;
+  width: fit-content;
+}
+.tl-role-name{
+  color:#20558B;
+  font-size: 14px;
+  font-weight: 600;
+}
+.attachment-label{
+  color:#323C47;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.attachment-label:hover{
+  color:#20558B;
+  font-size: 12px;
+  text-decoration: underline;
+}
+/*vertical timeline end*/
+/*horizontal timeline starts*/
+.h-timeline{
+  overflow-x: auto;
+}
+.h-timeline li{
+  min-width:350px;
+  padding-left: 0px;
+  padding-bottom: 30px;
+  padding-top: 50px;
+}
+
+.h-timeline li:before {
+  content: '';
+  background-color: #252733;
+  position: absolute;
+  bottom: 0;
+  top: 30px;
+  left: 0px;
+  width: 100%;
+  height: 1px;
+}
+.h-timeline .timeline-date {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  text-align: left;
+  width: 45px;
+}
+.h-timeline li:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 22px;
+  height: 15px;
+  width: 15px;
+  background-color: white;
+  border-radius: 15px;
+  border:1px solid #20557f
+}
+.h-timeline li:first-child::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 22px;
+  height: 15px;
+  width: 15px;
+  background-color: #20557f;
+  border-radius: 15px;
+}
+.h-timeline li:last-child::before {
+  width: 1px;
+  height: 1px;
+}
+
+.h-timeline::-webkit-scrollbar {
+  height:7px;
+}
+ 
+.h-timeline::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+ 
+.h-timeline::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+.w-150 {
+  width: 150px;
+}
+
+.wrap-workflow{
+  padding-top: 30px;
+  height: 100%;
+  max-height: 600px;
+  overflow-y: scroll;
+}
+  
+.attachment-comment-head{
+  color: #20557f;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*horizontal timeline ends*/
+  .workflow {
+    .stage {
+      height: 70px;
+      max-width: 250px;
+      min-width: 150px;
+      &.claimslead {
+        @extend .card-yellow;
+        .bg-img {
+          background-image: url('src/assets/images-new/lead.png');
+          background-size: cover;
+        }
+      }
+      &.enrollmentlead {
+        @extend .card-yellow;
+        .bg-img {
+          background-image: url('src/assets/images-new/lead.png');
+          background-size: cover;
+        }
+      }
+      &.manager {
+        @extend .card-green;
+        .bg-img {
+          background-image: url('src/assets/images-new/manager.png');
+          background-size: cover;
+        }
+      }
+      &.enrollmentmanager {
+        @extend .card-green;
+        .bg-img {
+          background-image: url('src/assets/images-new/manager.png');
+          background-size: cover;
+        }
+      }
+      &.claimsauditor {
+        @extend .card-red;
+        .bg-img {
+          background-image: url('src/assets/images-new/auditor.png');
+          background-size: cover;
+        }
+      }
+      &.enrollmentauditor {
+        @extend .card-red;
+        .bg-img {
+          background-image: url('src/assets/images-new/auditor.png');
+          background-size: cover;
+        }
+      }
+      .card-title-examiner {
+        line-height: 17px;
+      }
+      &:not(:last-of-type) {
+        margin-right: 30px;
+      }
+    }
+    .stage-connector {
+      position: relative;
+      margin-right: 30px;
+      max-width: 500px;
+      min-width: 10%;
+      &::before {
+        content: "";
+        position: absolute;
+        background-color: #20557F;
+        left: 0px;
+        height: 15px;
+        top: calc(50% - 7.5px);
+        width: calc(100% - 15px);
+        animation: growarrowbefore 1s ease-in;
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        width: 0px;
+        height: 0px;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-left: 15px solid #20557F;
+        top: calc(50% - 15px);
+        left: calc(100% - 15px);
+        animation: growarrowafter 1s ease-in;
+      }
+    }
+
+    @keyframes growarrowbefore {
+      from {
+        width: 0;
+      }
+      to {
+        width: calc(100% - 15px);
+      }
+    }
+
+    @keyframes growarrowafter {
+      0% {
+        left: 0;
+      }
+      100% {
+        left: calc(100% - 15px);
+      }
+    }
+  }
+
+  
+.graph-legend {
+  display: flex;
+  margin-top: 15px;
+  li {
+    font-size: 12px;
+    position: relative;
+    padding: 0;
+    padding-left: 20px;
+    margin-right: 20px;
+    list-style: none;
+    &::before {
+      display: none;
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 2px;
+      height: 15px;
+      width: 15px;
+      background-color: white;
+      border: 1px solid #20558B;
+      border-radius: 15px;
+    }
+
+    &.green {
+      &::after {
+        background-color: #4cc14f;
+        border: 1px solid #4cc14f;
+      }
+    }
+
+    &.blue {
+      &::after {
+        background-color: #00aadf;
+        border: 1px solid #00aadf;
+      }
+    }
+
+    &.red {
+      &::after {
+        background-color: #ff5c5d;
+        border: 1px solid #ff5c5d;
+      }
+    }
+  }
+}
+
+.audit-failed-enrol-grid {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  column-gap: 30px;
+  row-gap: 20px;
+}

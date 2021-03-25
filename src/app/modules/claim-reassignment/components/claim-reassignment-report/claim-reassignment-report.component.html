@@ -1,0 +1,204 @@
+<form [formGroup]="claimReassignmentGroup" id="userList">
+  <div [class.mt-60]="!fromTab">
+    <div class="wrap-report">
+      <div class="section-title d-flex space-between" *ngIf="!fromTab">
+        <div class=" mt-30">Claims Reassignment Report</div>
+      </div>
+      <div class="popup-body">
+        <div class="d-flex pl-30 pr-30 mt-15">
+          <div class="wrap-input100 mr-30 w-25">
+            <span class="label-input100">Reassignment From</span>
+            <p-calendar formControlName="reassignmentStartDate" appendTo="body" [showIcon]="true" dateFormat="mm/dd/yy"
+              yearRange="1970:2099" [monthNavigator]="true" [yearNavigator]="true" [maxDate]="maxDate"
+              (onSelect)="checkToDate()"></p-calendar>
+            <span class="focus-input100"></span>
+            <div class="error-msg" *ngIf="getActiveFrom.touched">
+              <span class="mb-0" *ngIf="getActiveFrom.hasError('required')">
+                Reassignment From Date is required.
+              </span>
+            </div>
+          </div>
+
+          <div class="wrap-input100 mr-30 w-25">
+            <span class="label-input100">Reassignment To</span>
+            <p-calendar formControlName="reassignmentEndDate" appendTo="body" [showIcon]="true" dateFormat="mm/dd/yy"
+              yearRange="1970:2099" [monthNavigator]="true" [maxDate]="maxDate" [yearNavigator]="true"
+              [minDate]="getActiveFrom.value"></p-calendar>
+            <span class="focus-input100"></span>
+            <div class="error-msg" *ngIf="getActiveTo.touched">
+              <span class="mb-0" *ngIf="getActiveTo.hasError('required')">
+                Reassignment To Date is required.
+              </span>
+              <span class="mb-0" *ngIf="getActiveTo.hasError('rangeError')">
+                Date range cannot exceed 6 months.
+              </span>
+            </div>
+          </div>
+          <div class="wrap-input100 mr-30 w-25">
+            <span class="label-input100">Reassigned By</span>
+            <p-multiSelect showTransitionOptions="225ms ease-out" [options]="reassignedByList" #reassignedBySelect
+              appendTo="body" tooltip="Reassigned By" tooltipPosition="bottom" (onChange)="changeReassignedBy()"
+              formControlName="reassignedByNam" [virtualScroll]="true" itemSize="30"
+              defaultLabel="Select Reassigned By"></p-multiSelect>
+            <span class="focus-input100"></span>
+            <div class="error-msg" *ngIf="getClaimReassignmentGroup.touched">
+              <span class="mb-0" *ngIf="getClaimReassignmentGroup.hasError('required')">
+                Reassignment By is required.
+              </span>
+            </div>
+          </div>
+          <div class="d-flex mt-30 pr-30">
+            <div class="solid-btn" (click)="claimReassignmentGroup.invalid ? '' : submit()"
+              [class.disabled]="claimReassignmentGroup.invalid" pTooltip="Generate Report" tooltipPosition="bottom">
+              Generate
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isDataPresent" class="wrap-report mt-30 pb-0">
+      <div class="d-flex mt-30">
+        <div class="mr-auto">
+          <span class="section-title">Reassigned Claims Report</span>
+          <span class="section-title-count" *ngIf="gridData?.length > 0">{{gridData.length}}</span>
+        </div>
+        <div>
+          <div class="outline-btn mr-30" [class.disabled]="!gridData || gridData.length < 1"
+            (click)="!gridData || gridData.length < 1 ? '' : exportExcel()">
+            Export to Excel
+          </div>
+        </div>
+      </div>
+      <div class="w-100 mt-20">
+        <p-table (onFilter)="getFilteredUsers($event)" [responsive]="true" [styleClass]="'td200'"
+          [columns]="cols" [tableStyle]="{ 'table-layout': 'auto' }" #ressignmentTable [value]="gridData"
+          [paginator]="true" [rows]="10" [resizableColumns]="true" [scrollable]="false">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th id="col" *ngFor="let col of columns" [pSortableColumn]="col.field" [pSortableColumnDisabled]="
+                col.field === 'claimId' ||
+                col.field === 'claimType' ||
+                col.field === 'claimStatus' ||
+                col.field === 'receiptDate' ||
+                col.field === 'userGroupName' ||
+                col.field === 'queueName' ||
+                col.field === 'reassignedByName' ||
+                col.field === 'wfmStatus' ||
+                col.field === 'wfmAge' ||
+                col.field === 'reassignedDate' ||
+                col.field === 'reassignedByRole' ||
+                col.field === 'assignedFromName' ||
+                col.field === 'assignedToRole' ||
+                col.field === 'assignedToName' ||
+                col.field === 'reassignmentReason' ||
+                col.field === 'reassignmentComment'
+                  ? true
+                  : false
+              ">
+                {{ col.header }}
+                <p-sortIcon *ngIf="
+                  col.field !== 'claimId' &&
+                  col.field !== 'reassignedByName' &&
+                  col.field !== 'claimType' &&
+                  col.field !== 'claimStatus' &&
+                  col.field !== 'receiptDate' &&
+                  col.field !== 'userGroupName' &&
+                  col.field !== 'queueName' &&
+                  col.field !== 'wfmStatus' &&
+                  col.field !== 'wfmAge' &&
+                  col.field !== 'assignedToName' &&
+                  col.field !== 'reassignedDate' &&
+                  col.field !== 'reassignedByRole' &&
+                  col.field !== 'assignedFromName' &&
+                  col.field !== 'assignedToRole' &&
+                  col.field !== 'reassignmentReason' &&
+                  col.field !== 'reassignmentComment'
+                " [field]="col.field">
+                </p-sortIcon>
+              </th>
+            </tr>
+            <tr>
+              <th id="col" *ngFor="let col of columns" [ngSwitch]="col.field">
+                <div class="wrap-input100 my-auto" *ngSwitchCase="'claimId'">
+                  <input class="input100" type="text"
+                    (input)="ressignmentTable.filter($event.target.value, col.field, col.filterMatchMode)" />
+                  <span class="focus-input100"></span>
+                </div>
+                <div class="wrap-input100 my-auto" *ngSwitchCase="'reassignedDate'">
+                  <input class="input100" type="text"
+                    (input)="ressignmentTable.filter($event.target.value, col.field, col.filterMatchMode)" />
+                  <span class="focus-input100"></span>
+                </div>
+                <div class="wrap-input100 my-auto" *ngSwitchCase="'assignedFromName'">
+                  <input class="input100" type="text"
+                    (input)="ressignmentTable.filter($event.target.value, col.field, col.filterMatchMode)" />
+                  <span class="focus-input100"></span>
+                </div>
+                <div class="wrap-input100 my-auto" *ngSwitchCase="'assignedToRole'">
+                  <input class="input100" type="text"
+                    (input)="ressignmentTable.filter($event.target.value, col.field, col.filterMatchMode)" />
+                  <span class="focus-input100"></span>
+                </div>
+                <div class="wrap-input100 my-auto" *ngSwitchCase="'reassignedByName'">
+                  <input class="input100" type="text"
+                    (input)="ressignmentTable.filter($event.target.value, col.field, col.filterMatchMode)" />
+                  <span class="focus-input100"></span>
+                </div>
+                <div class="wrap-input100 my-auto" *ngSwitchCase="'reassignmentReason'">
+                  <input class="input100" type="text"
+                    (input)="ressignmentTable.filter($event.target.value, col.field, col.filterMatchMode)" />
+                  <span class="focus-input100"></span>
+                </div>
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="cols">
+            <tr [pSelectableRow]="rowData">
+              <td *ngFor="let col of cols">
+                {{ rowData[col.field] }}
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage" let-columns>
+            <tr style="text-align: center">
+              <td [attr.colspan]="columns.length">
+                No records found
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft" let-state>
+            <div class="result-no">
+              {{
+                gridData?.length > 0
+                  ? "Showing " +
+                    (state.first + 1) +
+                    " - " +
+                    ((state.first + state.rows > state.totalRecords
+                      ? state.totalRecords
+                      : state.first + state.rows
+                    ) | number) +
+                    " of " +
+                    state.totalRecords
+                  : "Showing 0 - 0 of 0"
+              }}
+            </div>
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+            <div class="result-no d-flex">
+              <div>Rows per page &nbsp; &nbsp;</div>
+              <select class="input100 result-no" style="width: 50px;" (click)="ressignmentTable.reset()"
+                [(ngModel)]="ressignmentTable.rows" [ngModelOptions]="{standalone: true}">
+                <option>10</option>
+                <option>25</option>
+                <option>50</option>
+              </select>
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</form>
+<app-loader [showSpinner]="showSpinner"></app-loader> 

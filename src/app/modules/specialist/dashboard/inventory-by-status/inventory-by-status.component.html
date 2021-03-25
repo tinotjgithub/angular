@@ -1,0 +1,118 @@
+<form>
+  <div class="d-flex space-between ">
+    <div class="section-label">Inventory By Status</div>
+    <div>
+      <img
+        alt=" "
+        src="./../../../../../assets/images-new/max.png"
+        style="cursor: pointer;"
+        (click)="displayEnlarged = true"
+      />
+    </div>
+  </div>
+  <div class="d-flex" *ngIf="dataStatus?.length > 0">
+    <google-chart
+      #chart
+      class="d-flex justify-content-center w-100"
+      [title]="titleStatus"
+      [type]="typeStatus"
+      [data]="dataStatus"
+      (select)="isDataPresent ? openPopUp($event) : null"
+      [options]="optionsStatus"
+      [height]="heightStatus"
+      [width]="540"
+    ></google-chart>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <div
+    class="d-flex justify-content-center align-items-center"
+    style="height: 250px;"
+    *ngIf="!dataStatus || dataStatus?.length < 1"
+  ></div>
+  <div class="d-flex mt-10">
+    <form [formGroup]="dateForm" class="w-100">
+      <div class="wrap-input100 w-100 mb-0">
+        <div class="label-input100">Completion Date Range</div>
+        <p-calendar
+          appendTo="body"
+          (onClose)="dateForm.valid ? getData() : ''"
+          selectionMode="range"
+          rangeSeparator=" - "
+          [readonlyInput]="true"
+          [showIcon]="true"
+          [monthNavigator]="true"
+          [maxDate]="maxDate"
+          formControlName="dateRange"
+          [yearNavigator]="true"
+          yearRange="1970:2099"
+        ></p-calendar>
+        <div
+          class="error-msg"
+          *ngIf="
+            dateForm.controls.dateRange.touched &&
+            dateForm.controls.dateRange.invalid
+          "
+        >
+          <div *ngIf="dateForm.controls.dateRange.hasError('required')">
+            Date Range is required.
+          </div>
+          <div *ngIf="dateForm.controls.dateRange.hasError('invalidDate')">
+            Date Range should be less than 6 months.
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</form>
+<p-dialog
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  header="Inventory By Status"
+  [(visible)]="displayEnlarged"
+  *ngIf="displayEnlarged"
+>
+  <div class="d-flex justify-content-center w-100">
+    <div class="d-block">
+      <google-chart
+        [type]="'PieChart'"
+        (select)="isDataPresent ? openPopUp($event) : null"
+        [data]="dataStatus"
+        [options]="optionsStatusEnlarged"
+        [width]="750"
+        [height]="380"
+      ></google-chart>
+      <div
+        *ngIf="!isDataPresent"
+        class="ml-5 d-flex space-between justify-content-center"
+      >
+        <p-message severity="warn" text="No Data Present!"></p-message>
+      </div>
+    </div>
+  
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Inventory By Status ({{ sts }})"
+  (onHide)="closePopUp()"
+>
+  <app-specialist-dashboard-pop
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-specialist-dashboard-pop>
+</p-dialog>

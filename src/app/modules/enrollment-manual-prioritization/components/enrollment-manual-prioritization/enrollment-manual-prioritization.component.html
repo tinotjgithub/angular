@@ -1,0 +1,573 @@
+<div class="d-flex mt-60 cursor-pointer" href="#">
+  <div>
+    <img
+      alt=" "
+      src="./../../../../assets/images-new/left.png"
+      [routerLink]="'/actions'"
+      style="margin-right: 15px; cursor: pointer;"
+    />
+  </div>
+
+  <div>Back To Action Menu</div>
+</div>
+<div class="wrap-report mt-10">
+  <div class="promt-header-small d-flex space-between">
+    <div class="section-label">Manual Prioritization</div>
+  </div>
+  <div class="popup-body">
+    <div novalidate="" style="display: contents;">
+      <div class="d-flex space-between pl-30 pr-30 mt-15">
+        <div class="d-flex w-50">
+          <div class="wrap-input100 mr-30 w-50">
+            <span class="label-input100">Work Category</span>
+            <p-dropdown
+              [style]="{ width: '100%' }"
+              [placeholder]="'Select Work Category'"
+              [options]="workCategories"
+              [(ngModel)]="selectedWorkCategory"
+              optionLabel="name"
+            ></p-dropdown>
+          </div>
+        </div>
+        <div class="w-25 mt-30 d-flex flex-end mr-30" *ngIf="showLoading">
+          <div>
+            <img
+              alt=" "
+              src="./../../../../assets/images-new/loader-gif.gif"
+              alt="loading..."
+              style="width: 30px;"
+            />
+            Loading Subscriptions...
+          </div>
+        </div>
+        <div class="d-flex flex-end mt-20">
+          <div
+            class="solid-btn"
+            [class.disabled]="!selectedWorkCategory"
+            (click)="loadSubs()"
+          >
+            List Subscriptions
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap-manage-user mt-30">
+  <div class="d-flex space-between pr-30">
+    <div>
+      <span class="section-title">Unassigned Subscriptions</span
+      ><span
+        *ngIf="unAssignedSubscriptions && unAssignedSubscriptions.length > 0"
+        class="section-title-count"
+        >{{ unAssignedSubscriptions.length }}</span
+      >
+    </div>
+
+    <div class="d-flex mb-15">
+      <div class="search-bar d-flex space-between mr-30">
+        <input
+          type="text"
+          class="search-input"
+          (input)="
+            dt.filterGlobal($event.target.value, 'contains');
+            this.allCheckbox = false;
+            selectedValues = []
+          "
+          placeholder="Global Search"
+        />
+        <img
+          alt=" "
+          src="./../../../../assets/images-new/search.png"
+          style="width: 20px; height: 20px; margin-top: 10px;"
+        />
+      </div>
+      <div
+        class="outline-btn mr-20"
+        [class.disabled]="selectedValues?.length < 1"
+        (click)="selectedValues?.length < 1 ? '' : reprioritize()"
+      >
+        Prioritize {{ selectedValues?.length || "" }}
+        {{ selectedValues?.length === 1 ? "Subscription" : "Subscriptions" }}
+      </div>
+      <div
+        class="outline-btn-blue"
+        [class.disabled]="selectedValues?.length < 1"
+        (click)="selectedValues?.length < 1 ? '' : assignClick()"
+      >
+        Assign {{ selectedValues?.length || "" }}
+        {{ selectedValues?.length === 1 ? "Subscription" : "Subscriptions" }}
+      </div>
+    </div>
+  </div>
+  <p-table
+    id="captionless_table"
+    #dt
+    [columns]="cols"
+    [columnResizeMode]="'fit'"
+    [value]="unAssignedSubscriptions"
+    [tableStyle]="{ 'table-layout': 'auto' }"
+    [styleClass]="'prime_borderless'"
+    [(selection)]="selectedValues"
+    (onRowSelect)="select($event)"
+    (onRowUnselect)="unSelect($event)"
+    [metaKeySelection]="true"
+    [paginator]="true"
+    [rows]="10"
+    [resizableColumns]="true"
+    [scrollable]="false"
+    dataKey="subscriptionId"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th>Select</th>
+        <th *ngFor="let col of columns" id="{{ col.field }}">
+          {{ col.header }}
+        </th>
+      </tr>
+
+      <tr>
+        <th id="tableHeader" style="width: 75px; padding-top: 10px;">
+          <p-checkbox
+            (onChange)="selectRow($event)"
+            [(ngModel)]="selectedAll"
+            [binary]="true"
+            [disabled]="unAssignedSubscriptions.length === 0"
+          ></p-checkbox>
+        </th>
+        <th
+          *ngFor="let col of columns"
+          [ngSwitch]="col.filter"
+          id="col"
+          [class.select_row]="col.field === 'select'"
+        >
+          <div class="mt-3" id="tableHeader" *ngSwitchCase="'check'">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </div>
+          <div class="wrap-input100 my-auto" *ngSwitchCase="'text'">
+            <input
+              class="input100"
+              style="min-width: 100px; border: none;"
+              pInputText
+              type="text"
+              (input)="dt.filter($event.target.value, col.field, 'contains')"
+            />
+            <span class="focus-input100"></span>
+          </div>
+          <div class="wrap-input100 my-auto" *ngSwitchCase="'dropdown'">
+            <select
+              class="input100"
+              style="min-width: 200px; border: none"
+              (change)="dt.filter($event.target.value, col.field, 'equals')"
+            >
+              <option value="" selected>All</option>
+              <option
+                *ngFor="let val of getOptions(col, unAssignedSubscriptions)"
+                [value]="val"
+                >{{ val }}</option
+              >
+            </select>
+          </div>
+          <div
+            class="wrap-input100 my-auto"
+            style="visibility: hidden;"
+            *ngSwitchDefault
+          >
+            <input
+              class="input100"
+              style="min-width: 200px;"
+              pInputText
+              type="text"
+              (input)="dt.filter($event.target.value, col.field, 'contains')"
+            />
+            <span class="focus-input100"></span>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr
+        [pSelectableRow]="rowData"
+        [class.activate]="
+          rowData.priority === 'High' ||
+          rowData.priority === 'Low' ||
+          rowData.priority === 'Medium'
+        "
+      >
+        <td>
+          <p-tableCheckbox
+            [value]="rowData"
+            *ngIf="
+              rowData.taskStatus !== 'COMPLETED' &&
+              rowData.taskStatus !== 'PENDED' &&
+              rowData.taskStatus !== 'ROUTED' &&
+              rowData.taskStatus !== 'ASSIGNED'
+            "
+            (click)="checkAll(dt.filteredValue || unAssignedSubscriptions)"
+          >
+          </p-tableCheckbox>
+        </td>
+        <td *ngFor="let col of columns">
+          {{ rowData[col.field] }}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft" let-state>
+      <div class="result-no">
+        {{
+          unAssignedSubscriptions?.length > 0
+            ? "Showing " +
+              (dt?.filteredValue
+                ? dt?.filteredValue?.length > 0
+                  ? state.first + 1
+                  : 0
+                : state.first + 1) +
+              " - " +
+              ((state.first + state.rows >
+              (dt?.filteredValue || unAssignedSubscriptions)?.length
+                ? (dt?.filteredValue || unAssignedSubscriptions).length
+                : state.first + state.rows
+              ) | number) +
+              " of " +
+              (dt?.filteredValue || unAssignedSubscriptions)?.length
+            : "Showing 0 - 0 of 0"
+        }}
+      </div>
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+      <div class="result-no d-flex">
+        <div>Rows per page &nbsp; &nbsp;</div>
+        <select
+          class="input100 result-no"
+          style="width: 50px;"
+          (change)="dt.reset()"
+          [(ngModel)]="dt.rows"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+        </select>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr class="text-center">
+        <td [attr.colspan]="cols.length + 1">No subscriptions available</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-confirmDialog
+  header="Confirmation"
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+></p-confirmDialog>
+
+<p-dialog
+  [(visible)]="assign"
+  [style]="{
+    width: '90vw',
+    height: '90%',
+    maxHeight: '95vh',
+    paddingBottom: '10px'
+  }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [contentStyle]="{ padding: 0, maxHeight: '100%', overflowY: 'auto' }"
+  [transitionOptions]="'0ms'"
+>
+  <p-header>
+    Assign Claims
+    <span *ngIf="assignableClaims?.length > 0" class="section-title-count">
+      {{ assignableClaims?.length }}
+    </span>
+  </p-header>
+  <div class="d-flex pl-30 pr-30 mt-20">
+    <div class="wrap-input100 w-40 mr-20">
+      <div class="label-input100">User Groups</div>
+      <p-multiSelect
+        #queueSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="userGroups"
+        [virtualScroll]="true"
+        pTooltip="User Groups"
+        tooltipPosition="bottom"
+        itemSize="30"
+        defaultLabel="Select User Group"
+        appendTo="body"
+        optionLabel="userGroupName"
+        [(ngModel)]="selectedUserGroups"
+        (onChange)="getExaminers()"
+      ></p-multiSelect>
+    </div>
+    <div class="wrap-input100 w-40">
+      <div class="label-input100">Claims Examiner</div>
+      <p-multiSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="examiners"
+        [virtualScroll]="true"
+        pTooltip="Claims Examiners"
+        tooltipPosition="bottom"
+        defaultLabel="Select Examiner"
+        appendTo="body"
+        [(ngModel)]="selectedExaminers"
+        [filter]="true"
+        filterBy="label"
+      >
+        <ng-template let-examiner pTemplate="item">
+          <div class="d-block">
+            <div class="ui-helper-clearfix auditor-name">
+              {{ examiner.label }}
+            </div>
+            <div class="ui-helper-clearfix queue-count">
+              {{ examiner.value?.userGroupName }}
+            </div>
+          </div>
+        </ng-template>
+      </p-multiSelect>
+    </div>
+  </div>
+  <p-table
+    id="captionless_table"
+    #dts
+    [columns]="cols"
+    [columnResizeMode]="'fit'"
+    [value]="assignableClaims"
+    [tableStyle]="{ 'table-layout': 'auto' }"
+    [styleClass]="'prime_borderless'"
+    [paginator]="true"
+    [rows]="5"
+    [resizableColumns]="true"
+    [scrollable]="false"
+    dataKey="claimId"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns" id="{{ col.field }}">
+          {{ col.header }}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td *ngFor="let col of columns">
+          {{ rowData[col.field] }}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft" let-state>
+      <div class="result-no">
+        {{
+          assignableClaims?.length > 0
+            ? "Showing " +
+              (dts?.filteredValue
+                ? dts?.filteredValue?.length > 0
+                  ? state.first + 1
+                  : 0
+                : state.first + 1) +
+              " - " +
+              ((state.first + state.rows >
+              (dts?.filteredValue || assignableClaims)?.length
+                ? (dts?.filteredValue || assignableClaims).length
+                : state.first + state.rows
+              ) | number) +
+              " of " +
+              (dts?.filteredValue || assignableClaims)?.length
+            : "Showing 0 - 0 of 0"
+        }}
+      </div>
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+      <div class="result-no d-flex">
+        <div>Rows per page &nbsp; &nbsp;</div>
+        <select
+          class="input100 result-no"
+          style="width: 50px;"
+          (change)="dts.reset()"
+          [(ngModel)]="dts.rows"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option>5</option>
+          <option>15</option>
+          <option>30</option>
+        </select>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr class="text-center">
+        <td [attr.colspan]="cols.length + 1">No claims available</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <div class="d-flex mt-20 pl-30 pr-30 mb-15">
+    <div class="mt-10 ml-auto">
+      <p-checkbox
+        binary="true"
+        [(ngModel)]="prioritizeAndAssign"
+        [disabled]="
+          selectedUserGroups?.length < 1 || selectedExaminers?.length < 1
+        "
+      ></p-checkbox
+      ><span class="ml-10 mr-30">Prioritize</span>
+    </div>
+    <div
+      class="solid-btn mr-20"
+      [class.disabled]="
+        selectedUserGroups?.length < 1 || selectedExaminers?.length < 1
+      "
+      (click)="
+        selectedUserGroups?.length < 1 || selectedExaminers?.length < 1
+          ? ''
+          : assignClaimsToQueue()
+      "
+    >
+      Assign
+    </div>
+  </div>
+</p-dialog>
+<p-dialog
+  [(visible)]="addUserGroup"
+  modal="true"
+  [header]="'Assign Subscription To'"
+  (onHide)="cancelChanges()"
+  [style]="{ width: '70%' }"
+>
+  <form [formGroup]="dialogForm">
+    <div class="d-flex pl-30 pr-30 mt-30">
+      <div class="wrap-input100 w-45 mr-30">
+        <span class="label-input100">User Group</span>
+        <p-multiSelect
+          formControlName="userGroup"
+          (onChange)="onChangeUserGrp()"
+          showTransitionOptions="225ms ease-out"
+          [options]="userGroupList"
+          [selectedItemsLabel]="'{0} Selected'"
+          [virtualScroll]="true"
+          appendTo="body"
+          [optionLabel]="'name'"
+        ></p-multiSelect>
+        <span class="focus-input100"></span>
+      </div>
+      <div class="wrap-input100 w-45">
+        <div class="label-input100">Specialist Name</div>
+        <p-multiSelect
+          formControlName="specialistName"
+          showTransitionOptions="225ms ease-out"
+          [options]="specialistList"
+          [selectedItemsLabel]="'{0} Selected'"
+          [virtualScroll]="true"
+          [disabled]="dialogForm.get('userGroup').invalid"
+          appendTo="body"
+        >
+          <ng-template let-auditor pTemplate="item">
+            <div style="width: 100%">
+              <div class="ui-helper-clearfix auditor-name">
+                {{ auditor.label }}
+              </div>
+              <div class="d-flex space-between">
+                <div class="ui-helper-clearfix queue-count">
+                  {{ auditor.assignedCount }} Assigned Subscriptions
+                </div>
+                <div class="ui-helper-clearfix queue-count">
+                  {{ auditor.pendedCount }} Pended Subscriptions
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-multiSelect>
+        <span class="focus-input100"></span>
+      </div>
+    </div>
+
+    <div class="d-flex pl-30 pr-30">
+      <div class="wrap-input100 w-45 mr-30">
+        <span class="label-input100">Priority</span>
+        <select class="input100" formControlName="priority">
+          <option *ngFor="let item of priorityLevels" value="{{ item }}">{{
+            item
+          }}</option>
+        </select>
+
+        <span class="focus-input100"></span>
+      </div>
+    </div>
+
+    <div class="d-flex pl-30 pr-30">
+      <div class="wrap-input100">
+        <span class="label-input100">Comment</span>
+        <input
+          class="input100"
+          formControlName="comments"
+          type="email"
+          name="custom-email"
+          placeholder="Enter Comment"
+          maxlength="256"
+        />
+        <span class="focus-input100"></span>
+      </div>
+    </div>
+    <div class="d-flex flex-end mt-15 pr-30">
+      <div class="cancel-btn mr-30" (click)="cancelChanges()">Cancel</div>
+      <div
+        class="solid-btn"
+        (click)="assignSubs()"
+        [ngClass]="{ disabled: dialogForm.invalid }"
+      >
+        Assign {{ selectedValues?.length }} Subscriptions
+      </div>
+    </div>
+  </form>
+</p-dialog>
+<p-dialog
+  [(visible)]="prioritize"
+  modal="true"
+  [header]="'Prioritize Subscriptions'"
+  (onHide)="cancelPrioritization()"
+  [style]="{ width: '55%' }"
+>
+  <form [formGroup]="reprioritizeForm">
+    <div class="d-flex pr-30 mt-10">
+      <div class="wrap-input100 w-45 mr-30">
+        <span class="label-input100">Priority</span>
+        <select class="input100" formControlName="priority">
+          <option *ngFor="let item of priorityLevels" value="{{ item }}">{{
+            item
+          }}</option>
+        </select>
+
+        <span class="focus-input100"></span>
+      </div>
+    </div>
+
+    <div class="d-flex pr-30">
+      <div class="wrap-input100">
+        <span class="label-input100">Comment</span>
+        <input
+          class="input100"
+          formControlName="comments"
+          type="email"
+          name="custom-email"
+          placeholder="Enter Comment"
+          maxlength="256"
+        />
+        <span class="focus-input100"></span>
+      </div>
+    </div>
+
+    <div class="d-flex flex-end mt-15 pr-30">
+      <div class="cancel-btn mr-30" (click)="cancelPrioritization()">
+        Cancel
+      </div>
+      <div
+        class="solid-btn"
+        (click)="doReprioritize()"
+        [ngClass]="{ disabled: reprioritizeForm.invalid }"
+      >
+        Prioritize {{ selectedValues?.length }} Subscriptions
+      </div>
+    </div>
+  </form>
+</p-dialog>

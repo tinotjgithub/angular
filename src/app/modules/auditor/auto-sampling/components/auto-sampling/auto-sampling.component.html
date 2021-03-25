@@ -1,0 +1,393 @@
+<div class="d-flex space-between mt-60 mb-20" href="#">
+  <div class="d-flex">
+    <div [routerLink]="'/configuration-menu'">
+      <img alt = " " src="./../../../../assets/images-new/left.png" style="margin-right: 15px; cursor: pointer;" />
+    </div>
+
+    <div>Back To Configuration</div>
+  </div>
+  <div class="solid-btn" (click)="formGroup.invalid || errorList.length ? '' : saveSettings()"
+    [class.disabled]="formGroup.invalid || errorList.length">
+    Save Settings
+  </div>
+</div>
+
+<form [formGroup]="formGroup">
+  <div class="wrap-claim-volume">
+    <div class="incluison-header auto">
+      <div class="header-item">
+        <span>Inclusion</span>
+      </div>
+    </div>
+    <div class="md-stepper-horizontal blue mt-10" style="border-radius: 5px">
+      <div class="md-step mt" for="tab-menu1" style="border-left: none" (click)="setDivId(1)" [ngClass]="[
+          formGroup.controls['processWorkFlowExclusions'].value &&
+          formGroup.controls['processWorkFlowExclusions'].value.length === 0
+            ? 'active'
+            : 'done',
+          divId === 1 ? 'editable' : ''
+        ]">
+        <div class="md-step-circle"><img alt = " " src="./../../../../../../assets/images-new/Exclusion.png" alt="1"></div>
+        <div class="md-step-title">Exclusion</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div class="md-step inclusion" for="tab-menu2" (click)="setDivId(2)" style="border-left: none" [ngClass]="[
+          selectedUSerGroupsList.length === 0 ? 'active' : 'done',
+          divId === 2 ? 'editable' : ''
+        ]">
+        <div class="md-step-circle"><img alt = " " src="./../../../../../../assets/images-new/User Group Examiner.png" alt="2"></div>
+        <div class="md-step-title">User Group</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div class="md-step inclusion" for="tab-menu3" style="border-left: none" (click)="setDivId(3)" [ngClass]="[
+          selectedLobsList.length === 0 ? 'active' : 'done',
+          divId === 3 ? 'editable' : ''
+        ]">
+        <div class="md-step-circle"><img alt = " " src="./../../../../../../assets/images-new/Line of Business.png" alt="3"></div>
+        <div class="md-step-title">Line of Business</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div class="md-step inclusion" for="tab-menu4" style="border-left: none" (click)="setDivId(4)" [ngClass]="[
+          selectedPlanTypesList.length === 0 ? 'active' : 'done',
+          divId === 4 ? 'editable' : ''
+        ]">
+        <div class="md-step-circle"><img alt = " " src="./../../../../../../assets/images-new/plan type.png" alt="4"></div>
+        <div class="md-step-title">Plan Type</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+
+      <div class="md-step" for="tab-menu5" style="border-left: none" (click)="setDivId(5)" [ngClass]="[
+          formGroup.invalid || errorList.length ? 'active' : 'done',
+          divId === 5 ? 'editable' : ''
+        ]">
+        <div class="md-step-circle"><img alt = " " src="./../../../../../../assets/images-new/Inclusion.png" alt="5"></div>
+        <div class="md-step-title">Weightage & Sampling</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+
+      <div class="md-step active" for="tab-menu5" style="border-left: none" (click)="setDivId(6)"
+        [ngClass]="{ editable: divId === 6 }">
+        <div class="md-step-circle"><img alt = " " src="./../../../../../../assets/images-new/Review.png" alt="6"></div>
+        <div class="md-step-title">Review</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+    </div>
+
+    <div class="d-flex mt-30" style="margin-left: 60px" *ngIf="errorList.length !== 0 && (divId === 6 || divId === 5)">
+      <div *ngFor="let item of errorList" class="d-flex">
+        <ul class="m-0">
+          <li style="color: red">{{ item }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wrap-claim-volume mt-30 ml-30" [hidden]="divId !== 1">
+      <div class="d-flex mb-15">
+        <div class="d-flex mt-10">
+          <p-checkbox name="groupname" value="Adjusted Claims" class="mr-60"
+            [formControl]="formGroup.controls['processWorkFlowExclusions']" label="Adjusted Claims">
+          </p-checkbox>
+          <p-checkbox class="mr-60" name="groupname" value="Auto Adjudicated"
+            [formControl]="formGroup.controls['processWorkFlowExclusions']" label="Auto Adjudicated">
+          </p-checkbox>
+          <p-checkbox class="mr-60" name="groupname" value="Externally Priced"
+            [formControl]="formGroup.controls['processWorkFlowExclusions']" label="Externally Priced">
+          </p-checkbox>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap-claim-volume mt-30 ml-30" [hidden]="divId !== 2">
+      <div class="d-flex">
+        <p-pickList class="w-100" [source]="this.getFormControl('availableUserGroups').value"
+          [target]="this.getFormControl('userGroups').value" [sourceHeader]="'WB User Groupings'"
+          [targetHeader]="'Selected For Audit'">
+          <ng-template let-item pTemplate="item">
+            <div class="ui-helper-clearfix">
+              <p>{{ item.name }}</p>
+            </div>
+          </ng-template>
+        </p-pickList>
+      </div>
+    </div>
+
+    <div class="wrap-claim-volume mt-30 ml-30" [hidden]="divId !== 3">
+      <div class="d-flex">
+        <p-pickList class="w-100" [source]="this.getFormControl('availableLineOfBusiness').value"
+          [sourceHeader]="'LOBs'" [targetHeader]="'Selected LOBs'"
+          [target]="this.getFormControl('lineOfBusiness').value">
+          <ng-template let-item pTemplate="item">
+            <div class="ui-helper-clearfix">
+              <p>{{ item.name }}</p>
+            </div>
+          </ng-template>
+        </p-pickList>
+      </div>
+    </div>
+
+    <div class="wrap-claim-volume mt-30 ml-30" [hidden]="divId !== 4">
+      <div class="d-flex">
+        <p-pickList class="w-100" [source]="this.getFormControl('availablePlanTypes').value"
+          [sourceHeader]="'Plan Type'" [targetHeader]="'Selected Plan Types'"
+          [target]="this.getFormControl('planTypes').value">
+          <ng-template let-item pTemplate="item">
+            <div class="ui-helper-clearfix">
+              <p>{{ item.name }}</p>
+            </div>
+          </ng-template>
+        </p-pickList>
+      </div>
+    </div>
+
+    <div class="wrap-claim-volume mt-30 ml-30" [hidden]="divId !== 5">
+      <div class="d-flex">
+        <div class="w-25 mr-30 pr-30">
+          <div class="d-block">
+            <div class="attachment-comment new">High Dollar</div>
+          </div>
+          <div class="mt-20">
+            <div class="d-flex">
+              <p-checkbox (onChange)="onChangeHD($event)" name="groupname" value="HD Only"
+                [formControl]="formGroup.controls['HDStatus']" label="HD Only">
+              </p-checkbox>
+            </div>
+            <div class="wrap-input100 mt-15">
+              <div class="label-input100">Billed Above ($)</div>
+              <input type="number" *ngIf="!HdChecked" disabled class="input100" formControlName="billedAmount" />
+              <input type="number" *ngIf="HdChecked" type="number" class="input100" formControlName="billedAmount" />
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100">
+              <div class="label-input100">Paid Above ($)</div>
+              <input type="number" *ngIf="!HdChecked" disabled class="input100" formControlName="paidAmount" />
+              <input type="number" *ngIf="HdChecked" type="number" class="input100" formControlName="paidAmount" />
+              <span class="focus-input100"></span>
+            </div>
+          </div>
+          <div class="mt-30" style="margin-bottom: 60px;">
+            <div class="d-flex mb-20">
+              <div class="section-title ml-0">Sampling %</div>
+            </div>
+            <div class="wrap-input100 mt-20 w-150">
+              <div class="attachment-comment-head">Total Sampling %</div>
+              <input [readOnly]="
+                  !HDValid ||
+                  this.formGroup.get('claimType').invalid ||
+                  this.formGroup.get('claimSource').invalid ||
+                  this.formGroup.get('paymentstatus').invalid
+                " type="number" class="input100" style="font-size: 16px; font-weight: 600;"
+                formControlName="totalSamplingClaimsPercentage" />
+              <span class="focus-input100"></span>
+              <span class="error-msg w-200">This % will be applied equally on the each sections above</span>
+            </div>
+          </div>
+        </div>
+        <div class="w-25 ml-25 mr-30 pr-30">
+          <div class="d-block">
+            <div class="attachment-comment new">Claim Source</div>
+          </div>
+          <div class="mt-20" formGroupName="claimSource">
+            <div class="wrap-input100">
+              <div class="label-input100">EDI (%)</div>
+              <input type="number" formControlName="EDI" class="input100" />
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100">
+              <div class="label-input100">Paper (%)</div>
+              <input formControlName="paper" type="number" class="input100" />
+              <span class="focus-input100"></span>
+            </div>
+          </div>
+        </div>
+        <div class="w-25 ml-25 mr-30 pr-30">
+          <div class="d-block">
+            <div class="attachment-comment new">Claim Type</div>
+          </div>
+          <div class="mt-20" formGroupName="claimType">
+            <div class="wrap-input100">
+              <div class="label-input100">Professional (%)</div>
+              <input type="number" formControlName="Professional" class="input100" />
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100">
+              <div class="label-input100">Institutional (IP) (%)</div>
+              <input class="input100" formControlName="Institutional-IP" type="number" />
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100">
+              <div class="label-input100">Institutional (OP) (%)</div>
+              <input class="input100" formControlName="Institutional-OP" type="number" />
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100">
+              <div class="label-input100">Others (%)</div>
+              <input type="number" formControlName="Others" class="input100" />
+              <span class="focus-input100"></span>
+            </div>
+          </div>
+        </div>
+        <div class="w-25 ml-25 pr-30">
+          <div class="d-block">
+            <div class="attachment-comment new">Payment Status</div>
+          </div>
+          <div class="mt-20" formGroupName="paymentstatus">
+            <div class="wrap-input100">
+              <div class="label-input100">Denied Claims (%)</div>
+              <input type="number" formControlName="Denied" class="input100" />
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100">
+              <div class="label-input100">Check Issued (%)</div>
+              <input formControlName="Check Issued" type="number" class="input100" />
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100">
+              <div class="label-input100">Check Not Issued (%)</div>
+              <input formControlName="Check Not Issued" type="number" class="input100" />
+              <span class="focus-input100"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap-claim-volume w-100 mt-30" [hidden]="divId !== 6">
+      <div class="d-flex pl-30 pr-30 mt-15 space-between justify-content-center">
+        <div style="width: 25%">
+          <div class="attachment-comment new">Exclusions</div>
+          <div class="label-value"
+            *ngIf="!formGroup.controls['processWorkFlowExclusions']?.value ||  formGroup.controls['processWorkFlowExclusions']?.value?.length === 0">
+            No Exclusions Selected
+          </div>
+          <ng-container
+            *ngIf="formGroup.controls['processWorkFlowExclusions']?.value && formGroup.controls['processWorkFlowExclusions']?.value?.length > 0">
+            <div class="label-value" *ngFor="let val of formGroup.controls['processWorkFlowExclusions']?.value">
+              {{val}}
+            </div>
+          </ng-container>
+        </div>
+        <div style="width: 25%">
+          <div class="attachment-comment new">User Groups</div>
+          <div class="label-value" *ngIf="selectedUSerGroupsList?.length === 0">
+            All User Groups Selected
+          </div>
+          <ng-container *ngIf="selectedUSerGroupsList?.length > 0">
+            <div class="label-value" *ngFor="let val of splitValue(selectedUSerGroupsList)">
+              {{val}}
+            </div>
+          </ng-container>
+        </div>
+        <div style="width: 25%">
+          <div class="attachment-comment new">LOBs</div>
+          <div class="label-value" *ngIf="selectedLobsList?.length === 0">
+            All LOBs Selected
+          </div>
+          <ng-container *ngIf="selectedLobsList?.length > 0">
+            <div class="label-value" *ngFor="let val of splitValue(selectedLobsList)">
+              {{val}}
+            </div>
+          </ng-container>
+        </div>
+        <div style="width: 25%">
+          <div class="attachment-comment new">Plan Types</div>
+          <div class="label-value" *ngIf="selectedPlanTypesList?.length === 0">
+            All Plan Types Selected
+          </div>
+          <ng-container *ngIf="selectedPlanTypesList?.length > 0">
+            <div class="label-value" *ngFor="let val of splitValue(selectedPlanTypesList)">
+              {{val}}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="d-flex pl-30 pr-30 mt-15 space-between justify-content-center">
+        <div style="width: 25%">
+          <div class="attachment-comment new">High Dollar ($)</div>
+          <div class="label-value">Checked: {{ HdChecked ? "Yes" : "No" }}</div>
+          <div class="label-value">
+            Billed Amount:&nbsp;{{ formGroup.controls["billedAmount"].value }}
+          </div>
+          <div class="label-value">
+            Paid Amount:&nbsp;{{ formGroup.controls["paidAmount"].value }}
+          </div>
+        </div>
+        <div style="width: 25%">
+          <div class="attachment-comment new">Claim Source (%)</div>
+          <div class="label-value">
+            EDI:&nbsp;{{ $any(formGroup.get("claimSource")).controls["EDI"].value }}
+          </div>
+          <div class="label-value">
+            Paper:&nbsp;{{
+              $any(formGroup.get("claimSource")).controls["paper"].value
+            }}
+          </div>
+        </div>
+
+        <div style="width: 25%">
+          <div class="attachment-comment new">Claim Type (%)</div>
+          <div class="label-value">
+            Professional :&nbsp;{{
+              $any(formGroup.get("claimType")).controls["Professional"].value
+            }}
+          </div>
+          <div class="label-value">
+            Institutional (IP):&nbsp;{{
+              $any(formGroup.get("claimType")).controls["Institutional-IP"].value
+            }}
+          </div>
+          <div class="label-value">
+            Institutional (OP) :&nbsp;{{
+              $any(formGroup.get("claimType")).controls["Institutional-OP"].value
+            }}
+          </div>
+          <div class="label-value">
+            Others:&nbsp;{{
+              $any(formGroup.get("claimType")).controls["Others"].value
+            }}
+          </div>
+        </div>
+
+        <div style="width: 25%">
+          <div class="attachment-comment new">Payment Status (%)</div>
+          <div class="label-value">
+            Denied Claims :&nbsp;{{
+              $any(formGroup.get("paymentstatus")).controls["Denied"].value
+            }}
+          </div>
+          <div class="label-value">
+            Check Issued:&nbsp;{{
+              $any(formGroup.get("paymentstatus")).controls["Check Issued"].value
+            }}
+          </div>
+          <div class="label-value">
+            Check Not Issued :&nbsp;{{
+              $any(formGroup.get("paymentstatus")).controls["Check Not Issued"].value
+            }}
+          </div>
+        </div>
+      </div>
+      <div class="d-flex pl-30 pr-30 mt-15">
+        <div style="width: 25%">
+          <div class="attachment-comment new">Total Sampling</div>
+          <div class="label-value">
+            Sampling :&nbsp;{{
+              formGroup.controls["totalSamplingClaimsPercentage"].value
+            }} %
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<div class="d-flex space-between mt-20 justify-content-end" href="#">
+  <div class="solid-btn" (click)="formGroup.invalid || errorList.length ? '' : saveSettings()"
+    [class.disabled]="formGroup.invalid || errorList.length">
+    Save Settings
+  </div>
+</div>

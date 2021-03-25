@@ -1,0 +1,217 @@
+<div class="d-flex mt-60 cursor-pointer" href="#">
+  <div> <img alt = " " src="./../../../../assets/images-new/left.png" [routerLink]="'/actions'"
+      style="margin-right: 15px; cursor: pointer;"></div>
+  <div>Back To Action Menu</div>
+</div>
+<div class="wrap-get-claim w-100 mt-10">
+  <div class="popup-header d-flex space-between">
+    <div class="section-label">Search</div>
+  </div>
+  <div class="popup-body">
+    <div class="d-flex space-between pl-30 pr-30 mt-15">
+      <div class="wrap-input100  mr-30">
+        <div class="label-input100">Field</div>
+        <p-dropdown [style]="{width: '100%'}" [placeholder]="'Search Field'" [options]="searchFields"
+          (onChange)="setSearchField($event.value)">
+        </p-dropdown>
+      </div>
+      <div class="wrap-input100 mr-30 ">
+        <span class="label-input100">Value</span>
+        <input type="text" class="input100" placeholder="Enter Value" [(ngModel)]="searchValue" (keyup)="checkEmpty()">
+        <span class="focus-input100"></span>
+      </div>
+      <div class="d-flex flex-end mt-20">
+        <div class="solid-btn" (click)="submitSearch()">Search Claims</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap-manage-user mt-30">
+  <div class="d-flex space-between pr-30">
+    <div>
+      <span class="section-title">Manual Prioritization</span><span *ngIf="gridData && gridData.length > 0"
+        class="section-title-count">{{gridData.length}}</span>
+    </div>
+
+    <div class="d-flex mb-15">
+      <div class="search-bar d-flex space-between mr-30">
+        <input type="text" class="search-input" (input)="dt.filterGlobal($event.target.value, 'contains'); this.allCheckbox = false; selectedValues = [];"
+          placeholder="Global Search">
+        <img alt = " " src="./../../../../assets/images-new/search.png" style="width: 20px; height: 20px; margin-top: 10px;">
+      </div>
+      <div class="outline-btn mr-20" [class.disabled]="selectedValues?.length < 1"
+        (click)="(selectedValues?.length < 1) ? '' : reprioritize()">
+        Prioritize {{selectedValues?.length || ''}} Claims
+      </div>
+      <div class="outline-btn-blue" [class.disabled]="selectedValues?.length < 1"
+      (click)="(selectedValues?.length < 1) ? '' : assignClaims()">
+      Assign {{selectedValues?.length || ''}} Claims
+    </div>
+    </div>
+  </div>
+  <p-table id="captionless_table" #dt [columns]="cols" [columnResizeMode]="'fit'" [value]="gridData"
+    [tableStyle]="{ 'table-layout': 'auto' }" [styleClass]="'prime_borderless'" [(selection)]="selectedValues"
+    [metaKeySelection]="true" [paginator]="true" [rows]="10" [resizableColumns]="true" [scrollable]="false"
+    dataKey="claimId">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th id="tableHeader" style="width: 75px">
+          <p-checkbox (click)="selectReprioritizableClaims(dt.filteredValue || gridData, e.checked)"
+            [(ngModel)]="allCheckbox" [binary]="true" [disabled]="!(getReprioritizableClaims(dt.filteredValue || gridData).length > 0)"
+            #e></p-checkbox>
+        </th>
+        <th *ngFor="let col of columns" id="{{ col.field }}">
+          {{ col.header }}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr [pSelectableRow]="rowData" [class.activate]="rowData.claimPriorityStatus">
+        <td>
+          <p-tableCheckbox [value]="rowData" *ngIf="
+              rowData.taskStatus !== 'COMPLETED' &&
+              rowData.taskStatus !== 'PENDED' &&
+              rowData.taskStatus !== 'ROUTED' &&
+              rowData.taskStatus !== 'ASSIGNED'
+            " (click)="checkAll(dt.filteredValue || gridData)">
+          </p-tableCheckbox>
+        </td>
+        <td *ngFor="let col of columns">
+          {{ rowData[col.field] }}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft" let-state>
+      <div class="result-no">
+        {{gridData?.length > 0 ?
+          ('Showing ' + (dt?.filteredValue ? (dt?.filteredValue?.length > 0 ? (state.first + 1) : 0) : (state.first + 1)) +' - ' +
+          (
+            (
+            (state.first + state.rows) > (dt?.filteredValue || gridData)?.length ? ((dt?.filteredValue || gridData).length) : (state.first + state.rows)
+            )| number
+          ) + ' of '+ (dt?.filteredValue || gridData)?.length) : 'Showing 0 - 0 of 0'}}
+      </div>
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+      <div class="result-no d-flex">
+        <div>Rows per page &nbsp; &nbsp;</div>
+        <select class="input100 result-no" style="width: 50px;" (change)="dt.reset()" [(ngModel)]="dt.rows"
+          [ngModelOptions]="{standalone: true}">
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+        </select>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr class="text-center">
+        <td [attr.colspan]="cols.length + 1">No claims available</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-confirmDialog header="Confirmation" [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"></p-confirmDialog>
+
+<p-dialog [(visible)]="assign" [style]="{width: '90vw', height: '90%', maxHeight: '95vh', paddingBottom: '10px'}" modal="true" dismissableMask="true" [responsive]="true"
+[contentStyle]="{padding: 0, maxHeight: '100%', overflowY: 'auto'}" [transitionOptions]="'0ms'">
+<p-header>
+  Assign Claims
+  <span *ngIf="assignableClaims?.length > 0" class="section-title-count">
+    {{ assignableClaims?.length }}
+  </span>
+</p-header>
+<div class="d-flex pl-30 pr-30 mt-20">
+  <div class="wrap-input100 w-40 mr-20">
+    <div class="label-input100">User Groups</div>
+    <p-multiSelect
+        #queueSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="userGroups"
+        [virtualScroll]="true"
+        pTooltip="User Groups"
+        tooltipPosition="bottom"
+        itemSize="30"
+        defaultLabel="Select User Group"
+        appendTo="body"
+        optionLabel="userGroupName"
+        [(ngModel)]="selectedUserGroups"
+        (onChange)="getExaminers()"
+      ></p-multiSelect>
+  </div>
+  <div class="wrap-input100 w-40">
+    <div class="label-input100">Claims Examiner</div>
+    <p-multiSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="examiners"
+        [virtualScroll]="true"
+        pTooltip="Claims Examiners"
+        tooltipPosition="bottom"
+        defaultLabel="Select Examiner"
+        appendTo="body"
+        [(ngModel)]="selectedExaminers"
+        [filter]="true" filterBy="label"
+      >
+      <ng-template let-examiner pTemplate="item">
+        <div class="d-block">
+          <div class="ui-helper-clearfix auditor-name">{{examiner.label}}</div>
+          <div class="ui-helper-clearfix queue-count">{{examiner.value?.userGroupName}}</div>
+        </div>
+    </ng-template>
+    </p-multiSelect>
+  </div>
+</div>
+<p-table id="captionless_table" #dts [columns]="cols" [columnResizeMode]="'fit'" [value]="assignableClaims"
+  [tableStyle]="{ 'table-layout': 'auto' }" [styleClass]="'prime_borderless'" [paginator]="true" [rows]="5" [resizableColumns]="true" [scrollable]="false"
+  dataKey="claimId">
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" id="{{ col.field }}">
+        {{ col.header }}
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+    <tr>
+      <td *ngFor="let col of columns">
+        {{ rowData[col.field] }}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="paginatorleft" let-state>
+    <div class="result-no">
+      {{assignableClaims?.length > 0 ?
+        ('Showing ' + (dts?.filteredValue ? (dts?.filteredValue?.length > 0 ? (state.first + 1) : 0) : (state.first + 1)) +' - ' +
+        (
+          (
+          (state.first + state.rows) > (dts?.filteredValue || assignableClaims)?.length ? ((dts?.filteredValue || assignableClaims).length) : (state.first + state.rows)
+          )| number
+        ) + ' of '+ (dts?.filteredValue || assignableClaims)?.length) : 'Showing 0 - 0 of 0'}}
+    </div>
+  </ng-template>
+  <ng-template pTemplate="paginatorright">
+    <div class="result-no d-flex">
+      <div>Rows per page &nbsp; &nbsp;</div>
+      <select class="input100 result-no" style="width: 50px;" (change)="dts.reset()" [(ngModel)]="dts.rows"
+        [ngModelOptions]="{standalone: true}">
+        <option>5</option>
+        <option>15</option>
+        <option>30</option>
+      </select>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr class="text-center">
+      <td [attr.colspan]="cols.length + 1">No claims available</td>
+    </tr>
+  </ng-template>
+</p-table>
+<div class="d-flex mt-20 pl-30 pr-30 mb-15">
+  <div class="mt-10 ml-auto"><p-checkbox binary="true" [(ngModel)]="prioritizeAndAssign" [disabled]="selectedUserGroups?.length < 1 || selectedExaminers?.length <  1"></p-checkbox
+    ><span class="ml-10 mr-30">Prioritize</span></div>
+  <div class="solid-btn mr-20" [class.disabled]="selectedUserGroups?.length < 1 || selectedExaminers?.length <  1"
+    (click)="(selectedUserGroups?.length < 1 || selectedExaminers?.length <  1) ? '' : assignClaimsToQueue()">Assign</div>
+</div>
+</p-dialog>

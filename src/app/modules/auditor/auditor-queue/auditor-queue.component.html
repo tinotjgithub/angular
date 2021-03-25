@@ -1,0 +1,213 @@
+<p-confirmDialog [acceptButtonStyleClass]="'accept-button'" [rejectButtonStyleClass]="'reject-button'"
+    header="Confirmation"></p-confirmDialog>
+
+<div class="d-flex cursor-pointer space-between mt-60" href="#">
+    <div class="d-flex">
+        <div> <img alt = " " src="./../../../../../assets/images-new/left.png" [routerLink]="'/actions'"
+                style="margin-right: 15px; cursor: pointer;"></div>
+        <div>Back To Action Menu</div>
+    </div>
+    <div class="outline-btn-blue" *ngIf="claim?.claimId" (click)="this.routeClaimPopup = true">Route</div>
+</div>
+<div class="btn-claim mt-30" *ngIf="!claim" pTooltip="Get a new claim" [class.disabled]="claim"
+    (click)="claim ? '' : getClaim()">
+    <div>Get a Claim</div>
+</div>
+
+<div class="mt-30" *ngIf="!claim">
+    <span style="color: red;">Click on the Get a Claim button to load a claim.</span>
+</div>
+
+<div class="wrap-claim-details-accordian mt-10" *ngIf="claim?.claimId">
+    <div class="tabs">
+        <div class="tab">
+            <div class="d-flex wrap-tab" for="chck1">
+                <label class="tab-label claim-id-head mt-10 mr-20" pTooltip="Open Claim in HRP" for="chck1"
+                    (click)="copyAndOpenHRP(claimId)">Claim ID - <input style="position: absolute; top: 0; left: 0; opacity: 0;" value="{{claim?.claimId}}" #claimId><span id="claimId">{{claim?.claimId}}</span></label>
+                <div class="mr-auto"><img alt = " " src="./../../../../../assets/images-new/copy.png" style="cursor: pointer; margin-top: 10px;"
+                        pTooltip="Click to copy Claim ID" (click)="justCopy(claimId)"></div>
+                <label class="ml-auto mt-15 rebuttal-style mr-30" *ngIf="claim?.currentLevel && claim?.currentLevel > 0">Rebuttal
+                    Level -
+                    {{claim?.currentLevel}}</label>
+                <div class="d-flex" *ngIf="claim?.claimId">
+                    <div>
+                        <img alt = " " src="./../../../assets/images-new/stop-watch.png">
+                    </div>
+                    <div class="ml-10">
+                        <div class="target-label">Claim Processing Time</div>
+                        <div>
+                            <span class="target-count" [ngStyle]="{color: timerColor}">
+                                {{endTimer}}
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="d-flex mt-20">
+                <ng-container *ngFor="let col of cols; index as i">
+                    <div class="w-15" *ngIf="i < 6" [class.mr-30]="i < 5">
+                        <div class="label-placeholder">{{col.header}}</div>
+                        <div class="label-value">{{ claim ? (claim[col.field] || '-') : '-'}}</div>
+                    </div>
+                </ng-container>
+            </div>
+            <div class="d-flex mt-30 mb-15">
+                <ng-container *ngFor="let col of cols; index as i">
+                    <div class="w-15" *ngIf="i > 5" [class.mr-30]="i < (cols.length - 1)">
+                        <div class="label-placeholder">{{col.header}}</div>
+                        <div class="label-value">{{ claim ? (claim[col.field] || '-') : '-'}}</div>
+                    </div>
+                </ng-container>
+            </div>
+
+            <form [formGroup]="auditForm" style="display: contents;">
+                <p-steps [model]="steps" [activeIndex]="step" [readonly]="false" (activeIndexChange)="stepChange($event)"></p-steps>
+                <div class="d-block mt-15 pl-30 pr-30" *ngIf="step === 1">
+                    <div class="d-flex">
+                        <div class="wrap-input100 mr-20">
+                            <div class="label-input100">Status</div>
+                            <select class="input100" formControlName="status">
+                                <option value="" selected>Select</option>
+                                <option value="PASSED">Passed</option>
+                                <option value="FAILED">Failed</option>
+                            </select>
+                            <span class="focus-input100"></span>
+                            <div class="error-msg" style="top: 50px;"
+                                *ngIf="auditForm.get('status').touched && auditForm.get('status').hasError('required')">
+                                Status is required.
+                            </div>
+                        </div>
+                        <div class="wrap-input100 mr-20">
+                            <div class="label-input100">Claims Examiner</div>
+                            <p-dropdown [options]="touchedExaminers" appendTo="body" formControlName="examiner"
+                                [disabled]="!claim" [styleClass]="'w-100'" placeholder="Select" filter="true" optionLabel="label">
+                            </p-dropdown>
+                            <span class="focus-input100"></span>
+                            <div class="error-msg" style="top: 50px;"
+                                *ngIf="auditForm.get('examiner').touched && auditForm.get('examiner').hasError('required')">
+                                Claims Examiner is required.
+                            </div>
+                        </div>
+                        <div class="wrap-input100">
+                            <div class="label-input100">Error Type</div>
+                            <select class="input100" formControlName="errorType">
+                                <option value="" selected>Select</option>
+                                <option value="Financial">Financial</option>
+                                <option value="Procedural">Procedural</option>
+                                <option value="Both">Both</option>
+                            </select>
+                            <span class="focus-input100"></span>
+                            <div class="error-msg" style="top: 50px;"
+                                *ngIf="auditForm.get('errorType').touched && auditForm.get('errorType').hasError('required')">
+                                Error Type is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="wrap-input100 mr-20">
+                            <div class="label-input100">Financial Impact</div>
+                            <select class="input100" formControlName="financialImpact">
+                                <option value="" selected>Select</option>
+                                <option value="Over Paid">Over Paid</option>
+                                <option value="Under Paid">Under Paid</option>
+                            </select>
+                            <span class="focus-input100"></span>
+                            <div class="error-msg" style="top: 50px;"
+                                *ngIf="auditForm.get('financialImpact').touched && auditForm.get('financialImpact').hasError('required')">
+                                Financial Impact is required.
+                            </div>
+                        </div>
+                        <div class="wrap-input100">
+                            <div class="label-input100">Amount</div>
+                            <input type="number" min="0" oninput="validity.valid||(value='');" class="input100"
+                                formControlName="amount">
+                            <span class="focus-input100"></span>
+                            <div class="error-msg" style="top: 50px;"
+                                *ngIf="auditForm.get('amount').touched && auditForm.get('amount').hasError('required')">
+                                Amount is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wrap-input100">
+                        <div class="label-input100">Comments</div>
+                        <textarea class="w-100 input100" maxlength="256" formControlName="reviewComments"></textarea>
+                        <span class="focus-input100"></span>
+                        <div class="error-msg" style="top: 50px;"
+                            *ngIf="auditForm.get('reviewComments').touched && auditForm.get('reviewComments').hasError('required')">
+                            Comments is required.
+                        </div>
+                    </div>
+                </div>
+                <div class="d-block mt-15 pl-30 pr-30" *ngIf="step === 2">
+                    <div class="d-flex justify-content-center">
+                        <div class="w-70">
+                            <app-file-input [input]="input" [maxNoOfFiles]="6" [disabled]="!auditForm.get('status').value"
+                                (deleteFile)="deleteFile($event)" (download)="downloadFile($event)"></app-file-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-15 pl-30 pr-30" *ngIf="step === 0">
+                    <p-pickList [source]="checkListItem" class="w-100" styleClass="hide-move-all"
+                        [sourceHeader]="'Checklist Item'" [targetHeader]="'Checked Item'" [target]="checkedItem">
+                        <ng-template let-item pTemplate="item">
+                            <div class="ui-helper-clearfix">
+                                <p>{{item.name}}</p>
+                            </div>
+                        </ng-template>
+                    </p-pickList>
+                </div>
+                <div class="d-flex flex-end mt-15 mb-15">
+                    <div class="outline-btn pend mr-30"
+                        (click)="checkForCheckList() ? '' : saveForLater()"
+                        [class.disabled]="checkForCheckList()">Add to Backlog</div>
+                    <div class="solid-btn"
+                        (click)="(auditForm.invalid || !auditForm.get('status').value || checkForCheckList(true)) ? '' : saveForLater(true)"
+                        [class.disabled]="auditForm.invalid || !auditForm.get('status').value || checkForCheckList(true)">
+                        Submit</div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<p-dialog [(visible)]="routeClaimPopup" modal=true header="Claim Routing" [style]="{width: '50vw'}" (onHide)="routeForm?.reset();">
+    <form [formGroup]="routeForm" style="display: contents;">
+        <div class="d-flex mt-15">
+            <div class="wrap-input100 mr-20">
+                <div class="label-input100">Manager/Lead Name</div>
+                <p-dropdown [options]="claim?.managerLeadNameDetails" appendTo="body" formControlName="leadManagerName"
+                    [disabled]="!claim" [styleClass]="'w-100'" placeholder="Select" filter="true" optionLabel="name">
+                </p-dropdown>
+                <div class="error-msg" style="top: 50px;"
+                    *ngIf="routeForm.get('leadManagerName').touched && routeForm.get('leadManagerName').hasError('required')">
+                    Manager/Lead Name is required.
+                </div>
+            </div>
+            <div class="wrap-input100">
+                <div class="label-input100">Route Reason</div>
+                <p-dropdown [options]="claim?.routeReasons" appendTo="body" formControlName="reason" [disabled]="!claim"
+                    [styleClass]="'w-100'" placeholder="Select" filter="true" optionLabel="name"></p-dropdown>
+                <div class="error-msg" style="top: 50px;"
+                    *ngIf="routeForm.get('reason').touched && routeForm.get('reason').hasError('required')">
+                    Reason is required.
+                </div>
+            </div>
+        </div>
+        <div class="d-flex">            
+            <div class="wrap-input100">
+                <div class="label-input100">Comments</div>
+                <textarea class="w-100 input100" [disabled]="!claim" formControlName="comments"
+                    maxlength="256"></textarea>
+                <span class="focus-input100"></span>
+                <div class="error-msg" style="top: 50px;"
+                    *ngIf="routeForm.get('comments').touched && routeForm.get('comments').hasError('required')">
+                    Comments is required.
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-end">
+            <div class="solid-btn" (click)="routeForm.invalid ? '' : routeClaim()" [class.disabled]="routeForm.invalid">
+                Route</div>
+        </div>
+    </form>
+</p-dialog>

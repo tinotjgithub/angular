@@ -1,0 +1,140 @@
+<div *ngIf="!isSLAArray" class="d-flex flex-end mt-1">
+  <span class="label-input50">SLA Days:&nbsp;&nbsp;{{ slaDays }}</span>
+</div>
+<div class="mt-2 d-flex flex-beginning">
+  <span class="label-input50">
+    <div class="d-flex mr-30">
+      <span style="width: 25px; height: 14px; background-color:#4973a6;"></span>
+      <span class="ml-2" style="font-size:13px">{{ this.categoryName }}</span>
+    </div>
+    &nbsp;&nbsp;</span
+  >
+</div>
+<div class="d-flex flex-end">
+  <span *ngIf="isSLAArray" class="label-input50">SLA Days&nbsp;&nbsp;</span>
+</div>
+<div class="d-flex flex-end mt-1" *ngIf="isSLAArray">
+  <div *ngFor="let sla of slaDaysArray">
+    <span class="label-input50">{{ sla }}&nbsp; &nbsp;</span>
+  </div>
+</div>
+
+<div class="d-flex scroll-graph-x">
+  <p class="horizontal-axis" style="padding-top:60px;">Transaction Count</p>
+  <google-chart
+    *ngIf="isExaminerCountRendered"
+    #barchart
+    (select)="openPopUp($event)"
+    [title]="titleExaminerCount"
+    [type]="typeExaminerCount"
+    [data]="dataInventory"
+    [options]="optionsOpenInv"
+    [columnNames]="columnNamesExaminerCount"
+    [width]="widthAge"
+    [height]="heightAge"
+  >
+  </google-chart>
+</div>
+<p class="vertical-axis text-center">Nearing SLA Days</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mb-2 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<form [formGroup]="invGroup" (ngSubmit)="onSubmitOpenInv()">
+  <div
+    class="row justify-content-right"
+    style="margin-left:5px; margin-right:5px;"
+  >
+    <div class="wrap-input100 mb-0 mr-30">
+      <div class="label-input100">Work Category</div>
+      <p-dropdown
+        appendTo="body"
+        [options]="categoryList"
+        formControlName="category"
+        [style]="{ width: '100%' }"
+        placeholder="Select Work Category"
+        tooltip="Work Category"
+        (onChange)="onSubmitOpenInv()"
+        tooltipPosition="bottom"
+      ></p-dropdown>
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Open Inventory Nearing SLA Days"
+>
+  <div *ngIf="!isSLAArray" class="d-flex flex-end mt-1">
+    <span class="label-input50">SLA Days:&nbsp;&nbsp;{{ slaDays }}</span>
+  </div>
+  <div class="mt-2 d-flex flex-beginning">
+    <span class="label-input50">
+      <div class="d-flex mr-30">
+        <span
+          style="width: 25px; height: 14px; background-color:#4973a6;"
+        ></span>
+        <span class="ml-2" style="font-size:13px">{{ this.categoryName }}</span>
+      </div>
+      &nbsp;&nbsp;</span
+    >
+  </div>
+  <div class="d-flex flex-end">
+    <span *ngIf="isSLAArray" class="label-input50">SLA Days&nbsp;&nbsp;</span>
+  </div>
+  <div class="d-flex flex-end mt-1" *ngIf="isSLAArray">
+    <div *ngFor="let sla of slaDaysArray">
+      <span class="label-input50">{{ sla }}&nbsp; &nbsp;</span>
+    </div>
+  </div>
+  <div class="d-flex scroll-graph-x">
+    <p class="horizontal-axis" style="padding-top:160px;">Transaction Count</p>
+    <google-chart
+      *ngIf="isExaminerCountRendered"
+      #chart
+      (select)="openPopUp($event)"
+      [title]="titleExaminerCount"
+      [type]="typeExaminerCount"
+      [data]="dataInventory"
+      [options]="optionsOpenInvEnlarged"
+      [width]="enlargedWidth"
+      [height]="360"
+      [columnNames]="columnNamesExaminerCount"
+    >
+    </google-chart>
+  </div>
+  <p class="vertical-axis-enlarged text-center">Nearing SLA Days</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  [style]="{ marginbottom: '20px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Open Inventory Nearing SLA Days - {{ this.categoryName }} ({{ this.age }} Days)"
+  (onHide)="closePopUp()"
+>
+  <app-enrollment-manager-dashboard-pop-up
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-enrollment-manager-dashboard-pop-up>
+</p-dialog>

@@ -1,0 +1,70 @@
+<div class="container-card px-5">
+  <h5 class="mb-2 heading">Modify User Target</h5>
+  <div class="row m-0 mb-2 p-0">
+  </div>
+  <p-table id="{{ searchDone ? 'searchtable' : '' }}" [tableStyle]="{ 'table-layout': 'auto' }" [responsive]="true"
+    #userTable selectionMode="single" [columns]="col" [value]="userList" [paginator]="searchDone" [rows]="8"
+    editMode="row" [resizableColumns]="true" dataKey="userName" [scrollable]="false">
+    <ng-template pTemplate="caption">
+      <div class="ui-helper-clearfix d-flex justify-content-center mb-2">
+        <span style="font-size: 18px; width: 10%">
+          <label class="font-weight-light">User Group: </label>
+        </span>
+        <span class="mr-2" style="position: relative;width: 30%;max-width: 300px;">
+          <select class="mr-2 form-control" style="max-width: 300px;" [(ngModel)]="filterType"
+            (change)="filterChange()">
+            <option value="userName">User Name</option>
+            <option value="first-name">First Name</option>
+          </select>
+        </span>
+        <input class="mr-2 form-control" [(ngModel)]="filterValue" type="text" style="max-width: 300px;" />
+        <button class="btn btn-primary" [disabled]="!filterValue" (click)="search()">
+          Search
+        </button>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr *ngIf="searchDone">
+        <th *ngFor="let col of columns" id="{{col.field}}">
+          {{ col.header }}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-editing="editing" let-user let-columns="columns" let-rowIndex="rowIndex">
+      <tr [pEditableRow]="col" style="text-align:left; align-items: left; align-content: left;" *ngIf="searchDone">
+        <td *ngFor="let col of columns" style="cursor: pointer" [ngSwitch]="col.field">
+          <ng-container *ngSwitchCase="'ldapOrLocal'">
+            {{ user[col.field] === "ldap" ? "LDAP" : "Local user" }}
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            {{ user[col.field] }}
+          </ng-container>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input" let-col>
+              <input pInputText size="40" maxlength="50" type="text" [(ngModel)]="col.userTarget" required />
+            </ng-template>
+            <ng-template pTemplate="output" let-col>
+              {{ col.userTarget }}
+            </ng-template>
+          </p-cellEditor>
+          <button *ngIf="!editing" pButton type="button" pInitEditableRow label="Edit"
+            style="height:100%; padding-left:12px; padding-right:12px; background-color: #3394cb; border-color: #3394cb"
+            (click)="onRowEditInit(col, rowIndex)"></button>
+          <button *ngIf="editing" pButton type="button" pSaveEditableRow icon="pi pi-check"
+            style="background-color: #3eb000; border-color: #3eb000; margin-right: .5em"></button>
+          <button *ngIf="editing" pButton type="button" pCancelEditableRow icon="pi pi-times"
+            style="background-color: #f54d50; border-color: #f54d50"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr *ngIf="searchDone">
+        <td class="text-center" [attr.colspan]="col.length + 1">
+          No users available.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

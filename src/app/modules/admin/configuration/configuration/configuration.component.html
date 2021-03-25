@@ -1,0 +1,153 @@
+<div class="d-flex mt-60">
+  <div class="wrap-general col pl-0 sub-menu mr-30">
+    <div class="popup-header d-flex config-header">
+      <div>
+        <img
+          alt=" "
+          src="../../../../../assets/images-new/general.png"
+          style="margin-right: 15px; margin-top: 19px;"
+        />
+      </div>
+      <div class="block-header">General</div>
+    </div>
+    <div class="pl-30 pr-30 mt-30"> 
+      <div class="link-wrapper w-fit">
+        <a [routerLink]="'/notification/list'">Notifications</a>
+      </div>
+      <div class="link-wrapper w-fit mt-20">
+        <a [routerLink]="'/ConfigureSupport'">Support</a>
+      </div>
+      <div class="mt-20">
+        <div>
+          Bulk Upload
+        </div>
+        <div class="link-wrapper w-fit ml-30 mt-20">
+          <a [routerLink]="'/BulkUpload'" [queryParams]="{ mode: 'user' }"
+            >User Creation Upload</a
+          >
+        </div>
+        <div class="link-wrapper w-fit mt-20 ml-30">
+          <a [routerLink]="'/BulkUpload'" [queryParams]="{ mode: 'userGroup' }"
+            >User Group Creation Upload</a
+          >
+        </div>
+        <div class="link-wrapper w-fit mt-20 ml-30">
+          <a
+            [routerLink]="'/BulkUpload'"
+            [queryParams]="{ mode: 'userCheckist' }"
+            >Auditor Checklist Upload</a
+          >
+        </div>
+        <div class="link-wrapper w-fit mt-20 ml-30">
+          <a [routerLink]="'/BulkUpload'" [queryParams]="{ mode: 'userReason' }"
+            >Reasons Upload</a
+          >
+        </div>
+        <div class="link-wrapper w-fit mt-20 ml-30">
+          <a
+            [routerLink]="'/BulkUpload'"
+            [queryParams]="{ mode: 'procedure-code' }"
+            >Procedure Code Upload</a
+          >
+        </div>
+        <div class="link-wrapper w-fit mt-20 ml-30">
+          <a
+            [routerLink]="'/BulkUpload'"
+            [queryParams]="{ mode: 'diagnosis-code' }" 
+            >Diagnosis Code Upload</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="wrap-claims-operations col sub-menu mr-30"
+    *ngIf="adminType === 'Claim' || adminType === 'Both'"
+  >
+    <div class="popup-header d-flex config-header">
+      <div>
+        <img
+          alt=" "
+          src="./../../../../../assets/images-new/claims-operations.png"
+          style="margin-right: 15px; margin-top: 19px;"
+        />
+      </div>
+      <div class="block-header">Claims Operations</div>
+    </div>
+    <div class="pl-30 pr-30 mt-30">
+      <div>
+        Reason Code
+      </div>
+      <div class="link-wrapper w-fit ml-30 mt-20">
+        <a [routerLink]="'/admin-configuration/pend-reason'">Pend</a>
+      </div>
+      <div class="link-wrapper w-fit mt-20 ml-30">
+        <a [routerLink]="'/admin-configuration/route-reason'">Route</a>
+      </div>
+      <div class="link-wrapper w-fit mt-20 ml-30">
+        <a [routerLink]="'/admin-configuration/reassign-reason'"
+          >Reassignment</a
+        >
+      </div>
+      <div class="link-wrapper w-fit mt-20 ml-30">
+        <a [routerLink]="'/admin-configuration/send-back'">Send Back</a>
+      </div>
+      <div class="link-wrapper w-fit mt-20">
+        <a [routerLink]="'/admin-configuration/route-role'">Route Option</a>
+      </div>
+      <div class="link-wrapper w-fit mt-20">
+        <a [routerLink]="'/ConfigureExaminerProductivity'"
+          >Examiner Productivity Configuration</a
+        >
+      </div>
+    </div>
+  </div>
+  <div
+    class="wrap-enrollment-operations col sub-menu mr-30"
+    *ngIf="adminType === 'Enrollment' || adminType === 'Both'"
+  >
+    <div class="popup-header d-flex config-header">
+      <div>
+        <img
+          alt=" "
+          src="../../../../../assets/images-new/enrollment.png"
+          style="margin-right: 15px; margin-top: 19px;"
+        />
+      </div>
+      <div class="block-header">Enrollment Operations</div>
+    </div>
+    <div class="pl-30 pr-30 mt-30">
+      <div class="link-wrapper w-fit mt-20">
+        <a [routerLink]="'/admin-configuration/transaction-category'">Transaction Category</a>
+      </div>
+      <div class="mt-20">
+        Reason Code
+      </div>
+      <div class="link-wrapper w-fit ml-30 mt-20">
+        <a [routerLink]="'/admin-configuration/pend-reason'" [queryParams]="{type: 'enrollment'}">Pend</a>
+      </div>
+      <div class="link-wrapper w-fit mt-20 ml-30">
+        <a [routerLink]="'/admin-configuration/route-reason'" [queryParams]="{type: 'enrollment'}">Route</a>
+      </div>
+      <div class="link-wrapper w-fit mt-20 ml-30">
+        <a [routerLink]="'/admin-configuration/reassign-reason'" [queryParams]="{type: 'enrollment'}"
+          >Reassignment</a
+        >
+      </div>
+      <div class="link-wrapper w-fit mt-20">
+        <a [routerLink]="'/admin-configuration/route-role'" [queryParams]="{type: 'enrollment'}">Route Option</a>
+      </div>
+      <div class="link-wrapper w-fit mt-20">
+        <a [routerLink]="'/admin-configuration/work-category'">Manage Work Category</a>
+      </div>
+      <div class="link-wrapper w-fit mt-20">
+        <a [routerLink]="'/enable-audit-checklist'">Configure Audit Checklist</a>
+      </div>
+      <div class="link-wrapper w-fit mt-20">
+        <a [routerLink]="'/ConfigureExaminerProductivity/specialist'"
+          >Specialist Productivity Configuration</a
+        >
+      </div>
+    </div>
+  </div>
+</div>

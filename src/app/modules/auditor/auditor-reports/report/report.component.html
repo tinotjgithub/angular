@@ -1,0 +1,21 @@
+<div class="tab-wrapper mt-60">
+    <div class="tab-container scroll-graph-x">
+        <input type="radio" name="tab-menu" id="tab1" class="tab-menu-radio" checked #tab1/>
+        <label for="tab1" class="tab-menu">Audited Claims</label>
+
+        <input type="radio" name="tab-menu" id="tab2" class="tab-menu-radio" #tab2/>
+        <label for="tab2" class="tab-menu">Audit Backlog</label>
+
+        <input type="radio" name="tab-menu" id="tab3" class="tab-menu-radio" #tab3/>
+        <label for="tab3" class="tab-menu">Audit Rebuttal</label>
+    </div>
+    <div class="tab-data" [hidden]="!tab1.checked">
+        <app-audit-report [fromTab]="true"></app-audit-report>
+    </div>
+    <div class="tab-data" [hidden]="!tab2.checked">
+        <app-audit-backlog-report [fromTab]="true"></app-audit-backlog-report>
+    </div>
+    <div class="tab-data" [hidden]="!tab3.checked">
+        <app-audit-rebuttal-report [fromTab]="true"></app-audit-rebuttal-report>
+    </div>
+</div>

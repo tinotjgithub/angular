@@ -1,0 +1,182 @@
+<form [formGroup]="userForm">
+  <div class="d-flex mt-15">
+    <div class="wrap-input100 mr-30 w-30">
+      <span class="label-input100">First Name</span>
+      <input class="input100" formControlName="firstName" type="text" name="name" placeholder="First Name">
+      <span class="focus-input100"></span>
+      <div class="error-msg" *ngIf="this.getControl('firstName').touched">
+        <span class="mb-0" *ngIf="this.getControl('firstName').hasError('required')">
+          First Name is required.
+        </span>
+        <span class="mb-0" *ngIf="this.getControl('firstName').hasError('invalid_name')">
+          Enter a valid First Name.
+        </span>
+      </div>
+    </div>
+    <div class="wrap-input100 mr-30 w-30">
+      <span class="label-input100">Last Name</span>
+      <input class="input100" formControlName="lastName" type="text" name="name" placeholder="Last Name">
+      <span class="focus-input100"></span>
+      <div class="error-msg" *ngIf="this.getControl('lastName').touched">
+        <span class="mb-0" *ngIf="this.getControl('lastName').hasError('required')">
+          Last Name is required.
+        </span>
+        <span class="mb-0" *ngIf="this.getControl('lastName').hasError('invalid_name')">
+          Enter a valid Last Name.
+        </span>
+      </div>
+    </div>
+    <div class="wrap-input100 w-30">
+      <span class="label-input100">User Name</span>
+      <input formControlName="userName" [attr.disabled]="editMode ? '' : null" class="input100" type="text" name="pass" placeholder="Username">
+      <span class="focus-input100"></span>
+      <div class="error-msg" *ngIf="this.getControl('userName').touched">
+        <span class="mb-0" *ngIf="this.getControl('userName').hasError('required')">
+          Username is required.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex">
+    <div class="wrap-input100 mr-30 w-30">
+      <span class="label-input100">Email</span>
+      <input  formControlName="email" class="input100" type="email" name="pass" placeholder="Email">
+      <span class="focus-input100"></span>
+      <div class="error-msg" *ngIf="this.getControl('email').touched">
+        <span class="mb-0" *ngIf="this.getControl('email').hasError('required')">
+          Email is required.
+        </span>
+        <span class="mb-0" *ngIf="this.getControl('email').hasError('emailPattern')">
+          Please enter valid email.
+        </span>
+      </div>
+    </div>
+    <div class="wrap-input100 mr-30 w-30">
+      <span class="label-input100">Date of Birth</span>
+      <p-calendar appendTo="body" [styleClass]="d.focus ? 'focus-calendar' : ''" formControlName="dob"
+        [showIcon]="true" dateFormat="mm/dd/yy" yearRange="1970:2099" [monthNavigator]="true"
+        [yearNavigator]="true" [maxDate]="today" (onFocus)="d.focus = true" [placeholder]="'Date Of Birth'" #d>
+      </p-calendar>
+      <div class="error-msg" *ngIf="this.getControl('dob').touched">
+        <span class="mb-0" *ngIf="this.getControl('dob').hasError('required')">
+          Date of Birth is required.
+        </span>
+      </div>
+    </div>
+    <div class="wrap-input100 w-30">
+      <span class="label-input100">Role</span>
+      <ng-container *ngIf="!editMode; else editModeRole">
+        <select formControlName="role" class="input100" type="password" name="pass" placeholder="Select Role">
+          <option value="" disabled selected hidden data-default>Select Role</option>
+          <option *ngFor="let role of userRoles" [value]="role.id">
+            {{ role.roleName }}
+          </option>
+        </select>
+        <div class="error-msg" *ngIf="this.getControl('role').touched">
+          <span class="mb-0" *ngIf="this.getControl('role').hasError('required')">
+            Role is required.
+          </span>
+        </div>
+      </ng-container>
+      <ng-template #editModeRole>
+        <input formControlName="role" [attr.disabled]="editMode ? '' : null" class="input100" type="text" name="role" placeholder="Role">
+      </ng-template>
+      <span class="focus-input100"></span>
+    </div>
+  </div>
+
+  <div class="d-flex">
+    <div class="wrap-input100 mr-30 w-30">
+      <span class="label-input100">Activation Date</span>
+      <p-calendar formControlName="activeDate" appendTo="body" [showIcon]="true"
+        [styleClass]="e.focus ? 'focus-calendar' : ''" dateFormat="mm/dd/yy" yearRange="1970:2099" [monthNavigator]="true"
+        [yearNavigator]="true" [minDate]="today" (onFocus)="e.focus = true" [placeholder]="'Activation Date'" #e>
+      </p-calendar>
+      <div class="error-msg" *ngIf="this.getControl('activeDate').touched">
+        <span class="mb-0" *ngIf="this.getControl('activeDate').hasError('required')">
+          Active Date is required.
+        </span>
+      </div>
+    </div>
+    <div class="wrap-input100 w-30 mr-30" *ngIf="getRoleName() === 'Manager'">
+      <span class="label-input100">Operations Type</span>      
+      <select formControlName="operationType" class="input100" placeholder="Select Type">
+        <option value="" disabled selected hidden>Select</option>        
+        <option value="both">Both</option>
+        <option *ngFor="let type of operationTypes" [value]="type.id">
+          {{ type.name }}
+        </option>
+      </select>
+      <!-- <p-multiSelect dataKey="id" [options]="operationTypes" appendTo="body" [maxSelectedLabels]="1" formControlName="operationType" optionLabel="name"></p-multiSelect> -->
+      <div class="error-msg" *ngIf="this.getControl('operationType').touched">
+        <span class="mb-0" *ngIf="this.getControl('operationType').hasError('required')">
+          Operations Type is required.
+        </span>
+      </div>
+      <span class="focus-input100"></span>
+    </div>
+        
+    <div class="wrap-input100 mr-30 w-30">
+      <span class="label-input100">Deactivation Date</span>
+      <p-calendar appendTo="body" [styleClass]="f.focus ? 'focus-calendar' : ''" formControlName="deactiveDate" [showIcon]="true"
+        dateFormat="mm/dd/yy" yearRange="1970:2099" [monthNavigator]="true" [yearNavigator]="true"
+        (onFocus)="f.focus = true" [minDate]="minDeactivateDate()" [placeholder]="'Deactivation Date'" #f></p-calendar>
+        <div class="error-msg" *ngIf="this.getControl('deactiveDate').hasError('deactivateDate')">
+          <span class="mb-0">
+            Past dates are not allowed.
+          </span>
+        </div>
+    </div>
+    <div class="wrap-input100 w-30" *ngIf="getControl('managerName')">
+      <span class="label-input100">Manager Name</span>
+      <ng-container *ngIf="!editMode; else editModeManagerName">
+        <select formControlName="managerName" class="input100" type="password" name="pass" placeholder="Select Manager" (change)="onManagerChange($event?.target?.value)">
+          <option value="" disabled selected hidden>Select</option>
+          <option *ngFor="let manager of managers" [value]="manager.id">
+            {{ manager.firstName }}&nbsp;{{ manager.lastName }}
+          </option>
+        </select>
+        <div class="error-msg" *ngIf="this.getControl('managerName').touched">
+          <span class="mb-0" *ngIf="this.getControl('managerName').hasError('required')">
+            Manager Name is required.
+          </span>
+        </div>
+      </ng-container>
+      <ng-template #editModeManagerName>
+        <input formControlName="managerName" [attr.disabled]="editMode ? '' : null" class="input100" type="text" name="role" placeholder="Role">
+      </ng-template>
+      <span class="focus-input100"></span>
+    </div>
+  </div>
+
+  <div class="d-flex">
+    <div class="wrap-input100 w-30 mr-30" *ngIf="getControl('userGroupName')">
+      <span class="label-input100">User Group Name</span>
+      <p-multiSelect dataKey="groupId" [options]="userGroups" appendTo="body" [maxSelectedLabels]="1" formControlName="userGroupName" optionLabel="groupName"
+        showTransitionOptions="225ms ease-out" [virtualScroll]="true" [filter]="true"> </p-multiSelect>
+      <span class="focus-input100"></span>
+      <div class="error-msg" *ngIf="this.getControl('userGroupName').touched">
+        <span class="mb-0" *ngIf="this.getControl('userGroupName').hasError('required')">
+          User Group Name is required.
+        </span>
+      </div>
+    </div>
+    <div class="wrap-input100 w-30" *ngIf="getRoleName() === 'Claims Examiner' || getRoleName() === 'Enrollment Specialist'">
+      <span class="label-input100">Target Count</span>
+      <input class="input100" formControlName="target" (keyup)="preventInput($event)" maxlength="3" min="minTarget"
+        max="maxTarget" numbersOnly placeholder="Target Count">
+      <span class="focus-input100"></span>
+    </div>
+  </div>
+
+  <div class="d-flex flex-end pr-30">
+    <div class="position-relative ml-30 pl-30 mr-auto" *ngIf="userForm.invalid && userForm.hasError('deactivateDate')">
+      <span class="error-msg" class="invalid-feedback d-block" style="font-size: inherit;">
+        Deactivate Date should be greater than Active Date
+      </span>
+    </div>
+    <div class="cancel-btn mr-30" (click)="cancel()">Cancel</div>
+    <div class="solid-btn" [class.disabled]="this.userForm.invalid || submitting" (click)="(userForm.invalid || submitting) ? '' : submit()">Save</div>
+  </div>
+</form>

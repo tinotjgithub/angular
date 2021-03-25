@@ -1,0 +1,563 @@
+#enrollment-landing {
+  .d-grid {
+    display: grid;
+  }
+  .card {
+    position: relative;
+    background-color: white;
+    border-radius: 5px;
+    padding: 15px 0px 0px 0px;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    font-weight: normal;
+    border-left-style: solid;
+    border: 1px solid #dbdbdb;
+    border-left-width: 7px;
+    cursor: pointer;
+  }
+  .card-title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 14px;
+  }
+  .card-value {
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 30px;
+  }
+  .block-title {
+    font-size: 20px;
+    color: #07568d;
+    margin-bottom: 5px;
+  }
+  .wrap-cards {
+    height: 385px;
+    overflow-y: scroll;
+  }
+  .card-blue {
+    border-left-color: #20558b;
+    color: #20558b;
+  }
+  .card-blue-bg {
+    background-color: #20558b;
+  }
+
+  .card-grey {
+    border-left-color: #686868;
+    color: #686868;
+  }
+  .card-grey-bg {
+    background-color: #686868;
+  }
+
+  .card-red {
+    border-left-color: #ff5c5d;
+    color: #ff5c5d;
+  }
+  .card-red-bg {
+    background-color: #ff5c5d;
+  }
+  .card-green {
+    border-left-color: #00b33d;
+    color: #00b33d;
+  }
+  .card-green-bg {
+    background-color: #00b33d;
+  }
+
+  .card-yellow {
+    border-left-color: #c5b200;
+    color: #c5b200;
+  }
+  .card-yellow-bg {
+    background-color: #c5b200;
+  }
+  .card-purple {
+    border-left-color: #a1285d;
+    color: #a1285d;
+  }
+  .card-purple-bg {
+    background-color: #a1285d;
+  }
+  .wrap-section-title {
+    position: relative;
+    width: fit-content;
+    height: 30px;
+  }
+
+  .section-title {
+    font-size: 18px;
+    color: inherit;
+    margin-left: 15px;
+    font-weight: bold;
+    line-height: 18px;
+    text-align: left;
+  }
+  .section-title-count {
+    font-size: 14px;
+    color: white;
+    margin-top: -15px;
+    position: absolute;
+    padding: 5px 6px;
+    height: 20px;
+    line-height: 10px;
+    border-radius: 52px;
+    top: 14px;
+    right: -35px;
+  }
+
+  .card-grid-template-column {
+    padding-left: 15px;
+    padding-right: 15px;
+    grid-template-columns: auto auto auto auto auto auto;
+    text-align: left !important;
+    grid-column-gap: 30px;
+    grid-row-gap: 10px;
+  }
+  .request-type {
+    font-size: 12px;
+    font-weight: normal;
+    opacity: 0.8;
+  }
+  .request-count {
+    font-size: 18px;
+    font-weight: 600;
+    opacity: 0.8;
+  }
+
+  .request-count-link {
+    font-size: 16px;
+    font-weight: 700;
+    opacity: 0.8;
+  }
+
+  .grid-work-category {
+    position: relative;
+  }
+  .grid-work-category-hover {
+    display: none;
+    color: white !important;
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 22px;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 45px;
+  }
+  .card-blue .grid-work-category:hover .grid-work-category-hover {
+    display: block;
+    background-color: #20558b;
+  }
+  .card-blue .grid-work-category:hover .grid-work-category-hover {
+    display: block;
+    background-color: #20558b;
+  }
+  .card-red .grid-work-category:hover .grid-work-category-hover {
+    display: block;
+    background-color: #ff5c5d;
+  }
+  .card-grey .grid-work-category:hover .grid-work-category-hover {
+    display: block;
+    background-color: #686868;
+  }
+  .card-green .grid-work-category:hover .grid-work-category-hover {
+    display: block;
+    background-color: #00b33d;
+  }
+  .card-yellow .grid-work-category:hover .grid-work-category-hover {
+    display: block;
+    background-color: #c5b200;
+  }
+
+  .card-purple .grid-work-category:hover .grid-work-category-hover {
+    display: block;
+    background-color: #a1285d;
+  }
+
+  .title-hint {
+    font-size: 14px;
+    color: #939ba5;
+    line-height: 20px;
+  }
+  .wrap-reques-category-btn {
+    font-size: 14px;
+    color: #20558b;
+    background-color: white;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    cursor: pointer;
+  }
+  .wrap-reques-category-btn:hover {
+    color: white;
+    background-color: #20558b;
+    border: 1px solid #20558b;
+  }
+  .wrap-reques-category-btn:hover .general-request-count {
+    color: #20558b;
+    background-color: white;
+  }
+  .general-request-count {
+    font-size: 14px;
+    color: white;
+    padding: 5px 6px;
+    height: 20px;
+    line-height: 10px;
+    border-radius: 52px;
+    background-color: #20558b;
+    width: fit-content;
+    margin: 0 auto;
+  }
+
+  .quick-link-grid {
+    grid-template-columns: auto auto auto auto auto;
+    text-align: left !important;
+    grid-column-gap: 30px;
+    grid-row-gap: 10px;
+  }
+
+  .quick-link-div {
+    border: none;
+    padding: 10px;
+    border: 1px solid #dbdbdb;
+    background-color: white;
+    position: relative;
+    border-radius: 5px;
+  }
+
+  .quick-link-div:hover .quick-link-grid-hover {
+    display: block;
+  }
+
+  .quick-link-grid-hover {
+    cursor: pointer;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #20558b;
+    color: white;
+    width: 100%;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 5px;
+    padding: 20px 0;
+  }
+
+  .wrap-list-view-chart-view {
+    background-color: #dfe0eb;
+    border-radius: 6px;
+  }
+  .list-view {
+    background-color: #dfe0eb;
+    width: 60px;
+    height: 30px;
+    padding: 3px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .icon-list {
+    background-image: url("src/assets/images-new/list-blue.png");
+    width: 24px;
+    height: 24px;
+    background-size: cover;
+  }
+  .active .icon-list {
+    background-image: url("src/assets/images-new/list-white.png");
+    width: 24px;
+    height: 24px;
+  }
+  .icon-chart {
+    background-image: url("src/assets/images-new/chart-blue.png");
+    width: 24px;
+    height: 24px;
+  }
+  .active .icon-chart {
+    background-image: url("src/assets/images-new/chart-white.png");
+    width: 24px;
+    height: 24px;
+  }
+  .chart-view {
+    background-color: #dfe0eb;
+    width: 60px;
+    height: 30px;
+    padding: 3px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .active {
+    background-color: #20558b;
+  }
+  .wrap-cards {
+    height: 385px;
+    overflow-y: scroll;
+  }
+
+  .wrap-enrollment-task .big-btn {
+    display: flex;
+    background-color: white;
+    font-size: 16px;
+    color: #07568d;
+    width: 100%;
+    line-height: 30px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #dfe0eb;
+    cursor: pointer;
+    position: relative;
+    padding: 5px 15px;
+  }
+  .wrap-enrollment-task .btn-label {
+    margin-left: 25px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    line-height: 18px;
+  }
+  .wrap-enrollment-task .big-btn:hover {
+    background-color: #07568d;
+    color: white;
+  }
+  .wrap-enrollment-task .user-element-2 {
+    background-image: url("src/assets/images-new/add-user.png");
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+  }
+  .wrap-enrollment-task .big-btn:hover .user-element-2 {
+    background-image: url("src/assets/images-new/add-user-1.png");
+  }
+  .wrap-enrollment-task .user-element-3 {
+    background-image: url("src/assets/images-new/ql-claims-audit.png");
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+  }
+  .wrap-enrollment-task .big-btn:hover .user-element-3 {
+    background-image: url("src/assets/images-new/ql-claims-audit-hover.png");
+  }
+  .my-enrollment-task {
+    width: 100%;
+  }
+  .my-enrollment-task .card {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px 30px;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    height: 90px;
+  }
+  .my-enrollment-task .card-red {
+    border-left-color: #ff5c5d;
+    color: #ff5c5d;
+    &.hover-hide:hover {
+      background-color: #ff5c5d;
+      color: #ff5c5d;
+      .card-hover {
+        color: white;
+        background-color: transparent;
+        display: block;
+      }
+    }
+    &.hover:hover {
+      background-color: #ff5c5d;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .my-enrollment-task .card-title {
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 14px;
+    color: #9fa2b4;
+    &-examiner {
+      font-size: 16px;
+      font-weight: normal;
+      line-height: 13px;
+    }
+  }
+  .my-enrollment-task .card-value {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 20px;
+    font-family: Poppins-Bold, Arial, Verdana, Tahoma, sans-serif;
+    &-examiner {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 30px;
+    }
+  }
+
+  .my-enrollment-task .card-assigned {
+    border-left-color: #20558b;
+    color: #20558b;
+    &.hover:hover {
+      background-color: #20558b;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .my-enrollment-task .card-unassigned {
+    border-left-color: #686868;
+    color: #686868;
+    &.hover:hover {
+      background-color: #686868;
+      color: white;
+      cursor: pointer;
+    }
+  }
+  .my-enrollment-task .card-completed {
+    border-left-color: #00b33d;
+    color: #00b33d;
+    &.hover:hover {
+      background-color: #00b33d;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .my-enrollment-task .card-routed {
+    border-left-color: #c5b200;
+    color: #c5b200;
+    &.hover:hover {
+      background-color: #c5b200;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .my-enrollment-task .card-audit-failed {
+    border-left-color: #a1285d;
+    color: #a1285d;
+    &.hover:hover {
+      background-color: #a1285d;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .my-enrollment-task .card-total {
+    color: #444d57;
+    height: 90px;
+    &.hover:hover {
+      background-color: #444d57;
+      color: white;
+      cursor: pointer;
+    }
+  }
+  .my-enrollment-task .card-to-do {
+    color: #20558b;
+    height: 90px;
+    &.hover:hover {
+      background-color: #20558b;
+      color: white;
+      cursor: pointer;
+    }
+  }
+  .my-enrollment-task .card-pended {
+    color: #ff5c5d;
+    height: 90px;
+    &.hover:hover {
+      background-color: #ff5c5d;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .my-enrollment-task .card-amber {
+    color: red;
+    &.hover:hover {
+      background-color: red;
+      color: white;
+      cursor: pointer;
+    }
+    border-left-color: red;
+  }
+
+  .my-enrollment-task .card-yellow {
+    border-left-color: #c5b200;
+    color: #c5b200;
+    &.hover-hide:hover {
+      background-color: #c5b200;
+      color: #c5b200;
+      .card-hover {
+        color: white;
+        background-color: transparent;
+        display: block;
+      }
+    }
+    &.hover:hover {
+      background-color: #c5b200;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .my-enrollment-task .card-purple {
+    border-left-color: #a1285d;
+    color: #a1285d;
+    &.hover-hide:hover {
+      background-color: #a1285d;
+      color: #a1285d;
+      .card-hover {
+        color: white;
+        background-color: transparent;
+        display: block;
+      }
+    }
+    &.hover:hover {
+      background-color: #a1285d;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .my-enrollment-task .card-grey {
+    border-left-color: #686868;
+    color: #686868;
+    &.hover-hide:hover {
+      background-color: #686868;
+      color: #686868;
+      .card-hover {
+        color: white;
+        background-color: transparent;
+        display: block;
+      }
+    }
+    &.hover:hover {
+      background-color: #686868;
+      color: white;
+      cursor: pointer;
+    }
+  }
+
+  .card-title-examiner {
+    font-size: 16px;
+    width: 100%;
+    font-weight: normal;
+    line-height: 18px;
+    height: 20px;
+    // white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

@@ -1,0 +1,37 @@
+.wrap-pend-reason{
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid #DFE0EB;
+    padding-top: 30px;
+    max-height: fit-content;
+    /* padding-bottom: 30px; */
+  }
+  
+.pend-reason{
+    width:50%;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 30px;
+  }
+  .table-header{
+    font-weight: 600;
+    color: rgba(50, 60, 71, 0.7);
+  }.wrap-pend-reason-form{
+    border-radius: 8px;
+    background-color: white;
+    padding-bottom: 30px;
+    border: 1px solid #DFE0EB;
+    height: fit-content;
+  }
+  .pend-reason-form-header{
+    height: 67px;
+    border-bottom: 1px solid #EBEFF2;
+    padding: 0 30px;
+    font-size: 18px;
+    color: #20558B;
+    /* margin-left: 30px; */
+    line-height: 35px;
+    margin-top: 30px;
+  }

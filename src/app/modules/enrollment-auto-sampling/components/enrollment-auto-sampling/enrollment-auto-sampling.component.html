@@ -1,0 +1,884 @@
+<form [formGroup]="formGroup">
+  <div class="d-flex space-between mt-60 mb-20" href="#">
+    <div class="d-flex">
+      <div [routerLink]="'/configuration-menu'">
+        <img
+          alt=" "
+          src="./../../../../assets/images-new/left.png"
+          style="margin-right: 15px; cursor: pointer;"
+        />
+      </div>
+
+      <div>Back To Configuration</div>
+    </div>
+    <div
+      class="solid-btn"
+      (click)="saveSettings()"
+      [class.disabled]="
+        formGroup.invalid ||
+        getFormControl('selectedWorkCategory')?.value?.length === 0
+      "
+    >
+      Save Settings
+    </div>
+  </div>
+  <div>
+    <div class="md-stepper-horizontal blue bg-transperant">
+      <div
+        class="md-step"
+        for="tab-menu1"
+        [ngClass]="[
+          selectedWorkCategoryList.length === 0 ? 'active' : 'done',
+          divId === 2 ? 'editable pointer-div' : ''
+        ]"
+        style="border-left: none"
+        (click)="setDivId(2)"
+      >
+        <div class="md-step-circle">
+          1
+        </div>
+        <div class="md-step-title">Work Category</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div
+        class="md-step"
+        for="tab-menu1"
+        [ngClass]="[
+          selectedTransactionCategoryList.length === 0 ? 'active' : 'done',
+          divId === 1 ? 'editable pointer-div' : ''
+        ]"
+        style="border-left: none"
+        (click)="setDivId(1)"
+        [ngClass]="{ editable: divId === 1 }"
+      >
+        <div class="md-step-circle">
+          2
+        </div>
+        <div class="md-step-title">Transaction Category</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div
+        class="md-step"
+        [ngClass]="[
+          selectedBenefitPlanList.length === 0 ? 'active' : 'done',
+          divId === 3 ? 'editable pointer-div' : ''
+        ]"
+        for="tab-menu2"
+        (click)="setDivId(3)"
+        style="border-left: none"
+      >
+        <div class="md-step-circle">
+          3
+        </div>
+        <div class="md-step-title">Benefit Plan</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div
+        class="md-step"
+        for="tab-menu3"
+        [ngClass]="[
+          selectedBenefitPlanList.length === 0 ? 'active' : 'done',
+          divId === 4 ? 'editable pointer-div' : ''
+        ]"
+        style="border-left: none"
+        (click)="setDivId(4)"
+      >
+        <div class="md-step-circle">
+          4
+        </div>
+        <div class="md-step-title">Member Group</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+
+      <div
+        class="md-step"
+        for="tab-menu5"
+        [ngClass]="[
+          selectedUserGroupList.length === 0 ? 'active' : 'done',
+          divId === 6 ? 'editable pointer-div' : ''
+        ]"
+        style="border-left: none"
+        (click)="setDivId(6)"
+      >
+        <div class="md-step-circle">
+          5
+        </div>
+        <div class="md-step-title">User Group & Enrollment Specialist</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div
+        class="md-step"
+        for="tab-menu4"
+        style="border-left: none"
+        (click)="setDivId(5)"
+        [ngClass]="[
+          formGroup.invalid ||
+          getFormControl('selectedWorkCategory')?.value?.length === 0
+            ? 'active'
+            : 'done',
+          divId === 5 ? 'editable pointer-div' : ''
+        ]"
+      >
+        <div class="md-step-circle">
+          6
+        </div>
+        <div class="md-step-title">Apply Percentage</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div
+        class="md-step active"
+        for="tab-menu5"
+        [ngClass]="{ 'editable pointer-div': divId === 8 }"
+        style="border-left: none"
+        (click)="setDivId(8)"
+        x
+      >
+        <div class="md-step-circle">
+          7
+        </div>
+        <div class="md-step-title">Review</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0 "
+    style="border-radius: 8px;"
+    [hidden]="divId !== 2"
+  >
+    <div class="d-flex mt-30">
+      <p-pickList
+        filterBy="name"
+        [source]="this.getFormControl('availableWorkCategories').value"
+        class="w-100"
+        [sourceHeader]="'Work  Categories'"
+        [targetHeader]="'Selected Work Categories'"
+        [target]="this.getFormControl('selectedWorkCategory').value"
+        (onMoveToTarget)="onMoveToTargetWorkCategory($event)"
+        (onMoveToSource)="onMoveToSourceWorkCategory($event)"
+      >
+        <ng-template let-item pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <p>{{ item.name }}</p>
+          </div>
+        </ng-template>
+      </p-pickList>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0"
+    style="border-radius: 8px;"
+    [hidden]="divId !== 1"
+  >
+    <div class="d-flex mt-30">
+      <p-pickList
+        filterBy="name"
+        [source]="this.getFormControl('availableTransactionCategory').value"
+        class="w-100"
+        [sourceHeader]="'Transaction Categories'"
+        [targetHeader]="'Selected Transaction Categories'"
+        [target]="this.getFormControl('selectedTransactionCategory').value"
+      >
+        <ng-template let-item pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <p>{{ item.name }}</p>
+          </div>
+        </ng-template>
+      </p-pickList>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0"
+    style="border-radius: 8px;"
+    [hidden]="divId !== 3"
+  >
+    <div class="d-flex mt-30">
+      <p-pickList
+        filterBy="name"
+        [source]="this.getFormControl('availableBenefitPlan').value"
+        class="w-100"
+        [sourceHeader]="'Benefit Plans'"
+        [targetHeader]="'Selected Benefit Plans'"
+        [target]="this.getFormControl('selectedBenefitPlan').value"
+      >
+        <ng-template let-item pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <p>{{ item.name }}</p>
+          </div>
+        </ng-template>
+      </p-pickList>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0"
+    style="border-radius: 8px;"
+    [hidden]="divId !== 4"
+  >
+    <div class="d-flex mt-30">
+      <p-pickList
+        filterBy="name"
+        [source]="this.getFormControl('availableMemberGroup').value"
+        [sourceHeader]="'Member Groups'"
+        class="w-100"
+        [targetHeader]="'Selected Member Groups'"
+        [target]="this.getFormControl('selectedMemberGroup').value"
+      >
+        <ng-template let-item pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <p>{{ item.name }}</p>
+          </div>
+        </ng-template>
+      </p-pickList>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0"
+    style="border-radius: 8px;"
+    [hidden]="divId !== 5"
+  >
+    <div class=" mt-30">
+      <h6
+        *ngIf="getFormControl('selectedWorkCategory')?.value?.length === 0"
+        class="text-danger"
+      >
+        There are no Work Categories selected. Please select atleast one Work
+        Category.
+      </h6>
+      <div class="grid-container mt-15">
+        <div class="grid-item" *ngIf="displayWorkCategory('WORKBASKET')">
+          <div>
+            <input type="checkbox" checked="" />
+            <label class="checkbox-label"> Workbasket %</label>
+          </div>
+          <div class="wrap-input100  mt-15">
+            <span class="label-input100">Workbasket %</span>
+            <input
+              *ngIf="displayWorkCategory('WORKBASKET')"
+              class="input100"
+              placeholder=""
+              formControlName="workbasketPercentage"
+              type="number"
+              required
+              pattern="^(?!0*(\.0+)?$)(\d{0,2}(\.\d{1,2})?|100(\.00?)?)$"
+            />
+            <span class="focus-input100"></span>
+            <div
+              class="error-msg"
+              *ngIf="
+                getFormControl('workbasketPercentage').touched &&
+                getFormControl('workbasketPercentage').invalid
+              "
+            >
+              <span
+                *ngIf="
+                  getFormControl('workbasketPercentage').hasError('pattern') ||
+                  getFormControl('workbasketPercentage').hasError('required')
+                "
+              >
+                Value should be between 0 and 100
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item" *ngIf="displayWorkCategory('RECONCILIATION')">
+          <div>
+            <input type="checkbox" checked="" />
+            <label class="checkbox-label"> Reconciliation %</label>
+          </div>
+          <div class="wrap-input100  mt-15">
+            <span class="label-input100">Reconciliation %</span>
+            <input
+              class="input100"
+              placeholder=""
+              formControlName="reconciliationPercentage"
+              type="number"
+              required
+              pattern="^(?!0*(\.0+)?$)(\d{0,2}(\.\d{1,2})?|100(\.00?)?)$"
+            />
+            <span class="focus-input100"></span>
+            <div
+              class="error-msg"
+              *ngIf="
+                getFormControl('reconciliationPercentage').touched &&
+                getFormControl('reconciliationPercentage').invalid
+              "
+            >
+              <span
+                *ngIf="
+                  getFormControl('reconciliationPercentage').hasError(
+                    'pattern'
+                  ) ||
+                  getFormControl('reconciliationPercentage').hasError(
+                    'required'
+                  )
+                "
+              >
+                Value should be between 0 and 100
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-item" *ngIf="displayWorkCategory('FALLOUT')">
+          <div>
+            <input type="checkbox" checked="" />
+            <label class="checkbox-label"> Fallout %</label>
+          </div>
+          <div class="wrap-input100  mt-15">
+            <span class="label-input100">Fallout %</span>
+            <input
+              class="input100"
+              placeholder=""
+              formControlName="falloutPercentage"
+              type="number"
+              required
+              pattern="^(?!0*(\.0+)?$)(\d{0,2}(\.\d{1,2})?|100(\.00?)?)$"
+            />
+            <span class="focus-input100"></span>
+            <div
+              class="error-msg"
+              *ngIf="
+                getFormControl('falloutPercentage').touched &&
+                getFormControl('falloutPercentage').invalid
+              "
+            >
+              <span
+                *ngIf="
+                  getFormControl('falloutPercentage').hasError('pattern') ||
+                  getFormControl('falloutPercentage').hasError('required')
+                "
+              >
+                Value should be between 0 and 100
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="grid-item"
+          *ngIf="displayWorkCategory('NEW GROUP ENROLLMENT')"
+        >
+          <div>
+            <input type="checkbox" checked="" />
+            <label class="checkbox-label"> New Group %</label>
+          </div>
+          <div class="wrap-input100  mt-15">
+            <span class="label-input100">New Group %</span>
+            <input
+              class="input100"
+              placeholder=""
+              formControlName="newGroupEnrollmentPercentage"
+              required
+              pattern="^(?!0*(\.0+)?$)(\d{0,2}(\.\d{1,2})?|100(\.00?)?)$"
+            />
+            <span class="focus-input100"></span>
+            <div
+              class="error-msg"
+              *ngIf="
+                getFormControl('newGroupEnrollmentPercentage').touched &&
+                getFormControl('newGroupEnrollmentPercentage').invalid
+              "
+            >
+              <span
+                *ngIf="
+                  getFormControl('newGroupEnrollmentPercentage').hasError(
+                    'pattern'
+                  ) ||
+                  getFormControl('newGroupEnrollmentPercentage').hasError(
+                    'required'
+                  )
+                "
+              >
+                Value should be between 0 and 100
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-item" *ngIf="displayWorkCategory('ID CARD REQUEST')">
+          <div>
+            <input type="checkbox" checked="" />
+            <label class="checkbox-label">ID Card Request %</label>
+          </div>
+          <div class="wrap-input100  mt-15">
+            <span class="label-input100">ID Card Request %</span>
+            <input
+              class="input100"
+              placeholder=""
+              formControlName="idCardRequestPercentage"
+              required
+              pattern="^(?!0*(\.0+)?$)(\d{0,2}(\.\d{1,2})?|100(\.00?)?)$"
+            />
+            <span class="focus-input100"></span>
+            <div
+              class="error-msg"
+              *ngIf="
+                getFormControl('idCardRequestPercentage').touched &&
+                getFormControl('idCardRequestPercentage').invalid
+              "
+            >
+              <span
+                *ngIf="
+                  getFormControl('idCardRequestPercentage').hasError(
+                    'pattern'
+                  ) ||
+                  getFormControl('idCardRequestPercentage').hasError('required')
+                "
+              >
+                Value should be between 0 and 100
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item" *ngIf="displayWorkCategory('BULK TERMINATION')">
+          <div>
+            <input type="checkbox" checked="" />
+            <label class="checkbox-label">Bulk Termination %</label>
+          </div>
+          <div class="wrap-input100  mt-15">
+            <span class="label-input100">Bulk Termination %</span>
+            <input
+              class="input100"
+              placeholder=""
+              formControlName="bulkTerminationPercentage"
+              required
+              pattern="^(?!0*(\.0+)?$)(\d{0,2}(\.\d{1,2})?|100(\.00?)?)$"
+            />
+            <span class="focus-input100"></span>
+            <div
+              class="error-msg"
+              *ngIf="
+                getFormControl('bulkTerminationPercentage').touched &&
+                getFormControl('bulkTerminationPercentage').invalid
+              "
+            >
+              <span
+                *ngIf="
+                  getFormControl('bulkTerminationPercentage').hasError(
+                    'pattern'
+                  ) ||
+                  getFormControl('bulkTerminationPercentage').hasError(
+                    'required'
+                  )
+                "
+              >
+                Value should be between 0 and 100
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item" *ngIf="displayWorkCategory('GROUP RENEWAL')">
+          <div>
+            <input type="checkbox" checked="" />
+            <label class="checkbox-label">Group Renewal %</label>
+          </div>
+          <div class="wrap-input100  mt-15">
+            <span class="label-input100">Group Renewal %</span>
+            <input
+              class="input100"
+              placeholder=""
+              formControlName="groupRenewalPercentage"
+              required
+              pattern="^(?!0*(\.0+)?$)(\d{0,2}(\.\d{1,2})?|100(\.00?)?)$"
+            />
+            <span class="focus-input100"></span>
+            <div
+              class="error-msg"
+              *ngIf="
+                getFormControl('groupRenewalPercentage').touched &&
+                getFormControl('groupRenewalPercentage').invalid
+              "
+            >
+              <span
+                *ngIf="
+                  getFormControl('groupRenewalPercentage').hasError(
+                    'pattern'
+                  ) ||
+                  getFormControl('groupRenewalPercentage').hasError('required')
+                "
+              >
+                Value should be between 0 and 100
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="grid-item" *ngIf="displayWorkCategory('OTHER TICKETS')">
+          <div>
+            <input type="checkbox" checked="" />
+            <label class="checkbox-label">Other Request %</label>
+          </div>
+          <div class="wrap-input100  mt-15">
+            <span class="label-input100">Other Request %</span>
+            <input
+              class="input100"
+              placeholder=""
+              formControlName="otherTicketsPercentage"
+              required
+              pattern="^(?!0*(\.0+)?$)(\d{0,2}(\.\d{1,2})?|100(\.00?)?)$"
+            />
+            <span class="focus-input100"></span>
+            <div
+              class="error-msg"
+              *ngIf="
+                getFormControl('otherTicketsPercentage').touched &&
+                getFormControl('otherTicketsPercentage').invalid
+              "
+            >
+              <span
+                *ngIf="
+                  getFormControl('otherTicketsPercentage').hasError(
+                    'pattern'
+                  ) ||
+                  getFormControl('otherTicketsPercentage').hasError('required')
+                "
+              >
+                Value should be between 0 and 100
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid-item-total float-right" style="max-width: 15vw">
+        <div class="wrap-input100  mb-0">
+          <span class="selected-label" style="color: #20558b"
+            >Total Sampling %</span
+          >
+          <input
+            class="input100 total-input mt-10"
+            placeholder=""
+            formControlName="totalPercentage"
+            style="font-size: 30px; color: #20558b"
+            required
+            pattern="^(?!0*(\.0+)?$)(\d{0,2}(\.\d{1,2})?|100(\.00?)?)$"
+          />
+          <span class="focus-input100"></span>
+          <div
+            class="error-msg mt-1"
+            *ngIf="getFormControl('totalPercentage').invalid"
+          >
+            <span
+              *ngIf="
+                getFormControl('totalPercentage').hasError('pattern') ||
+                getFormControl('totalPercentage').hasError('required')
+              "
+            >
+              Value should be between 0 and 100
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="wrap-claim-volume pt-0"
+    style="border-radius: 0 0 8px 8px;"
+    [hidden]="divId !== 6"
+  >
+    <div class="d-flex mt-15">
+      <div class="attachment-comment new">User Group</div>
+    </div>
+    <div class="d-flex">
+      <div class="wrap-input100 w-70">
+        <p-multiSelect
+          class="w-100"
+          [options]="this.getFormControl('avalaibelUserGroup').value"
+          (onChange)="onChangeUserGroup($event)"
+          appendTo="body"
+          formControlName="selectedUserGroup"
+          optionLabel="name"
+        ></p-multiSelect>
+      </div>
+    </div>
+    <div
+      class="d-flex mt-15"
+      *ngIf="
+        this.getFormControl('selectedUserGroup').value &&
+        this.getFormControl('selectedUserGroup').value.length > 0
+      "
+    >
+      <div class="attachment-comment new">Specialist</div>
+    </div>
+    <div
+      class="d-flex"
+      *ngIf="
+        this.getFormControl('selectedUserGroup').value &&
+        this.getFormControl('selectedUserGroup').value.length > 0
+      "
+    >
+      <p-pickList
+        filterBy="name"
+        [source]="this.getFormControl('availableEnrollmentSpecialist').value"
+        class="w-100"
+        [sourceHeader]="'Enrollment Specialists'"
+        [targetHeader]="'Selected For Audit'"
+        [target]="this.getFormControl('selectedEnrollmentSpecialist').value"
+      >
+        <ng-template let-item pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <p>{{ item.name }}</p>
+          </div>
+        </ng-template>
+      </p-pickList>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0 w-100"
+    style="border-radius: 8px;"
+    [hidden]="divId !== 8"
+  >
+    <div class="d-flex pl-30 pr-30 mt-30 space-between">
+      <div style="width: 33%">
+        <div class="attachment-comment new">Work Categories</div>
+        <div class="label-value" *ngIf="selectedWorkCategoryList?.length === 0">
+          <p class="text-danger">
+            No Work Categories Selected, Select Atleast One.
+          </p>
+        </div>
+        <ng-container *ngIf="selectedWorkCategoryList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedWorkCategoryList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+      <div style="width: 33%">
+        <div class="attachment-comment new">Transaction Category</div>
+        <div
+          class="label-value"
+          *ngIf="selectedTransactionCategoryList?.length === 0"
+        >
+          All Transaction Categories Selected
+        </div>
+        <ng-container *ngIf="selectedTransactionCategoryList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedTransactionCategoryList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+      <div style="width: 33%">
+        <div class="attachment-comment new">Benefit Plan</div>
+        <div class="label-value" *ngIf="selectedBenefitPlanList?.length === 0">
+          All Benefit plans Selected
+        </div>
+        <ng-container *ngIf="selectedBenefitPlanList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedBenefitPlanList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="d-flex pl-30 pr-30 mt-30 space-between">
+      <div style="width: 33%">
+        <div class="attachment-comment new">Member Group</div>
+        <div class="label-value" *ngIf="selectedMemberGroupList?.length === 0">
+          All Member Groups Selected
+        </div>
+        <ng-container *ngIf="selectedMemberGroupList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedMemberGroupList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+      <div style="width: 33%">
+        <div class="attachment-comment new">User Groups</div>
+        <div class="label-value" *ngIf="selectedUserGroupList?.length === 0">
+          All User Groups Selected
+        </div>
+        <ng-container *ngIf="selectedUserGroupList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedUserGroupList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+      <div style="width: 33%">
+        <div class="attachment-comment new">Enrollment Specialist</div>
+        <div
+          class="label-value"
+          *ngIf="selectedEnrollmentSpecialistList?.length === 0"
+        >
+          All Enrollment Specialists Selected
+        </div>
+        <ng-container *ngIf="selectedEnrollmentSpecialistList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedEnrollmentSpecialistList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="d-flex pl-30 pr-30 mt-30 space-between">
+      <div style="width: 33%">
+        <div class="attachment-comment new">Apply Percentage</div>
+        <div
+          class="label-value"
+          *ngIf="getFormControl('selectedWorkCategory').value?.length === 0"
+        >
+          <p class="text-danger">
+            No Work Categories Selected, Select Atleast One!
+          </p>
+        </div>
+        <ng-container
+          *ngIf="getFormControl('selectedWorkCategory').value?.length > 0"
+        >
+          <div class="label-value" *ngIf="displayWorkCategory('WORKBASKET')">
+            <p
+              [ngClass]="{
+                'text-danger':
+                  getFormControl('workbasketPercentage').value === 0
+              }"
+            >
+              Workbasket: {{ getFormControl("workbasketPercentage").value }}
+            </p>
+          </div>
+          <div
+            class="label-value"
+            *ngIf="displayWorkCategory('RECONCILIATION')"
+          >
+            <p
+              [ngClass]="{
+                'text-danger':
+                  getFormControl('reconciliationPercentage').value === 0
+              }"
+            >
+              Reconciliation:
+              {{ getFormControl("reconciliationPercentage").value }}
+            </p>
+          </div>
+          <div class="label-value" *ngIf="displayWorkCategory('FALLOUT')">
+            <p
+              [ngClass]="{
+                'text-danger': getFormControl('falloutPercentage').value === 0
+              }"
+            >
+              Fallout: {{ getFormControl("falloutPercentage").value }}
+            </p>
+          </div>
+          <div
+            class="label-value"
+            *ngIf="displayWorkCategory('NEW GROUP ENROLLMENT')"
+          >
+            <p
+              [ngClass]="{
+                'text-danger':
+                  getFormControl('newGroupEnrollmentPercentage').value === 0
+              }"
+            >
+              New Group Enrollment:
+              {{ getFormControl("newGroupEnrollmentPercentage").value }}
+            </p>
+          </div>
+          <div class="label-value" *ngIf="displayWorkCategory('GROUP RENEWAL')">
+            <p
+              [ngClass]="{
+                'text-danger':
+                  getFormControl('groupRenewalPercentage').value === 0
+              }"
+            >
+              Group Renewal:
+              {{ getFormControl("groupRenewalPercentage").value }}
+            </p>
+          </div>
+          <div
+            class="label-value"
+            *ngIf="displayWorkCategory('ID CARD REQUEST')"
+          >
+            <p
+              [ngClass]="{
+                'text-danger':
+                  getFormControl('idCardRequestPercentage').value === 0
+              }"
+            >
+              Id card Request:
+              {{ getFormControl("idCardRequestPercentage").value }}
+            </p>
+          </div>
+          <div
+            class="label-value"
+            *ngIf="displayWorkCategory('BULK TERMINATION')"
+          >
+            <p
+              [ngClass]="{
+                'text-danger':
+                  getFormControl('bulkTerminationPercentage').value === 0
+              }"
+            >
+              Bulk termination:
+              {{ getFormControl("bulkTerminationPercentage").value }}
+            </p>
+          </div>
+          <div class="label-value" *ngIf="displayWorkCategory('OTHER TICKETS')">
+            <p
+              [ngClass]="{
+                'text-danger':
+                  getFormControl('otherTicketsPercentage').value === 0
+              }"
+            >
+              Other Tickets:
+              {{ getFormControl("otherTicketsPercentage").value }}
+            </p>
+          </div>
+          <div class="label-value">
+            <p
+              [ngClass]="{
+                'text-danger ': getFormControl('totalPercentage').value === 0
+              }"
+              class="font-weight-bold mt-2"
+            >
+              Total Sampling Percentage:
+              {{ getFormControl("totalPercentage").value }}
+            </p>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div
+    class="mt-30 d-flex space-between"
+    [hidden]="divId !== 8"
+    style="margin-bottom: 30px"
+  ></div>
+  <div class="d-flex flex-end">
+    <div
+      class="solid-btn"
+      (click)="saveSettings()"
+      [class.disabled]="
+        formGroup.invalid ||
+        getFormControl('selectedWorkCategory')?.value?.length === 0
+      "
+    >
+      Save Settings
+    </div>
+  </div>
+</form>
+
+<app-loader [showSpinner]="showSpinner"></app-loader>
+<p-confirmDialog
+  header="Confirmation"
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+></p-confirmDialog>

@@ -1,0 +1,363 @@
+<div class="tab-wrapper bottom-border mt-60">
+  <div class="tab-container">
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab1"
+      class="tab-menu-radio"
+      checked
+      #tab1
+    />
+    <label for="tab1" class="tab-menu px-4">Claims Dashboard</label>
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab2"
+      class="tab-menu-radio"
+      #tab2
+    />
+    <label for="tab2" class="tab-menu px-4">Audit Dashboard</label>
+  </div>
+</div>
+
+<div class="mt-30" *ngIf="tab2.checked">
+  <app-audit-report-dashboard></app-audit-report-dashboard>
+</div>
+<ng-container *ngIf="tab1.checked">
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Claims Nearing Threshold SLA</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="threashold.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-claims-nearing-threashold-sla
+          #threashold
+        ></app-claims-nearing-threashold-sla>
+      </div>
+    </div>
+
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Claims Nearing SLA</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="openInv.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-claims-open-inventory-sla #openInv></app-claims-open-inventory-sla>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex mt-30">
+    <div class="wrap-claim-volume w-50 mr-30 mt-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Claims Volume By Age</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="volumeByAge.triggerZoom = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-30">
+        <app-manager-claims-count-by-age-vol
+          #volumeByAge
+        ></app-manager-claims-count-by-age-vol>
+      </div>
+    </div>
+    <div class="wrap-claim-count mr-30 mt-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Claims Count By Queue & Status</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="statusQueue.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class=" mt-30">
+        <app-manager-claims-count-by-status-queue
+          #statusQueue
+        ></app-manager-claims-count-by-status-queue>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex mt-30">
+    <div class="wrap-claim-volume w-50 mr-30 mt-30">
+      <form [formGroup]="assignedDates">
+        <div class="d-flex space-between ">
+          <div class="section-label">Audit Summary By Auditor</div>
+          <div>
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/max.png"
+              (click)="expand = true"
+              style="cursor: pointer;"
+            />
+          </div>
+        </div>
+        <div class="mt-30 scroll-graph-y" style="max-height: 250px;">
+          <google-chart
+            [type]="'BarChart'"
+            [height]="auditorHeight"
+            style="min-width: 600px;width: 100%; display: flex; justify-content: center;"
+            [options]="optionsAuditor"
+            [data]="auditorCountData"
+            [columnNames]="auditorColumnNames"
+            #chart1
+            (select)="selectBar($event)"
+          ></google-chart>
+        </div>
+        <p class="vertical-axis">Audit Claim Count</p>
+        <div
+          *ngIf="!isDataPresent"
+          class="mb-2 d-flex space-between justify-content-center"
+        >
+          <p-message severity="warn" text="No Data Present!"></p-message>
+        </div>
+        <div class="d-flex space-between">
+          <div class="wrap-input100 mb-0 mr-30">
+            <span class="label-input100">Processed Date Range</span>
+            <p-calendar
+              [maxDate]="maxDate"
+              (onSelect)="validateDates()"
+              selectionMode="range"
+              pTooltip="Processed Date Range"
+              tooltipPosition="bottom"
+              rangeSeparator=" - "
+              [readonlyInput]="true"
+              [showIcon]="true"
+              formControlName="dateRange"
+              dateFormat="mm/dd/yy"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              yearRange="1970:2099"
+              appendTo="body"
+              (onClose)="onSubmitStatus()"
+            >
+            </p-calendar>
+            <span class="focus-input100"></span>
+            <div class="error-msg" style="top: 70px" *ngIf="!isValid">
+              Date range should not exceed six months
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="wrap-claim-count mr-30 mt-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">My Team Productivity</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="teamProductivity.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-30">
+        <app-manager-team-productivity
+          #teamProductivity
+        ></app-manager-team-productivity>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex mt-30">
+    <div class="wrap-claim-count mr-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Financial Score Of Examiner</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="financialScore.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-30">
+        <app-manager-financial-score
+          #financialScore
+        ></app-manager-financial-score>
+      </div>
+    </div>
+    <div class="wrap-claim-count mr-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Procedural Score Of Examiner</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="procScore.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-30">
+        <app-manager-procedural-score #procScore></app-manager-procedural-score>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex mt-30">
+    <div class="wrap-claim-count w-50 mr-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Claims Processed vs Audited</div>
+        <div>
+          <img
+            src="./../../../../../assets/images-new/max.png"
+            (click)="procAudit.displayEnlarged = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-30">
+        <app-manager-claims-processed-vs-audited
+          #procAudit
+        ></app-manager-claims-processed-vs-audited>
+      </div>
+    </div>
+    <div class="wrap-claim-volume w-50 mr-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Audit Status By Claims Lead</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="auditScore.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-30">
+        <app-manager-audit-score #auditScore></app-manager-audit-score>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex mt-30">
+    <div class="wrap-claim-volume w-50 mr-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Claims Examiner Count By Claims Lead</div>
+        <div>
+          <img
+            src="./../../../../../assets/images-new/max.png"
+            (click)="examinerLead.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-30">
+        <app-manager-claims-examiner-count-by-lead
+          #examinerLead
+        ></app-manager-claims-examiner-count-by-lead>
+      </div>
+    </div>
+    <div class="wrap-claim-count w-50 mr-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Low Productivity Instances</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="lowPer.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-30">
+        <app-low-performing-examiners #lowPer></app-low-performing-examiners>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex mt-30">
+    <div class="wrap-claim-count mr-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">High Productivity Instances</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="highPer.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-30">
+        <app-high-performing-examiners #highPer></app-high-performing-examiners>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<p-dialog
+  *ngIf="loaded"
+  [(visible)]="expand"
+  modal="true"
+  header="Audit Summary By Auditor"
+  [style]="{ width: '800px', height: '500px' }"
+>
+  <div class="d-flex" *ngIf="expand">
+    <div class="scroll-graph-y" style="max-height: 400px; color: black">
+      <google-chart
+        [type]="'BarChart'"
+        [options]="optionsStatusEnlarged"
+        [data]="auditorCountData"
+        [columnNames]="auditorColumnNames"
+        [width]="750"
+        [height]="auditorHeightEnlarged"
+        (select)="selectBar($event)"
+      ></google-chart>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged">Audit Claim Count</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="detailsView"
+  [style]="{ width: '90vw', height: '80%' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="detailsView"
+  [contentStyle]="{ padding: 0, maxHeight: '100%' }"
+  [transitionOptions]="'0ms'"
+  header="{{ barDetails.type + ' Claims under ' + barDetails.auditorName }}"
+>
+  <div class="d-flex">
+    <app-report-table
+      class="w-100"
+      header="{{ barDetails.type }}"
+      [isChart]="true"
+      [data]="chartDetail"
+      [columns]="cols"
+      (exportExcel)="downloadExcel()"
+    ></app-report-table>
+  </div>
+</p-dialog>

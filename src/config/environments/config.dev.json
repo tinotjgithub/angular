@@ -1,0 +1,9 @@
+{
+  "SERVER_API_URL": "https://hps-application-loadbalancer-1316005358.us-east-2.elb.amazonaws.com:9994",
+  "AUDITOR_SERVER_URL": "http://hps-application-loadbalancer-1316005358.us-east-2.elb.amazonaws.com:9995",
+  "HEALTH_EDGEURL": "http://localhost:9090",
+  "LOGIN_OPTION": "saml",
+  "ENTITY_ID": "http://idp.ustdev.com/adfs/services/trust",
+  "ENROLLMENT_SERVER_URL": "https://hps-application-loadbalancer-1316005358.us-east-2.elb.amazonaws.com:8084",
+  "ENROLLMENT_AUDITOR_SERVER_URL": "https://hps-application-loadbalancer-1316005358.us-east-2.elb.amazonaws.com:8087"
+}

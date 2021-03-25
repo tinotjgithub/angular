@@ -1,0 +1,544 @@
+<div class="mt-60">
+  <div class=" mt-30">
+    <div class="d-flex">
+      <div
+        class="card-with-icon card-blue d-flex mr-20 w-30"
+        [ngClass]="'flex-child-25'"
+      >
+        <div>
+          <img src="./../../../../../assets/images-new/examiner.png" />
+        </div>
+        <div class="ml-15 mt-10" _ngcontent-fsp-c6="">
+          <div class="card-title">Enrollment Specialist</div>
+          <div
+            class="card-value cursor-pointer"
+            [routerLink]="
+              this.specialistCount
+                ? ['/enrollment-lead-detail/specialist']
+                : null
+            "
+          >
+            {{ this.specialistCount }}
+          </div>
+        </div>
+      </div>
+      <div
+        class="card card-red  d-flex mr-20 w-30"
+        [ngClass]="
+          daysCrossed
+            ? 'flex-child-25 card-amber hover card pulse'
+            : 'flex-child-25 card-amber hover card'
+        "
+        [routerLink]="
+          this.pendingCount ? ['/pending-assignment-detail/enrollment'] : null
+        "
+      >
+        <div class="card-title-examiner">Pending Reassignment</div>
+        <div class="card-value-examiner">{{ this.pendingCount }}</div>
+        <div class="card-hover">
+          View Pending Assignment
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="enrollment-landing">
+    <div class="d-flex space-between mt-30">
+      <div class="d-flex wrap-switch">
+        <ng-container>
+          <div class="block-title">My Task Status</div>
+          <div class="container d-flex flex-column justify-content-center">
+            <div class="cm-3-state-switch align-middle">
+              <input id="state-1" name="state" class="toggle" type="radio" />
+              <label
+                #claims
+                for="state-1"
+                (click)="setToggleState('MyTask')"
+              ></label>
+              <input
+                id="state-3"
+                name="state"
+                class="toggle"
+                type="radio"
+                value="checked"
+              />
+              <label
+                #enrollment
+                style="left:66.66%"
+                for="state-3"
+                (click)="setToggleState('Team')"
+              ></label>
+              <div class="switch-background">
+                <span class="thumb-button"></span>
+              </div>
+            </div>
+          </div>
+          <div class="block-title">My Team Task Status</div>
+        </ng-container>
+      </div>
+
+      <div class="wrap-list-view-chart-view d-flex">
+        <div
+          class="list-view"
+          [class.active.icon-list]="view === 'list'"
+          (click)="setView('list')"
+        >
+          <div class="icon-list"></div>
+        </div>
+        <div
+          class="chart-view "
+          [class.active.icon-chart]="view === 'chart'"
+          (click)="setView('chart')"
+        >
+          <div class="icon-chart"></div>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="view === 'list' && !myTeamTask"
+      class="wrap-cards scroll enrollment-open-inventory mt-15"
+    >
+      <div class="card card-grey mt-15">
+        <div class="wrap-section-title">
+          <div class="section-title">General Queue</div>
+          &nbsp;
+          <div class="section-title-count card-grey-bg">
+            {{ totalGeneralQueue }}
+          </div>
+        </div>
+        <div class="d-grid card-grid-template-column">
+          <div
+            class="grid-work-category"
+            *ngFor="let item of this.generalQueueData; let i = index"
+            [routerLink]="
+              item.requestCount ? ['/enrollment-lead-detail/general'] : null
+            "
+            [queryParams]="item.requestCount ? { type: item.requestType } : {}"
+          >
+            <div class="request-type">{{ item.requestType }}</div>
+            <div class="request-count">
+              {{ item.requestCount }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-yellow mt-15">
+        <div class="wrap-section-title">
+          <div class="section-title">Routed In</div>
+          &nbsp;
+          <div class="section-title-count card-yellow-bg">
+            {{ totalRoutedIn }}
+          </div>
+        </div>
+        <div class="d-grid card-grid-template-column">
+          <div
+            class="grid-work-category"
+            *ngFor="let item of this.routedInData; let i = index"
+            [routerLink]="
+              item.requestCount ? ['/enrollment-lead-detail/routed-in'] : null
+            "
+            [queryParams]="item.requestCount ? { type: item.requestType } : {}"
+          >
+            <div class="request-type">{{ item.requestType }}</div>
+            <div class="request-count">
+              {{ item.requestCount }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-purple mt-15">
+        <div class="wrap-section-title">
+          <div class="section-title">Rebuttal/Review</div>
+          &nbsp;
+          <div class="section-title-count card-purple-bg">
+            {{ totalReview }}
+          </div>
+        </div>
+        <div class="d-grid card-grid-template-column">
+          <div
+            class="grid-work-category"
+            *ngFor="let item of this.reviewData; let i = index"
+            [routerLink]="
+              item.requestCount
+                ? ['/enrollment-lead-detail/rebuttal-review']
+                : null
+            "
+            [queryParams]="item.requestCount ? { type: item.requestType } : {}"
+          >
+            <div class="request-type">{{ item.requestType }}</div>
+            <div class="request-count">
+              {{ item.requestCount }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="view === 'list' && myTeamTask"
+      class="wrap-cards scroll enrollment-open-inventory mt-15"
+    >
+      <div class="card card-blue mt-15">
+        <div class="wrap-section-title">
+          <div class="section-title">Assigned</div>
+          &nbsp;
+          <div class="section-title-count card-blue-bg">
+            {{ totalAssigned }}
+          </div>
+        </div>
+        <div class="d-grid card-grid-template-column">
+          <div
+            class="grid-work-category"
+            *ngFor="let item of this.assignedData; let i = index"
+            [routerLink]="
+              item.requestCount ? ['/enrollment-lead-detail/assigned'] : null
+            "
+            [queryParams]="item.requestCount ? { type: item.requestType } : {}"
+          >
+            <div class="request-type">{{ item.requestType }}</div>
+            <div class="request-count">
+              {{ item.requestCount }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-red mt-15">
+        <div class="wrap-section-title">
+          <div class="section-title">Pended</div>
+          &nbsp;
+
+          <div class="section-title-count card-red-bg">
+            {{ totalPended }}
+          </div>
+        </div>
+        <div class="d-grid card-grid-template-column">
+          <div
+            class="grid-work-category"
+            *ngFor="let item of this.pendedData; let i = index"
+            [routerLink]="
+              item.requestCount ? ['/enrollment-lead-detail/pended'] : null
+            "
+            [queryParams]="item.requestCount ? { type: item.requestType } : {}"
+          >
+            <div class="request-type">{{ item.requestType }}</div>
+            <div class="request-count">
+              {{ item.requestCount }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-green mt-15">
+        <div class="wrap-section-title">
+          <div class="section-title">Completed</div>
+          &nbsp;
+          <div class="section-title-count card-green-bg">
+            {{ totalCompleted }}
+          </div>
+        </div>
+        <div class="d-grid card-grid-template-column">
+          <div
+            class="grid-work-category"
+            *ngFor="let item of this.completedData; let i = index"
+            [routerLink]="
+              item.requestCount ? ['/enrollment-lead-detail/completed'] : null
+            "
+            [queryParams]="item.requestCount ? { type: item.requestType } : {}"
+          >
+            <div class="request-type">{{ item.requestType }}</div>
+            <div class="request-count">
+              {{ item.requestCount }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-yellow mt-15">
+        <div class="wrap-section-title">
+          <div class="section-title">Routed Out</div>
+          &nbsp;
+          <div class="section-title-count card-yellow-bg">
+            {{ totalRoutedOut }}
+          </div>
+        </div>
+        <div class="d-grid card-grid-template-column">
+          <div
+            class="grid-work-category"
+            *ngFor="let item of this.routedOutData; let i = index"
+          >
+            <div class="request-type">{{ item.requestType }}</div>
+            <div class="request-count">
+              {{ item.requestCount }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-purple mt-15">
+        <div class="wrap-section-title">
+          <div class="section-title">Audit Failed</div>
+          &nbsp;
+          <div class="section-title-count card-purple-bg">
+            {{ totalAuditFailed }}
+          </div>
+        </div>
+        <div class="d-grid card-grid-template-column">
+          <div
+            [routerLink]="
+              item.requestCount
+                ? ['/enrollment-lead-detail/audit-failed']
+                : null
+            "
+            [queryParams]="item.requestCount ? { type: item.requestType } : {}"
+            class="grid-work-category"
+            *ngFor="let item of this.auditFailedData; let i = index"
+          >
+            <div class="request-type">{{ item.requestType }}</div>
+            <div class="request-count">
+              {{ item.requestCount }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="d-flex mt-30 wrap-claims-operations"
+      *ngIf="view === 'chart' && !myTeamTask"
+    >
+      <div class="wrap-claim-count mr-40" style="padding: 10px">
+        <div class="d-flex space-between justify-content-center">
+          <div class="section-label">General Queue</div>
+        </div>
+        <div
+          class="d-flex justify-content-center"
+          *ngIf="myDataGeneralQueueStatus?.length > 0"
+        >
+          <google-chart
+            #chart
+            [title]="titleStatus"
+            [type]="typeStatus"
+            [data]="myDataGeneralQueueStatus"
+            [options]="optionsGeneralQueue"
+            [columnNames]="columnNamesStatus"
+            [height]="heightStatus"
+            [width]="widthStatus"
+          >
+          </google-chart>
+        </div>
+        <div
+          *ngIf="totalGeneralQueue === 0"
+          class="d-flex space-between justify-content-center"
+        >
+          <p-message severity="warn" text="No Data Present!"></p-message>
+        </div>
+      </div>
+      <div class="wrap-claim-count mr-40" style="padding: 10px">
+        <div class="d-flex space-between justify-content-center">
+          <div class="section-label">Routed In</div>
+        </div>
+        <div
+          class="d-flex justify-content-center"
+          *ngIf="myDataRoutedInStatus?.length > 0"
+        >
+          <google-chart
+            #chart
+            [title]="titleStatus"
+            [type]="typeStatus"
+            [data]="myDataRoutedInStatus"
+            [options]="optionsRoutedIn"
+            [columnNames]="columnNamesStatus"
+            [height]="heightStatus"
+            [width]="widthStatus"
+          >
+          </google-chart>
+        </div>
+        <div
+          *ngIf="totalRoutedIn === 0"
+          class="d-flex space-between justify-content-center"
+        >
+          <p-message severity="warn" text="No Data Present!"></p-message>
+        </div>
+      </div>
+      <div class="wrap-claim-count mr-40" style="padding: 10px">
+        <div class="d-flex space-between justify-content-center">
+          <div class="section-label">Rebuttal/Review</div>
+        </div>
+        <div
+          class="d-flex justify-content-center"
+          *ngIf="myDataRebuttalReviewStatus?.length > 0"
+        >
+          <google-chart
+            #chart
+            [title]="titleStatus"
+            [type]="typeStatus"
+            [data]="myDataRebuttalReviewStatus"
+            [options]="optionsRebuttalReview"
+            [columnNames]="columnNamesStatus"
+            [height]="heightStatus"
+            [width]="widthStatus"
+          >
+          </google-chart>
+        </div>
+        <div
+          *ngIf="totalReview === 0"
+          class="d-flex space-between justify-content-center"
+        >
+          <p-message severity="warn" text="No Data Present!"></p-message>
+        </div>
+      </div>
+    </div>
+    <div
+      class="d-flex mt-30 wrap-claims-operations"
+      *ngIf="view === 'chart' && myTeamTask"
+    >
+      <div class="wrap-claim-count mr-40" style="padding: 10px">
+        <div class="d-flex space-between justify-content-center">
+          <div class="section-label">Assigned</div>
+        </div>
+        <div
+          class="d-flex justify-content-center"
+          *ngIf="teamDataAssignedStatus?.length > 0"
+        >
+          <google-chart
+            #chart
+            [title]="titleStatus"
+            [type]="typeStatus"
+            [data]="teamDataAssignedStatus"
+            [options]="optionsAssigned"
+            [columnNames]="columnNamesStatus"
+            [height]="heightStatus"
+            [width]="widthStatus"
+          >
+          </google-chart>
+        </div>
+        <div
+          *ngIf="totalAssigned === 0"
+          class="d-flex space-between justify-content-center"
+        >
+          <p-message severity="warn" text="No Data Present!"></p-message>
+        </div>
+      </div>
+      <div class="wrap-claim-count mr-40" style="padding: 10px">
+        <div class="d-flex space-between justify-content-center">
+          <div class="section-label">Pended</div>
+        </div>
+        <div
+          class="d-flex justify-content-center"
+          *ngIf="teamDataPendedStatus?.length > 0"
+        >
+          <google-chart
+            #chart
+            [title]="titleStatus"
+            [type]="typeStatus"
+            [data]="teamDataPendedStatus"
+            [options]="optionsPended"
+            [columnNames]="columnNamesStatus"
+            [height]="heightStatus"
+            [width]="widthStatus"
+          >
+          </google-chart>
+        </div>
+        <div
+          *ngIf="totalPended === 0"
+          class="d-flex space-between justify-content-center"
+        >
+          <p-message severity="warn" text="No Data Present!"></p-message>
+        </div>
+      </div>
+
+      <div class="wrap-claim-count mr-40" style="padding: 10px">
+        <div class="d-flex space-between justify-content-center">
+          <div class="section-label">Completed</div>
+        </div>
+        <div
+          class="d-flex justify-content-center"
+          *ngIf="teamDataCompletedStatus?.length > 0"
+        >
+          <google-chart
+            #chart
+            [title]="titleStatus"
+            [type]="typeStatus"
+            [data]="teamDataCompletedStatus"
+            [options]="optionsCompleted"
+            [columnNames]="columnNamesStatus"
+            [height]="heightStatus"
+            [width]="widthStatus"
+          >
+          </google-chart>
+        </div>
+        <div
+          *ngIf="totalCompleted === 0"
+          class="d-flex space-between justify-content-center"
+        >
+          <p-message severity="warn" text="No Data Present!"></p-message>
+        </div>
+      </div>
+
+      <div class="wrap-claim-count mr-40" style="padding: 10px">
+        <div class="d-flex space-between justify-content-center">
+          <div class="section-label">Routed Out</div>
+        </div>
+        <div
+          class="d-flex justify-content-center"
+          *ngIf="teamDataRoutedOutStatus?.length > 0"
+        >
+          <google-chart
+            #chart
+            [title]="titleStatus"
+            [type]="typeStatus"
+            [data]="teamDataRoutedOutStatus"
+            [options]="optionsRoutedOut"
+            [columnNames]="columnNamesStatus"
+            [height]="heightStatus"
+            [width]="widthStatus"
+          >
+          </google-chart>
+        </div>
+        <div
+          *ngIf="totalRoutedOut === 0"
+          class="d-flex space-between justify-content-center"
+        >
+          <p-message severity="warn" text="No Data Present!"></p-message>
+        </div>
+      </div>
+      <div class="wrap-claim-count mr-40" style="padding: 10px">
+        <div class="d-flex space-between justify-content-center">
+          <div class="section-label">Audit Failed</div>
+        </div>
+        <div
+          class="d-flex justify-content-center"
+          *ngIf="teamDataAuditFailedStatus?.length > 0"
+        >
+          <google-chart
+            #chart
+            [title]="titleStatus"
+            [type]="typeStatus"
+            [data]="teamDataAuditFailedStatus"
+            [options]="optionsAuditFailed"
+            [columnNames]="columnNamesStatus"
+            [height]="heightStatus"
+            [width]="widthStatus"
+          >
+          </google-chart>
+        </div>
+        <div
+          *ngIf="totalAuditFailed === 0"
+          class="d-flex space-between justify-content-center"
+        >
+          <p-message severity="warn" text="No Data Present!"></p-message>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex mt-30 justify-content-center" *ngIf="view === 'chart'">
+      <div
+        class="d-flex justify-content-center mr-30"
+        *ngFor="let item of this.totalConfiguredItems; let i = index"
+      >
+        <div
+          [style.background-color]="pieColor[i]"
+          style="width: 15px; height: 15px;border-radius: 4px;"
+        ></div>
+        <span class="ml-2" style="font-size:13px">{{ item }}</span>
+      </div>
+    </div>
+  </div>
+</div>

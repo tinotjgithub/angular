@@ -1,0 +1,115 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+    <div [routerLink]="'/configuration-menu'">
+        <img alt=" " src="./../../../../../assets/images-new/left.png" style="margin-right: 15px; cursor: pointer;" />
+    </div>
+    <div>Back To Configuration</div>
+</div>
+
+
+<div class="d-flex mt-30">
+    <div class="wrap-pend-reason w-70 mr-30" style="padding: 30px;">
+        <div class="d-flex space-between">
+            <div class="claim-id-head no-hover">SLA Configuration </div>
+            <div class="wrap-input100 mb-0 w-200">
+                <span class="label-input100">Work Category</span>
+                <select class="input100" name="pass" [(ngModel)]="workCategory" (change)="getWorkCategorySLAs(workCategory)" placeholder="Select Category">
+                    <option [value]="null" selected hidden data-default >Select Category</option>
+                    <option *ngFor="let type of requestTypes" [value]="type.id">{{type.name}}</option>
+                </select>
+                <span class="focus-input100"></span>
+            </div>
+        </div>
+                        
+        <div class=" wrap-workflow mt-20" style="max-height: 430px;">
+            <ol class="sla-config" *ngIf="slaData?.length > 0">
+                <li class="SLA-bullet" *ngFor="let sla of slaData">
+                    <div class="timeline-date">
+                        <div>{{sla.strFormat}}</div>
+                        <div *ngIf="sla.year">{{sla.year}}</div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="tl-SLA-count mr-30"> SLA Days - {{sla.slaCount}}</div>
+                        <div class="edit-SLA-hover" *ngIf="sla.enabled">
+                            <div><img style="cursor: pointer;" pTooltip="Edit" (click)="showEdit(sla)" src="./../../../../../assets/images-new/Edit SLA.png" class="mr-30"></div>
+                            <div><img style="cursor: pointer;" pTooltip="Delete" (click)="deleteSla(sla)" src= "./../../../../../assets/images-new/Delete SLA.png"></div>
+                        </div>
+                    </div>
+                </li>                
+            </ol>
+            <div class="claim-value" *ngIf="!slaData || (slaData?.length < 1)">
+                No SLA configured for selected Work Category.
+            </div>
+        </div>
+    </div>
+    <div class="wrap-pend-reason-form w-40" style="padding: 30px;">
+        <div class="claim-id-head no-hover d-flex space-between">
+            <div>Add SLA</div>
+        </div>
+        <div class="pend-reason-body mt-15">
+            <ng-component *ngTemplateOutlet="formTemplate;context:addContext"></ng-component>
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="editSLA" modal="true" header="Update SLA"
+    (onHide)="editForm.reset()">
+    <ng-component *ngTemplateOutlet="formTemplate;context:editContext"></ng-component>
+</p-dialog>
+<ng-template #formTemplate let-formG="form" let-isEdit="edit">
+    <form [formGroup]="formG">
+        <div class="mt-15">
+            <div class="wrap-input100">
+                <div class="label-input100">Work Category</div>
+                <select class="input100" formControlName="workCategory" >
+                    <option [value]="null" selected disabled>Select Category</option>
+                    <option *ngFor="let type of requestTypes" [value]="type.id">{{type.name}}</option>
+                </select>
+                <span class="focus-input100"></span>
+                <div class="error-msg" style="top: 53px;" *ngIf="formG.get('workCategory').touched && formG.get('workCategory').hasError('required')">
+                    Work Category is Required.
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="wrap-input100">
+                <div class="label-input100">From Month</div>
+                <p-calendar formControlName="from" appendTo="body" placeholder="MM/YYYY" view="month" [readonlyInput]="true" [showIcon]="true" dateFormat="mm/yy"
+                    [monthNavigator]="true" [yearNavigator]="true" yearRange="1970:2099">
+                </p-calendar>
+                <div class="error-msg" style="top: 53px;" *ngIf="formG.get('from').touched && formG.get('from').hasError('required')">
+                    From Month is Required.
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="wrap-input100">
+                <div class="label-input100">To Month</div>
+                <p-calendar formControlName="to" appendTo="body" placeholder="MM/YYYY" view="month" [readonlyInput]="true" [showIcon]="true" dateFormat="mm/yy"
+                    [monthNavigator]="true" [minDate]="formG.value.from || today" [yearNavigator]="true" yearRange="1970:2099">
+                </p-calendar>
+                <div class="error-msg" style="top: 53px;" *ngIf="formG.get('to').touched && formG.get('to').hasError('required')">
+                    To Month is Required.
+                </div>
+            </div>
+        </div>
+        <div class="">
+            <div class="wrap-input100">
+                <div class="label-input100">SLA Days</div>
+                <input autocomplete="off" type="text" placeholder="SLA Days" class="input100" maxlength="3" formControlName="count" (keyup)="preventInput($event, formG)" />
+                <span class="focus-input100"></span>
+                <div class="error-msg" style="top: 53px;" *ngIf="formG.get('count').touched && formG.get('count').hasError('required')">
+                    SLA Days is Required.
+                </div>
+                <div class="error-msg" style="top: 53px;" *ngIf="formG.get('count').touched && formG.get('count').hasError('maxlength')">
+                    SLA Days should not exceed 3 digits.
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-end">
+            <div class="cancel-btn mr-30" (click)="cancelOperation(formG, isEdit)" [class.disabled]="isEdit ? false : !formG.dirty">Cancel</div>
+            <div class="solid-btn" (click)="formG.valid ? (!isEdit ? addSla() : editSla()) : ''" [class.disabled]="formG.invalid">
+                {{isEdit ? 'Update' : 'Add'}} SLA
+            </div>
+        </div>
+    </form>
+</ng-template>

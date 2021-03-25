@@ -1,0 +1,103 @@
+<div class="d-flex">
+  <p class="horizontal-axis text-center">Claim Count</p>
+  <div class="d-flex scroll-graph-x" style="min-width: 100%;">
+    <google-chart
+      #chart
+      [title]="myTitleProductivity"
+      style="min-width: 100%;"
+      *ngIf="isProductivityRendered"
+      [type]="myTypeProductivity"
+      [data]="myDataProductivity"
+      [options]="myOptionsProductivity"
+      [columnNames]="myColumnNamesProductivity"
+      [width]="'100%'"
+      [height]="myHeightProductivity"
+    >
+    </google-chart>
+  </div>
+</div>
+<p class="vertical-axis">Time (am/pm)</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mr-3 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<form
+  [formGroup]="myTeamProductivityDates"
+  (ngSubmit)="onSubmitMyTeamProductivity()"
+>
+  <div class="d-flex space-between mt-10">
+    <div class="wrap-input100 mb-0">
+      <span class="label-input100">Processed Date Range</span>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onClose)="validateDates()"
+        appendTo="body"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        pTooltip="Processed Date Range"
+        tooltipPosition="bottom"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <div
+        style="  color: red;
+    font-size: 11px;
+    position: absolute;
+    top:60px;"
+        *ngIf="getDateRange.touched"
+      >
+        <span class="mr-2" *ngIf="getDateRange.hasError('required')"
+          >Date range is required.</span
+        >
+        <span class="mr-2" *ngIf="getDateRange.hasError('inValidDate')"
+          >Date range should not exceed six months.</span
+        >
+      </div>
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="My Team Productivity"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex">
+    <p class="horizontal-axis-enlarged text-center">Claim Count</p>
+    <div style="overflow-x:auto; max-width: 700px; min-width: 700px;">
+      <google-chart
+        #chart
+        [title]="myTitleProductivity"
+        *ngIf="isProductivityRendered"
+        [type]="myTypeProductivity"
+        [data]="myDataProductivity"
+        [options]="myOptionsProductivityEnlarged"
+        [width]="700"
+        [columnNames]="myColumnNamesProductivity"
+        [height]="400"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged">Time (am/pm)</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-3 mb-3 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>

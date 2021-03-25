@@ -1,0 +1,128 @@
+<div class="tab-wrapper mt-60">
+  <div class="tab-container scroll-graph-x">
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab3"
+      class="tab-menu-radio"
+      checked
+      #tab3
+    />
+    <label
+      for="tab3"
+      id="tab-label3"
+      class="tab-menu"
+      (click)="scrollItemToView('tab-label3')"
+      >Pended Claims</label
+    >
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab4"
+      class="tab-menu-radio"
+      #tab4
+    />
+    <label for="tab4" class="tab-menu">Routed-In Claims</label>
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab2"
+      class="tab-menu-radio"
+      #tab2
+    />
+    <label
+      for="tab2"
+      class="tab-menu"
+      id="tab-label2"
+      (click)="scrollItemToView('tab-label2')"
+      >Audited Claims</label
+    >
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab6"
+      class="tab-menu-radio"
+      #tab6
+    />
+    <label for="tab6" class="tab-menu">Reassigned Claims</label>
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab7"
+      class="tab-menu-radio"
+      #tab7
+    />
+    <label
+      for="tab7"
+      id="tab-label4"
+      class="tab-menu"
+      (click)="scrollItemToView('tab-label4')"
+      >Audit Sampling Claim Deletion</label
+    >
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab1"
+      class="tab-menu-radio"
+      #tab1
+    />
+    <label
+      for="tab1"
+      class="tab-menu"
+      id="tab-label1"
+      (click)="scrollItemToView('tab-label1')"
+      >My User</label
+    >
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab8"
+      class="tab-menu-radio"
+      #tab8
+    />
+    <label
+      for="tab8"
+      class="tab-menu"
+      id="tab-label8"
+      (click)="scrollItemToView('tab-label8')"
+      >Claim Completion Report</label
+    >
+  </div>
+  <div class="tab-data" [hidden]="!tab1.checked">
+    <app-promt-user-list [fromTab]="true"></app-promt-user-list>
+  </div>
+  <div class="tab-data" [hidden]="!tab2.checked">
+    <app-claims-examiner-quality [fromTab]="true"></app-claims-examiner-quality>
+  </div>
+  <div class="tab-data" [hidden]="!tab3.checked">
+    <app-status-report
+      [reportType]="'Pended'"
+      [fromTab]="true"
+    ></app-status-report>
+  </div>
+  <div class="tab-data" [hidden]="!tab4.checked">
+    <app-status-report
+      [reportType]="'Routed-In'"
+      [fromTab]="true"
+    ></app-status-report>
+  </div>
+  <div class="tab-data" [hidden]="!tab6.checked">
+    <app-claim-reassignment-report
+      [fromTab]="true"
+    ></app-claim-reassignment-report>
+  </div>
+  <div class="tab-data" [hidden]="!tab7.checked">
+    <app-audit-sampling-deletion-report
+      [fromTab]="true"
+    ></app-audit-sampling-deletion-report>
+  </div>
+  <div class="tab-data" [hidden]="!tab8.checked">
+    <app-claim-completion-report
+    ></app-claim-completion-report>
+  </div>
+</div>

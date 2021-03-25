@@ -1,0 +1,210 @@
+<div class="d-flex mt-60" *ngIf="activeUsers">
+  <div class="pl-0" [class.col-4]="adminType === 'Both'" [class.col-6]="adminType === 'Claim' || adminType === 'Enrollment'">
+    <div class="block-title">Operations Team Snapshot</div>
+    <div>
+      <div class="d-flex">
+        <div class="card-with-icon w-50 card-green mr-20" pTooltip="Total number of Users">
+          <div class="d-flex">
+            <div class="small-icon">
+              <img alt = " " src="./../../../../../assets/images-new/Total.png">
+            </div>
+            <div class="ml-15 card-content">
+              <div class="card-title-examiner small">Total User</div>
+              <div class="card-value-examiner">{{ activeUsers.usersCount || 0 }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-with-icon w-50 card-grey" pTooltip="Total number of Queues">
+          <div class="d-flex">
+            <div class="small-icon">
+              <img alt = " " src="./../../../../../assets/images-new/Queue.png">
+            </div>
+            <div class="ml-15 card-content">
+              <div class="card-title-examiner small">Queue</div>
+              <div class="card-value-examiner">{{ activeUsers.queueCount || 0 }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class=" d-flex mt-20">
+        <div class="card-with-icon w-50 card-yellow mr-20" pTooltip="Total number of User Groups">
+          <div class="d-flex">
+            <div class="small-icon">
+              <img alt = " " src="./../../../../../assets/images-new/usergroup.png" class="w-100 h-100">
+            </div>
+            <div class="ml-15 card-content">
+              <div class="card-title-examiner small">User Group</div>
+              <div class="card-value-examiner">{{ activeUsers.userGroups || 0 }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-with-icon w-50 card-brown" pTooltip="Total number of Managers">
+          <div class="d-flex">
+            <div class="small-icon">
+              <img alt = " " src="./../../../../../assets/images-new/Manager(1).png" class="w-100 h-100">
+            </div>
+            <div class="ml-15 card-content">
+              <div class="card-title-examiner small">Manager</div>
+              <div class="card-value-examiner">{{ activeUsers.managerCount || 0 }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div [class.col-4]="adminType === 'Both'" [class.col-6]="adminType === 'Claim'"  *ngIf="adminType === 'Both' || adminType === 'Claim'">
+    <div class="block-title">Claims Team Snapshot</div>
+    <div>
+      <div class="d-flex">
+        <div class="card-with-icon w-50 card-yellow mr-20" pTooltip="Total number of Claims Leads">
+          <div class="d-flex">
+            <div class="small-icon">
+              <img alt = " " src="./../../../../../assets/images-new/lead.png" class="w-100 h-100">
+            </div>
+            <div class="ml-15 card-content">
+              <div class="card-title-examiner small">Claims Lead</div>
+              <div class="card-value-examiner">{{ activeUsers.leadCount || 0 }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-with-icon card-red w-50" pTooltip="Total number of Claims Auditors">
+          <div class="d-flex">
+            <div class="small-icon">
+              <img alt = " " src="./../../../../../assets/images-new/auditor.png" class="w-100 h-100">
+            </div>
+            <div class="ml-15 card-content">
+              <div class="card-title-examiner small">Claims Auditor</div>
+              <div class="card-value-examiner">{{ activeUsers.auditorCount || 0 }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class=" d-flex mt-20">
+        <div class="card-with-icon w-50 mr-20 card-light-blue pr-1" pTooltip="Total number of Claims Examiners">
+          <div class="d-flex">
+            <div class="small-icon">
+              <img alt = " " src="./../../../../../assets/images-new/examiner.png" class="w-100 h-100">
+            </div>
+            <div class="ml-15 card-content">
+              <div class="card-title-examiner small">Claims Examiner</div>
+              <div class="card-value-examiner">{{ activeUsers.examinerCount || 0 }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="w-50"></div>
+      </div>
+    </div>
+  </div>
+  <div class="pr-0" *ngIf="adminType === 'Both' || adminType === 'Enrollment'" [class.col-4]="adminType === 'Both'" [class.col-6]="adminType === 'Enrollment'">
+    <div class="block-title">Enrollment Team Snapshot</div>
+    <div>
+      <div class="d-flex">
+        <div class="card-with-icon w-50 card-yellow mr-20" pTooltip="Total number of Enrollment Leads">
+          <div class="d-flex">
+            <div class="small-icon">
+              <img alt = " " src="./../../../../../assets/images-new/lead.png" class="w-100 h-100">
+            </div>
+            <div class="ml-15 card-content">
+              <div class="card-title-examiner small">Enrollment Lead</div>
+              <div class="card-value-examiner">{{ activeUsers.enrollmentLeadCount || 0 }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-with-icon w-50 card-red" pTooltip="Total number of Enrollment Auditors">
+          <div class="d-flex">
+            <div class="small-icon">
+              <img alt = " " src="./../../../../../assets/images-new/auditor.png" class="w-100 h-100">
+            </div>
+            <div class="ml-15 card-content">
+              <div class="card-title-examiner small">Enrollment Auditor</div>
+              <div class="card-value-examiner">{{ activeUsers.enrollmentAuditorCount || 0 }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class=" d-flex mt-20">
+        <div class="card-with-icon w-50 card-light-purple mr-20" pTooltip="Total number of Enrollment Specialists">
+          <div class="d-flex">
+            <div class="small-icon">
+              <img alt = " " src="./../../../../../assets/images-new/specalist.png" class="w-100 h-100">
+            </div>
+            <div class="ml-15 card-content">
+              <div class="card-title-examiner small">Enrollment Specialist</div>
+              <div class="card-value-examiner">{{ activeUsers.enrollmentSpecialistCount || 0 }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="w-50"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="btn-group d-flex">
+  <div class="big-btn" [routerLink]="'/UserConfig/edit-user'">
+    <div class="user-element-1"></div>
+    <div class="btn-label">Search User</div>
+  </div>
+
+  <div class="big-btn" (click)="openAddUser()">
+    <div class="user-element-2"></div>
+    <div class="btn-label">Add User</div>
+  </div>
+
+  <div class="big-btn" (click)="addNotification = true">
+    <div class="user-element-3"></div>
+    <div class="btn-label">Schedule Notifications</div>
+  </div>
+
+</div>
+
+<div class="wrap-schedule-notifications">
+  <div>
+    <span class="section-title">Upcoming Schedule Maintenance</span><span *ngIf="upcomingMaintenance?.length > 0"
+      class="section-title-count">{{upcomingMaintenance?.length}}</span>
+  </div>
+  <div class="mt-30">
+    <p-table [responsive]="true" #userTable [columns]="cols" [value]="upcomingMaintenance" [resizableColumns]="true"
+      [rows]="10">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" id="{{ col.field }}">
+            {{ col.header }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user let-columns="columns" let-rowIndex="rowIndex">
+        <tr style="text-align:left; align-items: left; align-content: left; position: relative;">
+          <td *ngFor="let col of columns">
+            <ng-container *ngIf="col.field === 'recipients'; else defaultTemplate">
+              <span title="{{user[col.field] | titlecase}}">
+                {{ processString(user[col.field]) | titlecase}}
+              </span>
+            </ng-container>
+            <ng-template #defaultTemplate>
+              <span title="{{user[col.field]}}">
+                {{ user[col.field] }}
+              </span>
+            </ng-template>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td class="text-center" [attr.colSpan]="cols.length">
+            No maintenance scheduled.
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+</div>
+<p-dialog [(visible)]="addUser" modal="true" header="Add New User" [style]="{ width: '900px' }"
+  (onHide)="add.clearForm()">
+  <app-add-user #add (cancelProcess)="this.addUser = false"></app-add-user>
+</p-dialog>
+<p-dialog [(visible)]="addNotification" modal="true" header="Add New Schedule Maintenance"
+  (onHide)="notification.clearForm();getMaintenanceGridData()" [style]="{ width: '900px' }">
+  <app-notification (cancelProcess)="this.addNotification = false" #notification></app-notification>
+</p-dialog>

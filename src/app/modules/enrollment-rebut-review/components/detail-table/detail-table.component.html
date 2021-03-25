@@ -1,0 +1,300 @@
+<div class="d-flex mt-60" *ngIf="backToHome">
+  <div (click)="navigateToHome()">
+    <img
+      alt=" "
+      src="./../../../../../../assets/images-new/left.png"
+      style="margin-right: 15px; cursor: pointer;"
+    />
+  </div>
+  <div>Back To Home</div>
+</div>
+<div class="wrap-manage-user flex" [class.mt-60]="!backToHome">
+  <div class="d-flex">
+    <div>
+      <span class="section-title">{{ header }}</span>
+      <span class="section-title-count" *ngIf="gridData?.length > 0">
+        {{ gridData?.length }}
+      </span>
+    </div>
+    <div class="d-flex ml-auto" *ngIf="!deleteButton">
+      <div class="search-bar d-flex space-between" [class.mr-30]="!assign">
+        <input
+          type="text"
+          class="search-input"
+          (input)="
+            scoreTable
+              ? scoreTable.filterGlobal($event.target.value, 'contains')
+              : ''
+          "
+          placeholder="{{ searchPlaceholder || 'Search Subscription' }}"
+        />
+        <img
+          alt=" "
+          src="./../../../assets/images-new/search.png"
+          style="width: 20px; height: 20px; margin-top: 10px;"
+        />
+      </div>
+      <div
+        class="outline-btn ml-15 mr-30"
+        *ngIf="assign"
+        [class.disabled]="selectedIds?.length < 1"
+        (click)="openAssign()"
+      >
+        Assign {{ selectedIds?.length || "" }} Subscription
+      </div>
+    </div>
+  </div>
+  <div class="d-flex mt-15" *ngIf="deleteButton">
+    <div
+      class="outline-btn delete ml-30 mr-auto"
+      [class.disabled]="selectedIds?.length < 1"
+      (click)="deleteRecord()"
+    >
+      Delete {{ selectedIds?.length || "" }} Transaction
+    </div>
+    <div class="search-bar d-flex space-between" [class.mr-30]="!assign">
+      <input
+        type="text"
+        class="search-input"
+        (input)="
+          scoreTable
+            ? scoreTable.filterGlobal($event.target.value, 'contains')
+            : ''
+        "
+        placeholder="{{ searchPlaceholder || 'Search Subscription' }}"
+      />
+      <img
+        alt=" "
+        src="./../../../assets/images-new/search.png"
+        style="width: 20px; height: 20px; margin-top: 10px;"
+      />
+    </div>
+  </div>
+  <div class="mt-30">
+    <p-table
+      [tableStyle]="{ 'table-layout': 'auto' }"
+      #scoreTable
+      class="flexcolumn"
+      [scrollable]="false"
+      [responsive]="true"
+      [columns]="cols"
+      [dataKey]="dataKey || 'id'"
+      [value]="gridData"
+      [paginator]="gridData?.length > 0"
+      [rows]="10"
+      [resizableColumns]="true"
+      [styleClass]="assign || deleteButton ? 'no_border left_select' : ''"
+      [(selection)]="selectedIds"
+      (onRowSelect)="emitSelection()"
+      (onRowUnSelect)="emitSelection()"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th
+            *ngFor="let col of columns"
+            [hidden]="!col.visible"
+            id="col"
+            [class.select_row]="col.field === 'select'"
+            [pSortableColumn]="col.field"
+            [pSortableColumnDisabled]="col.field !== 'recordAge' ? true : false"
+            [ngStyle]="col.field === 'select' ? null : { minWidth: '115px' }"
+          >
+            <ng-container *ngIf="col.field !== 'select'; else selectTemplate">
+              {{ col.header }}
+              <p-sortIcon
+                *ngIf="
+                  (name === 'general-queue' ||
+                    name === 'assigned' ||
+                    name === 'pended' ||
+                    name === 'routed-in') &&
+                  col.field === 'recordAge'
+                "
+                [field]="col.field"
+              >
+              </p-sortIcon>
+              <p-sortIcon
+                *ngIf="name === 'audit-failed' && col.field === 'auditDate'"
+                [field]="col.field"
+              >
+              </p-sortIcon>
+            </ng-container>
+            <ng-template #selectTemplate>
+              <div class="relative_div">
+                {{ col.header }}
+              </div>
+            </ng-template>
+          </th>
+        </tr>
+        <tr *ngIf="showFilter">
+          <th
+            *ngFor="let col of columns"
+            [ngSwitch]="col.filter"
+            id="col"
+            [class.select_row]="col.field === 'select'"
+          >
+            <div class="mt-3" id="tableHeader" *ngSwitchCase="'check'">
+              <p-tableHeaderCheckbox
+                *ngIf="!conditionalSelect"
+              ></p-tableHeaderCheckbox>
+              <p-checkbox
+                *ngIf="conditionalSelect"
+                (click)="selectAllSelectable(allCheckTemp.checked)"
+                [(ngModel)]="allCheckbox"
+                [binary]="true"
+                [disabled]="!(getSelectable().length > 0)"
+                #allCheckTemp
+              ></p-checkbox>
+            </div>
+            <div class="wrap-input100 my-auto" *ngSwitchCase="'text'">
+              <input
+                class="input100"
+                style="min-width: 100px;"
+                pInputText
+                type="text"
+                (input)="
+                  scoreTable.filter($event.target.value, col.field, 'contains')
+                "
+              />
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 my-auto" *ngSwitchCase="'dropdown'">
+              <select
+                class="input100"
+                style="min-width: 200px;"
+                (change)="
+                  scoreTable.filter($event.target.value, col.field, 'equals')
+                "
+              >
+                <option value="" selected>All</option>
+                <option
+                  *ngFor="let val of getOptions(col, gridData)"
+                  [value]="val"
+                  >{{ val }}</option
+                >
+              </select>
+            </div>
+            <div
+              class="wrap-input100 my-auto"
+              style="visibility: hidden;"
+              *ngSwitchDefault
+            >
+              <input
+                class="input100"
+                style="min-width: 115px;"
+                pInputText
+                type="text"
+                (input)="
+                  scoreTable.filter($event.target.value, col.field, 'contains')
+                "
+              />
+              <span class="focus-input100"></span>
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-columns="cols">
+        <tr [pSelectableRow]="rowData">
+          <td
+            *ngFor="let col of cols"
+            [ngStyle]="col.field === 'select' ? null : { minWidth: '115px' }"
+            [style]="{ width: 'auto' }"
+            [class.select_row]="col.field === 'select'"
+            [hidden]="!col.visible"
+            [class.link]="col.link"
+            (click)="col.link ? selectedCol(rowData) : ''"
+          >
+            <ng-container
+              *ngIf="col.field === 'select'; else rowDataInterpolation"
+            >
+              <p-tableCheckbox
+                [value]="rowData"
+                *ngIf="!conditionalSelect"
+              ></p-tableCheckbox>
+              <p-tableCheckbox
+                [value]="rowData"
+                *ngIf="conditionalSelect"
+                [disabled]="!selectItemCondition(rowData)"
+                (click)="checkAllSelected()"
+              ></p-tableCheckbox>
+            </ng-container>
+            <ng-template #rowDataInterpolation>
+              {{ rowData[col.field] }}
+            </ng-template>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr
+          style="text-align: center;"
+          *ngIf="gridData && gridData?.length > 0"
+        >
+          <td [attr.colspan]="columns.length">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{
+            gridData?.length > 0
+              ? "Showing " +
+                (scoreTable?.filteredValue
+                  ? scoreTable?.filteredValue?.length > 0
+                    ? state.first + 1
+                    : 0
+                  : state.first + 1) +
+                " - " +
+                ((state.first + state.rows >
+                (scoreTable?.filteredValue || gridData)?.length
+                  ? (scoreTable?.filteredValue || gridData).length
+                  : state.first + state.rows
+                ) | number) +
+                " of " +
+                (scoreTable?.filteredValue || gridData)?.length
+              : "Showing 0 - 0 of 0"
+          }}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <div class="result-no d-flex">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select
+            class="input100 result-no"
+            style="width: 50px;"
+            (change)="scoreTable.reset()"
+            [(ngModel)]="scoreTable.rows"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+    </p-table>
+    <div
+      class="mt-30 text-center mb-30"
+      *ngIf="!gridData || gridData?.length < 1"
+    >
+      <p>No Records found.</p>
+    </div>
+  </div>
+</div>
+<p-dialog
+  [blockScroll]="true"
+  [style]="{ width: '70vw' }"
+  [modal]="true"
+  header="Assign Subscription"
+  [(visible)]="viewAssign"
+  (onShow)="toggleDialog(true)"
+  (onHide)="toggleDialog(false)"
+>
+  <ng-content select="[dialog]"></ng-content>
+</p-dialog>
+<p-confirmDialog
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+  [style]="{ width: '50vw' }"
+></p-confirmDialog>

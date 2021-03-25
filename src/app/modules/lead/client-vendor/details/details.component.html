@@ -1,0 +1,66 @@
+<div class="mt-60">
+    <div class="wrap-pend-reason">
+      <div class="d-flex space-between">
+        <div>
+          <span class="section-title">Client/Vendor Queue</span>
+          <span *ngIf="queueList?.length > 0" class="section-title-count">{{queueList?.length}}</span>
+        </div>
+        <div class="d-flex mr-30">
+          <div class="search-bar d-flex space-between">
+            <input type="text" class="search-input"
+              (input)="claimsTable ? claimsTable.filterGlobal($event.target.value, 'contains') : ''"
+              placeholder="Search Claims">
+            <img alt = " " src="./../../../assets/images-new/search.png" style="width: 20px; height: 20px; margin-top: 10px;">
+          </div>
+        </div>
+      </div>
+      <div class="mt-30">
+        <p-table dataKey="claimId" [columns]="cols" [value]="queueList" [paginator]="true" [rows]="10"
+          [resizableColumns]="true" [tableStyle]="{ 'table-layout': 'auto' }" #claimsTable>
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns" id="col">
+                {{col.header}}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+              <td *ngFor="let col of columns">
+                {{ rowData[col.field] }}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft" let-state>
+            <div class="result-no">
+              {{queueList?.length > 0 ?
+                        ('Showing ' + (claimsTable?.filteredValue ? (claimsTable?.filteredValue?.length > 0 ? (state.first + 1) : 0) : (state.first + 1)) +' - ' +
+                        (
+                          (
+                          (state.first + state.rows) > (claimsTable?.filteredValue || queueList)?.length ? ((claimsTable?.filteredValue || queueList).length) : (state.first + state.rows)
+                          )| number
+                        ) + ' of '+ (claimsTable?.filteredValue || queueList)?.length) : 'Showing 0 - 0 of 0'}}
+            </div>
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+            <div class="result-no d-flex">
+              <div>Rows per page &nbsp; &nbsp;</div>
+              <select class="input100 result-no" style="width: 50px;" (click)="claimsTable.reset()"
+                [(ngModel)]="claimsTable.rows" [ngModelOptions]="{standalone: true}">
+                <option>10</option>
+                <option>25</option>
+                <option>50</option>
+              </select>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td class="text-center" [attr.colSpan]="cols.length">
+                No users available.
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>

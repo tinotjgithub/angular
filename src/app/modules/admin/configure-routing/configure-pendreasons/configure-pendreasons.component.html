@@ -1,0 +1,117 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+  <div [routerLink]="'/admin-configuration'">
+    <img alt = " " src="./../../../../../assets/images-new/left.png" style="margin-right: 15px; cursor: pointer;">
+  </div>
+  <div>Back To Configuration</div>
+</div>
+<div class="d-flex mt-30">
+  <div class="wrap-pend-reason w-70 mr-30">
+    <div class="d-flex space-between">
+      <div>
+        <span class="section-title">Pend Reason</span><span *ngIf="pendReasonList?.length > 0" class="section-title-count">{{pendReasonList.length}}</span>
+      </div>
+      <div class="search-bar d-flex space-between mr-30">
+        <input type="text" class="search-input" (input)="pendReasonTable ? pendReasonTable.filterGlobal($event.target.value, 'contains') : ''" placeholder="Search Pend Reason">
+        <img alt = " " src="./../../../../../assets/images-new/search.png" style="width: 20px; height: 20px; margin-top: 10px;">
+      </div>
+    </div>
+    <div class="mt-30" *ngIf="pendReasonList?.length > 0">
+      <p-table [tableStyle]="{ 'table-layout': 'auto' }" [columns]="cols" #pendReasonTable editMode="row"
+        [value]="pendReasonList" [paginator]="true" [rows]="10" dataKey="pendReasonCode" [resizableColumns]="true"
+        [scrollable]="false">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns" id="{{ col.field }}">
+              {{ col.header }}
+            </th>
+            <th id="th1"></th>
+            <th id="th2"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+          <tr [pEditableRow]="rowData">
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <div class="wrap-input100 mb-0">
+                    <input class="input100" type="text" maxlength="50" name="name" [(ngModel)]="rowData.pendReason" required
+                      placeholder="Enter Pend Reason">
+                    <span class="focus-input100"></span>
+                  </div>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ rowData.pendReason }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td style="width: 115px;">
+              <div *ngIf="!editing">
+                <img alt = " " src="./../../../../../assets/images-new/edit-form.png" pTooltip="Edit" pInitEditableRow
+                  title="Edit" (click)="onRowEditInit(rowData, ri)" style="cursor: pointer;margin-top: 12px;">
+              </div>
+              <div *ngIf="editing">
+                <em pSaveEditableRow class="pi pi-check" pTooltip="Save" (click)="onRowEditSave(rowData, ri)"
+                  style="cursor: pointer; font-size: 30px; color:#20bc55; margin-top: 12px;"></em>
+                <em pSaveEditableRow class="pi pi-times" pTooltip="Cancel" (click)="onRowEditCancel(ri)"
+                  style="cursor: pointer; margin-left: 20px; margin-top: 12px;"></em>
+              </div>
+            </td>
+            <td style="width: 115px;">
+              <div>
+                <img alt = " " src="./../../../../../assets/images-new/delete.png" pTooltip="Delete"
+                  style="cursor: pointer; margin-top: 12px;" (click)="deleteRow(ri, pendReasonTable)">
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td class="text-center" [attr.colSpan]="cols.length + 2">
+              No reasons available.
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          <div class="result-no">
+            {{pendReasonList?.length > 0 ? ('Showing ' + (state.first + 1) +' - ' + (((state.first + state.rows) > pendReasonList?.length ? (pendReasonList?.length) : (state.first + state.rows) ) | number) + ' of '+ pendReasonList?.length) : 'Showing 0 - 0 of 0'}}
+          </div>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+          <div class="result-no d-flex">
+            <div>Rows per page &nbsp; &nbsp;</div>
+            <select class="input100 result-no" style="width: 50px;" [(ngModel)]="pendReasonTable.rows" [ngModelOptions]="{standalone: true}">
+              <option>10</option>
+              <option>25</option>
+              <option>50</option>
+            </select>
+          </div>
+        </ng-template>
+      </p-table>
+    </div>
+    <div class="mt-60 text-center" *ngIf="!pendReasonList || pendReasonList?.length < 1">
+      <p>No Pend Reasons Present!! Please Add A Pend Reason.</p>
+    </div>
+  </div>
+
+  <div class="wrap-pend-reason-form w-40">
+    <div class="pend-reason-form-header d-flex space-between">
+      <div>Add Pend Reason</div>
+    </div>
+    <div class="pend-reason-body">
+      <form [formGroup]="pendReasonGroup">
+        <div class="pl-30 pr-30 mt-15">
+          <div class="wrap-input100">
+            <span class="label-input100">Pend Reason</span>
+            <input class="input100" maxlength="50" (keyup.enter)="isValid ? addPendReason(pendReasonTable) : ''" (ngModelChange)="pendReasonChange($event)" type="text"
+              formControlName="pendReason" placeholder="Enter Pend Reason">
+            <span class="focus-input100"></span>
+          </div>
+        </div>
+      </form>
+      <div class="d-flex flex-end mt-15 pr-30">
+        <div class="outline-btn-blue" (click)="isValid ? addPendReason(pendReasonTable) : ''" [class.disabled]="!isValid">Add</div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-confirmDialog header="Confirmation" [acceptButtonStyleClass]="'accept-button'" [rejectButtonStyleClass]="'reject-button'"></p-confirmDialog>

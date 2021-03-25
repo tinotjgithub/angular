@@ -1,0 +1,155 @@
+<div class="mt-60">
+  <div class="d-flex">
+    <div [routerLink]="'/actions'">
+      <img
+        alt=" "
+        src="./../../../../../assets/images-new/left.png"
+        style="margin-right: 15px; cursor: pointer;"
+      />
+    </div>
+    <div>Back To Actions</div>
+  </div>
+  <div class="mt-30 wrap-pend-reason">
+    <div class="d-flex mb-30">
+      <span class="section-title">Routed In</span>
+      <span
+        *ngIf="routedClaimList?.length > 0"
+        class="section-title-count mt-10 pt-1"
+        >{{ routedClaimList.length }}</span
+      >
+      <div class="search-bar ml-auto d-flex space-between mr-30">
+        <input
+          type="text"
+          class="search-input"
+          (input)="
+            claimsTable
+              ? claimsTable.filterGlobal($event.target.value, 'contains')
+              : ''
+          "
+          placeholder="Search Claims"
+        />
+        <img
+          alt=" "
+          src="./../../../../../assets/images-new/search.png"
+          style="width: 20px; height: 20px; margin-top: 10px;"
+        />
+      </div>
+    </div>
+    <p-table
+      [columns]="cols"
+      [responsive]="true"
+      [tableStyle]="{ 'table-layout': 'auto' }"
+      [resizableColumns]="true"
+      [value]="routedClaimList"
+      [paginator]="true"
+      [rows]="10"
+      #claimsTable
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th id="col" *ngFor="let col of columns">
+            {{ col.header }}
+          </th>
+        </tr>
+        <tr>
+          <th id="col" style="padding-top: 9px;" *ngFor="let col of columns" [ngSwitch]="col.field">
+            <div class="wrap-input100 my-auto" *ngSwitchCase="'status'">
+              <select class="input100" [value]="claimsTable.filters[col.field] ? claimsTable.filters[col.field].value : ''"
+                (change)="claimsTable.filter($event.target.value, col.field, 'equals')">
+                <option value="" selected>All</option>
+                <option *ngFor="let val of getOptions(col)" [value]="val">{{val}}</option>
+              </select>
+              <span class="focus-input100"></span>
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td
+            *ngFor="let col of columns"
+            [class.link]="col.field === 'claimId'"
+            (click)="selectedCol(col, rowData[col.field], rowData)"
+            [ngStyle]="{ 'cursor: pointer': col.field === 'claimId' }"
+            [pTooltip]="
+              col.field === 'claimId' ? 'Click to open Claim in HRP' : null
+            "
+          >
+            {{ rowData[col.field] }}
+          </td>
+          <div class="mu-hover " id="{{ rowData['claimId'] }}">
+            <div class="d-flex">
+              <div *ngIf="rowData['status'] === 'Complete & Route'" style="padding-top: 6px;" class="mr-20">Route To</div>
+              <div *ngIf="rowData['status'] === 'Complete & Route'" class="solid-btn mr-20" style="margin-top: -2px" pTooltip="Route to Client/Vendor Queue" 
+              (click)="onRowEditInit(rowData, true)">Client/Vendor Queue</div>
+              <div class="outline-btn" style="margin-top: -2px" (click)="onRowEditInit(rowData)">{{rowData['status'] === 'Complete & Route' ? 'Claims Examiner' : 'Route'}}</div>
+              <!-- <div
+                class="route-icon"
+                pTooltip="Route"
+                style="margin-top: 3px;"
+                (click)="onRowEditInit(rowData)"
+              ></div> -->
+            </div>
+          </div>
+        </tr> </ng-template
+      ><ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{
+            routedClaimList?.length > 0
+              ? "Showing " +
+                (claimsTable?.filteredValue
+                  ? claimsTable?.filteredValue?.length > 0
+                    ? state.first + 1
+                    : 0
+                  : state.first + 1) +
+                " - " +
+                ((state.first + state.rows >
+                (claimsTable?.filteredValue || routedClaimList)?.length
+                  ? (claimsTable?.filteredValue || routedClaimList).length
+                  : state.first + state.rows
+                ) | number) +
+                " of " +
+                (claimsTable?.filteredValue || routedClaimList)?.length
+              : "Showing 0 - 0 of 0"
+          }}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <div class="result-no d-flex">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select
+            class="input100 result-no"
+            style="width: 50px;"
+            (change)="claimsTable.reset()"
+            [(ngModel)]="claimsTable.rows"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [attr.colspan]="columns.length + 1" style="text-align: center">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <p-dialog
+    [(visible)]="openEdit"
+    modal="true"
+    [header]="isClient ? 'Route To Client/Vendor Queue' : 'Route To'"
+    [width]="700"
+    (onHide)="this.editData = null"
+  >
+    <app-route-claim-overlay
+      [claimDetails]="editData"
+      [isClient]="isClient"
+      (processComplete)="this.openEdit = false; getRoutedClaims()"
+    ></app-route-claim-overlay>
+  </p-dialog>
+</div>

@@ -1,0 +1,81 @@
+<div class="d-flex">
+  <p class="horizontal-axis" style="padding-top:15px;">Benefit Plan Name</p>
+  <div class="scroll-graph mt-10" style="max-height: 300px;">
+    <google-chart
+      *ngIf="isReqCountRendered"
+      #chart
+      [title]="titleReqCount"
+      [type]="typeReqCount"
+      [data]="dataReqCount"
+      [options]="optionsReqCount"
+      (select)="isDataPresent ? openPopUp($event) : null"
+      [columnNames]="columnNamesReqCount"
+      [width]="widthReqCount"
+      [height]="heightReqCount"
+    >
+    </google-chart>
+  </div>
+</div>
+<div *ngIf="!isDataPresent" class="d-flex space-between justify-content-center">
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<p class="vertical-axis text-center">Transaction Count</p>
+
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="450"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Audit Sampling By Benefit Plan"
+>
+<div class="d-flex">
+  <p class="horizontal-axis-enlarged mt-10" style="padding-top:50px;">
+    Benefit Plan Name
+  </p>
+  <div class="scroll-graph mt-10" style="max-height: 300px;">
+    <google-chart
+      *ngIf="isReqCountRendered"
+      #chart
+      [title]="titleReqCount"
+      [type]="typeReqCount"
+      (select)="isDataPresent ? openPopUp($event) : null"
+      [data]="dataReqCount"
+      [options]="optionsReqCountEnlarged"
+      [width]="700"
+      [height]="800"
+      [columnNames]="columnNamesReqCount"
+    >
+    </google-chart>
+  </div>
+</div>
+  <div
+    *ngIf="!isDataPresent"
+    class="d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <p class="vertical-axis-enlarged text-center">Transaction Count</p>
+
+</p-dialog>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Audit Sampling By Benefit Plan ({{ benefitPlanName }})"
+  (onHide)="closePopUp()"
+>
+  <app-enrollment-auditor-dashboard-pop-up
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-enrollment-auditor-dashboard-pop-up>
+</p-dialog>

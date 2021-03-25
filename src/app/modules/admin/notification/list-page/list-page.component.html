@@ -1,0 +1,87 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+    <div [routerLink]="'/admin-configuration'"> <img alt = " " src="./../../../../../assets/images-new/left.png" style="margin-right: 15px; cursor: pointer;"></div>
+    <div>Back To Configuration</div>
+</div>
+<div class="wrap-schedule-notifications">
+    <div class="d-flex space-between">
+        <div>
+            <span class="section-title">Upcoming Schedule Maintenance</span>
+            <span *ngIf="upcomingMaintenance?.length > 0" class="section-title-count">
+                {{upcomingMaintenance?.length}}
+            </span>
+        </div>
+        <div class=" outline-btn mr-30" (click)="addNotification = true">
+            Add notification
+        </div>
+    </div>
+    <div class="mt-30">
+        <p-table [responsive]="true" #userTable [columns]="cols" [value]="upcomingMaintenance" [resizableColumns]="true"
+          [rows]="10">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns" id="{{ col.field }}">
+                {{ col.header }}
+              </th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-user let-columns="columns" let-rowIndex="rowIndex">
+            <tr style="text-align:left; align-items: left; align-content: left; position: relative;">
+              <td *ngFor="let col of columns">
+                  <ng-container *ngIf="col.field === 'recipients'; else defaultTemplate">
+                    <span title="{{user[col.field] | titlecase}}">
+                      {{ processString(user[col.field]) | titlecase}}
+                    </span>
+                  </ng-container>
+                  <ng-template #defaultTemplate>
+                    <span title="{{user[col.field]}}">
+                      {{ user[col.field] }}
+                    </span>
+                  </ng-template>
+              </td>
+              
+          <div class="mu-hover " id="{{ rowIndex }}">
+            <div class="d-flex">
+              <div class="mr-10">
+                <img alt = " "
+                  src="./../../../../../assets/images-new/edit-form.png"
+                  pTooltip = "Edit"                
+                  (click)="openEdit(user, 'edit')"
+                  style="cursor: pointer; margin-bottom: 20px;"
+                />
+              </div>
+              <div class="mr-10" *ngIf="!emailTriggered(user['emailTriggerDate'])">
+                <img alt = " "
+                  src="./../../../../../assets/images-new/delete.png"
+                  pTooltip = "Delete"
+                  (click)="openEdit(user, 'delete')"
+                  style="cursor: pointer; margin-bottom: 20px;"
+                />
+              </div>
+              <div class="mr-10 mt-1" *ngIf="emailTriggered(user['emailTriggerDate'])">
+                <img alt = " "
+                  src="./../../../../../assets/images-new/cancel-schedule.png"
+                  pTooltip = "Cancel"                                  
+                  (click)="openEdit(user, 'cancel')"
+                  style="cursor: pointer; margin-bottom: 20px;"
+                />
+              </div>
+            </div>
+          </div>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td class="text-center" [attr.colSpan]="cols.length">
+                No maintenance scheduled.
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+    </div>
+    <p-dialog [(visible)]="addNotification" modal="true" header="Add New Schedule Maintenance" (onHide)="notification.clearForm(); getSchedule()" [style]="{ width: '900px' }">
+      <app-notification  (cancelProcess)="this.addNotification = false" #notification></app-notification>
+    </p-dialog>
+    <p-dialog [(visible)]="editNotification" modal="true" [header]= 'mode === "edit" ? "Edit Scheduled Maintenance": mode === "cancel" ? "Cancel Scheduled Maintenance": "Delete Scheduled Maintenance"' (onHide)="editnotification.clearForm(); editDetails = null; getSchedule()" [style]="{ width: '900px' }">
+      <app-notification [mode] = 'mode' [editNotification]="editDetails" (cancelProcess)="this.editNotification = false" #editnotification></app-notification>
+    </p-dialog>
+</div>

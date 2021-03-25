@@ -1,0 +1,440 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+  <div>
+    <img
+      alt=" "
+      src="./../../../assets/images-new/left.png"
+      [routerLink]="'/actions'"
+      style="margin-right: 15px; cursor: pointer;"
+    />
+  </div>
+  <div>Back To Action Menu</div>
+</div>
+<div class="wrap-report mt-10">
+  <div class="promt-header-small d-flex space-between">
+    <div class="section-label">Manual Claim Assignment</div>
+  </div>
+  <div class="popup-body">
+    <form [formGroup]="claimForm" style="display: contents;">
+      <div class="d-flex mt-15">
+        <div class="attachment-comment-head pl-30">Processed Date</div>
+      </div>
+      <div class="d-flex space-between pl-30 pr-30 mt-15">
+        <div class="d-flex w-50">
+          <div class="wrap-input100 mr-30 w-200">
+            <span class="label-input100">From Date</span>
+            <p-calendar
+              formControlName="from"
+              appendTo="body"
+              [maxDate]="claimForm.controls.to.value"
+              [showIcon]="true"
+            >
+            </p-calendar>
+          </div>
+          <div class="wrap-input100 mr-30 w-200">
+            <span class="label-input100">To Date</span>
+            <p-calendar
+              formControlName="to"
+              appendTo="body"
+              [minDate]="claimForm.controls.from.value"
+              [maxDate]="today"
+              [showIcon]="true"
+            ></p-calendar>
+          </div>
+        </div>
+        <div class="d-flex flex-end mt-20">
+          <div
+            class="solid-btn"
+            (click)="claimForm.invalid || claimLoading ? '' : getClaims()"
+            [class.disabled]="claimForm.invalid || claimLoading"
+          >
+            List Claims
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="wrap-manage-user mt-30" style="padding: 10px;" *ngIf="claimLoading">
+  <div class="text-center p-3">
+    <img alt=" " src="../../../assets/loader.svg" alt="loading..." />
+  </div>
+</div>
+
+<div
+  class="mt-30 text-center"
+  style="padding: 10px;"
+  *ngIf="claimLoaded && tableData.length < 1"
+>
+  <span class="text-center">No claims available.</span>
+</div>
+
+<div class="wrap-manage-user mt-30" *ngIf="claimLoaded && tableData.length > 0">
+  <div class="d-flex space-between pr-30 mb-15">
+    <div>
+      <span class="section-title">Claim List</span
+      ><span *ngIf="tableData.length > 0" class="section-title-count">{{
+        tableData.length
+      }}</span>
+    </div>
+    <div class="search-bar d-flex space-between">
+      <input
+        type="text"
+        class="search-input"
+        (input)="dt ? dt.filterGlobal($event.target.value, 'contains') : ''"
+        placeholder="Global Search"
+      />
+      <img
+        alt=" "
+        src="./../../../assets/images-new/search.png"
+        style="width: 20px; height: 20px; margin-top: 10px;"
+      />
+    </div>
+  </div>
+  <div class="d-flex pr-30 pl-30 mb-15">
+    <div class="d-flex claim-status mr-auto">
+      <div class="wrap-label">Selected Claims</div>
+      <div class="count">{{ selectedClaims?.length || 0 }}</div>
+    </div>
+    <ng-container *ngIf="role !== 'Claims Auditor'">
+      <span style="padding-top: 6px;" class="mr-20">Add To</span>
+      <div
+        class="outline-btn mr-20"
+        (click)="!selectedClaims.length || addingToQueue ? '' : addToQueue()"
+        [class.disabled]="!selectedClaims.length || addingToQueue"
+      >
+        Today's Audit Queue
+      </div>
+      <div
+        class="outline-btn-blue"
+        (click)="!selectedClaims.length || addingToQueue ? '' : showAssign()"
+        [class.disabled]="!selectedClaims.length || addingToQueue"
+      >
+        Specific Auditor
+      </div>
+    </ng-container>
+    <ng-container *ngIf="role === 'Claims Auditor'">
+      <div
+        class="outline-btn"
+        (click)="!selectedClaims.length || addingToQueue ? '' : addToQueue()"
+        [class.disabled]="!selectedClaims.length || addingToQueue"
+      >
+        Add to Today's Audit Queue
+      </div>
+    </ng-container>
+  </div>
+  <p-table
+    #dt
+    [columns]="cols"
+    [value]="tableData"
+    [styleClass]="'no_border left_select'"
+    [(selection)]="selectedClaims"
+    [tableStyle]="{ 'table-layout': 'auto' }"
+    dataKey="claimId"
+    [responsive]="true"
+    [paginator]="true"
+    [rows]="10"
+    [resizableColumns]="true"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th
+          *ngFor="let col of columns"
+          id="col"
+          [class.select_row]="col.field === 'select'"
+        >
+          <ng-container *ngIf="col.field !== 'select'; else selectTemplate">
+            {{ col.header }}
+          </ng-container>
+          <ng-template #selectTemplate>
+            <div class="relative_div">
+              {{ col.header }}
+            </div>
+          </ng-template>
+        </th>
+      </tr>
+      <tr>
+        <th
+          *ngFor="let col of columns"
+          [ngSwitch]="col.filter"
+          id="col"
+          [class.select_row]="col.field === 'select'"
+        >
+          <div class="mt-3" id="tableHeader" *ngSwitchCase="'check'">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </div>
+          <div class="wrap-input100 my-auto" *ngSwitchCase="'text'">
+            <input
+              class="input100"
+              style="min-width: 100px;"
+              pInputText
+              type="text"
+              (input)="dt.filter($event.target.value, col.field, 'contains')"
+            />
+            <span class="focus-input100"></span>
+          </div>
+          <div class="wrap-input100 my-auto" *ngSwitchCase="'dropdown'">
+            <select
+              class="input100"
+              style="min-width: 200px;"
+              (change)="dt.filter($event.target.value, col.field, 'equals')"
+            >
+              <option value="" selected>All</option>
+              <option
+                *ngFor="let val of getOptions(col, tableData)"
+                [value]="val"
+                >{{ val }}</option
+              >
+            </select>
+          </div>
+          <div
+            class="wrap-input100 my-auto"
+            style="visibility: hidden;"
+            *ngSwitchDefault
+          >
+            <input
+              class="input100"
+              style="min-width: 200px;"
+              pInputText
+              type="text"
+              (input)="dt.filter($event.target.value, col.field, 'contains')"
+            />
+            <span class="focus-input100"></span>
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <td
+          *ngFor="let col of columns"
+          [ngStyle]="col.field === 'select' ? null : { minWidth: '115px' }"
+          [class.select_row]="col.field === 'select'"
+        >
+          <ng-container
+            *ngIf="col.field === 'select'; else rowDataInterpolation"
+          >
+            <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+          </ng-container>
+          <ng-template #rowDataInterpolation>
+            {{ rowData[col.field] }}
+          </ng-template>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft" let-state>
+      <div class="result-no">
+        {{
+          tableData?.length > 0
+            ? "Showing " +
+              (dt?.filteredValue
+                ? dt?.filteredValue?.length > 0
+                  ? state.first + 1
+                  : 0
+                : state.first + 1) +
+              " - " +
+              ((state.first + state.rows >
+              (dt?.filteredValue || tableData)?.length
+                ? (dt?.filteredValue || tableData).length
+                : state.first + state.rows
+              ) | number) +
+              " of " +
+              (dt?.filteredValue || tableData)?.length
+            : "Showing 0 - 0 of 0"
+        }}
+      </div>
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+      <div class="result-no d-flex">
+        <div>Rows per page &nbsp; &nbsp;</div>
+        <select
+          class="input100 result-no"
+          style="width: 50px;"
+          [(ngModel)]="dt.rows"
+          (change)="dt.reset()"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+        </select>
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog
+  [(visible)]="showAuditorAssign"
+  [style]="{
+    width: '90vw',
+    height: '90%',
+    maxHeight: '95vh',
+    paddingBottom: '10px'
+  }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [contentStyle]="{ padding: 0, maxHeight: '100%', overflowY: 'auto' }"
+  [transitionOptions]="'0ms'"
+>
+  <p-header>
+    Assign Claims
+    <span *ngIf="assignableClaims?.length > 0" class="section-title-count">
+      {{ assignableClaims?.length }}
+    </span>
+  </p-header>
+  <div class="d-flex pl-30 pr-30 mt-20">
+    <div class="wrap-input100 w-50">
+      <div class="label-input100">Auditor Name</div>
+      <p-dropdown
+        appendTo="body"
+        placeholder="Select an Auditor"
+        styleClass="w-100"
+        [(ngModel)]="auditorName"
+        [options]="auditorDetails"
+        (onChange)="auditorNameChange(auditorName)"
+        [filter]="true"
+        filterBy="label"
+      >
+        <ng-template let-auditor pTemplate="item">
+          <div class="ui-helper-clearfix auditor-name">{{ auditor.label }}</div>
+          <div class="ui-helper-clearfix queue-count">
+            {{ auditor.count }} Assigned Claims
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+  </div>
+
+  <p-table
+    #dtm
+    [columns]="cols"
+    [value]="assignableClaims"
+    [styleClass]="'no_border'"
+    [tableStyle]="{ 'table-layout': 'auto' }"
+    dataKey="claimId"
+    [responsive]="true"
+    [paginator]="true"
+    [rows]="10"
+    [resizableColumns]="true"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <th *ngIf="col.field !== 'select'" id="col">
+            {{ col.header }}
+          </th>
+        </ng-container>
+      </tr>
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <th *ngIf="col.field !== 'select'" [ngSwitch]="col.filter" id="col">
+            <div class="wrap-input100 my-auto" *ngSwitchCase="'text'">
+              <input
+                class="input100"
+                style="min-width: 100px;"
+                pInputText
+                type="text"
+                (input)="dtm.filter($event.target.value, col.field, 'contains')"
+              />
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 my-auto" *ngSwitchCase="'dropdown'">
+              <select
+                class="input100"
+                style="min-width: 200px;"
+                (change)="dtm.filter($event.target.value, col.field, 'equals')"
+              >
+                <option value="" selected>All</option>
+                <option
+                  *ngFor="let val of getOptions(col, assignableClaims)"
+                  [value]="val"
+                  >{{ val }}</option
+                >
+              </select>
+            </div>
+            <div
+              class="wrap-input100 my-auto"
+              style="visibility: hidden;"
+              *ngSwitchDefault
+            >
+              <input
+                class="input100"
+                style="min-width: 200px;"
+                pInputText
+                type="text"
+                (input)="dtm.filter($event.target.value, col.field, 'contains')"
+              />
+              <span class="focus-input100"></span>
+            </div>
+          </th>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <td *ngIf="col.field !== 'select'">
+            {{ rowData[col.field] }}
+          </td>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft" let-state>
+      <div class="result-no">
+        {{
+          tableData?.length > 0
+            ? "Showing " +
+              (dtm?.filteredValue
+                ? dtm?.filteredValue?.length > 0
+                  ? state.first + 1
+                  : 0
+                : state.first + 1) +
+              " - " +
+              ((state.first + state.rows >
+              (dtm?.filteredValue || tableData)?.length
+                ? (dtm?.filteredValue || tableData).length
+                : state.first + state.rows
+              ) | number) +
+              " of " +
+              (dtm?.filteredValue || tableData)?.length
+            : "Showing 0 - 0 of 0"
+        }}
+      </div>
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+      <div class="result-no d-flex">
+        <div>Rows per page &nbsp; &nbsp;</div>
+        <select
+          class="input100 result-no"
+          style="width: 50px;"
+          [(ngModel)]="dtm.rows"
+          (change)="dtm.reset()"
+          [ngModelOptions]="{ standalone: true }"
+        >
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+        </select>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td class="" [attr.colSpan]="cols.length - 1">
+          No claims available for selected Auditor.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <div class="d-flex mt-20 flex-end pr-30 mb-15">
+    <div
+      class="solid-btn mr-20"
+      [class.disabled]="assignableClaims?.length < 1 || !auditorName"
+      (click)="
+        assignableClaims?.length < 1 || !auditorName ? '' : assigntoAuditor()
+      "
+    >
+      Assign
+    </div>
+  </div>
+</p-dialog>

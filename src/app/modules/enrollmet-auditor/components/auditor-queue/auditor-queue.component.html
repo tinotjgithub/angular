@@ -1,0 +1,255 @@
+<p-confirmDialog [acceptButtonStyleClass]="'accept-button'" [rejectButtonStyleClass]="'reject-button'"
+    header="Confirmation"></p-confirmDialog>
+<div class="mt-60" id="enrollment-landing" *ngIf="!subscription">
+    <div class="mt-10 ng-star-inserted">
+        <div class="d-flex pt-2 flex-end">
+          <img class="high-priotity">&nbsp;<span class="request-type">-&nbsp;High Priority</span>
+          <img class="medium-priotity ml-10">&nbsp;<span class="request-type">-&nbsp;Medium Priority</span>
+        </div>
+        <div class="card card-blue mt-15">
+            <div class="wrap-section-title">
+                <div class="section-title">Assigned</div>
+                &nbsp;
+                <div class="section-title-count card-grey-bg">{{totalData?.assigned || 0}}</div>
+            </div>
+            <div class="d-grid card-grid-template-column">
+                <div class="grid-work-category" *ngFor="let request of assignedData">
+                    <div class="request-type">{{request?.requestType}}&nbsp;<img *ngIf="request?.priority" [class.high-priotity]="request?.priority === 'HIGH'" [class.medium-priotity]="request?.priority === 'MEDIUM'"></div>
+                    <div class="request-count">{{request?.requestCount}}</div>
+                    <div class="grid-work-category-hover" (click)="request?.requestCount ? navigateToDetail('Assigned', request?.requestType) : ''">
+                        Open {{request?.requestType}} Detail Page
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-grey mt-15">
+            <div class="wrap-section-title">
+                <div class="section-title">Backlog</div>
+                &nbsp;
+                <div class="section-title-count card-grey-bg">{{totalData?.backlog || 0}}</div>
+            </div>
+            <div class="d-grid card-grid-template-column">
+                <div class="grid-work-category" *ngFor="let request of backlogData">
+                    <div class="request-type">{{request?.requestType}}&nbsp;<img *ngIf="request?.priority" [class.high-priotity]="request?.priority === 'HIGH'" [class.medium-priotity]="request?.priority === 'MEDIUM'"></div>
+                    <div class="request-count">{{request?.requestCount}}</div>
+                    <div class="grid-work-category-hover" (click)="request?.requestCount ? navigateToDetail('Backlog', request?.requestType) : ''">
+                        Open {{request?.requestType}} Detail Page
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="d-flex w-200 mt-20" *ngIf="!subscription">
+    <div class="wrap-input100">
+        <span class="label-input100">Work Category</span>
+        <select [(ngModel)]="requestType" class="input100" placeholder="Select Category">
+            <option value="" disabled selected hidden data-default>Select Category</option>
+            <option *ngFor="let type of requestTypes" value="{{ type.name }}">{{
+          type.name
+        }}</option>
+        </select>
+        <span class="focus-input100"></span>
+    </div>
+</div>
+
+<div class="btn-claim mt-05" pTooltip="Get a new subscription" [class.disabled]="subscription || !requestType"
+    (click)="subscription || !requestType ? '' : getSubscription()" *ngIf="!subscription">
+    <div>Get a Transaction</div>
+</div>
+<div class="mt-30" *ngIf="!subscription">
+    <span style="color: red; font-weight: bold;">Click on the 'Get a Transaction' to pull a transaction.</span>
+</div>
+
+<div class="mt-60" *ngIf="subscription">
+    <div class="tabs">
+        <div class="tab">
+            <div class="d-flex wrap-tab" for="chck1">
+                <label class="tab-label claim-id-head mt-10 mr-20" pTooltip="Open Subscription in HRP" for="chck1"
+                    (click)="copyAndOpenHRP(claimId)">Subscription ID - <input
+                        style="position: absolute; top: 0; left: 0; opacity: 0;" value="{{subscription.subscriptionId}}"
+                        #claimId><span id="claimId">{{subscription?.subscriptionId}}</span></label>
+                <div class="mr-auto"><img alt=" " src="./../../../../../assets/images-new/copy.png"
+                        style="cursor: pointer; margin-top: 10px;" pTooltip="Click to copy Claim ID"
+                        (click)="justCopy(claimId)"></div>
+                <label class="ml-auto mt-15 rebuttal-style mr-30"
+                    *ngIf="subscription?.priority">Priority - {{subscription?.priority}}</label>
+                <div class="d-flex" *ngIf="subscription?.subscriptionId">
+                    <div>
+                        <img alt=" " src="./../../../assets/images-new/stop-watch.png">
+                    </div>
+                    <div class="ml-10">
+                        <div class="target-label">Processing Time</div>
+                        <div>
+                            <span class="target-count" [ngStyle]="{color: timerColor}">
+                                {{endTimer}}
+                            </span>
+                        </div>
+                    </div>
+    
+                </div>
+            </div>
+            <div class="review-grid mt-20">
+                <ng-container *ngFor="let col of cols; index as i">
+                    <div class="" [class.grid-span-2]="col.large">
+                        <div class="label-placeholder">{{ col.header }}</div>
+                        <div class="label-value">{{ subscription[col.field] || '-' }}</div>
+                    </div>
+                </ng-container>
+                <div class="">
+                    <div class="label-placeholder">Enrollment Specialist Name</div>
+                    <div class="label-value">{{subscription?.specialistName || '-'}}</div>
+                </div>
+                <div class="">
+                    <div class="label-placeholder">Transaction Type</div>
+                    <div class="label-value">{{subscription?.transactionType || '-'}}</div>
+                </div>
+                <div class="">
+                    <div class="label-placeholder">Transaction Count</div>
+                    <div class="label-value">{{subscription?.transactionCount || '-'}}</div>
+                </div>
+                <div class="grid-span-2">
+                    <div class="label-placeholder">Comment</div>
+                    <div class="label-value">{{subscription?.specialistComments || '-'}}</div>
+                </div>
+                <div class="grid-span-2">
+                    <div class="label-placeholder">Error Details</div>
+                    <div class="label-value">{{subscription?.errorDetails || '-'}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form [formGroup]="auditForm" style="display: contents;">
+        <div class="d-flex space-between mt-10">
+            <div class="w-75 mr-30">
+                <p-steps [model]="steps" styleClass="transparent-background" [activeIndex]="activeIndex" [readonly]="false" (activeIndexChange)="stepChange($event)"></p-steps>
+            </div>
+            <div class="solid-btn mt-30" (click)="routeClaimPopup = true">Route</div>
+        </div>
+        <div class="tabs">
+            <div class="tab">
+                <div class="d-block mt-15" *ngIf="step.label === 'Audit'">
+                    <div class="claim-id-head">Audit Status</div>
+                    <div class="d-block mt-15 pl-30 pr-30">
+                        <div class="d-flex">
+                            <div class="wrap-input100 w-30 min-w-300">
+                                <div class="label-input100">Audit Status</div>
+                                <select class="input100" formControlName="status">
+                                    <option value="" selected>Select</option>
+                                    <option value="PASSED">Passed</option>
+                                    <option value="FAILED">Failed</option>
+                                    <option value="TRANSACTION_COUNT_MISMATCH">Transaction Count Mismatch</option>
+                                </select>
+                                <span class="focus-input100"></span>
+                                <div class="error-msg" style="top: 50px;"
+                                    *ngIf="auditForm.get('status').touched && auditForm.get('status').hasError('required')">
+                                    Status is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wrap-input100 min-w-300 w-70">
+                            <div class="label-input100">Auditor Comments</div>
+                            <textarea class="w-100 input100" maxlength="256" formControlName="reviewComments"></textarea>
+                            <span class="focus-input100"></span>
+                            <div class="error-msg" style="top: 50px;"
+                                *ngIf="auditForm.get('reviewComments').touched && auditForm.get('reviewComments').hasError('required')">
+                                Comments is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-block mt-15" *ngIf="step.label === 'Attachments'">
+                    <div class="claim-id-head">Attachment</div>
+                    <div class="d-block mt-15 pl-30 pr-30">
+                        <div class="d-flex justify-content-center">
+                            <div class="w-70">
+                                <app-file-input [input]="input" [maxNoOfFiles]="6"
+                                    [disabled]="!auditForm.get('status').value" (deleteFile)="deleteFile($event)"
+                                    (download)="downloadFile($event)"></app-file-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-block" *ngIf="step.label === 'CheckList'">
+                    <div class="claim-id-head">Checklist</div>
+                    <div class="mt-15 pl-30 pr-30">
+                        <p-pickList [source]="checkListItem" class="w-100" *ngIf="actualCheckListLength > 0" styleClass="hide-move-all"
+                            [sourceHeader]="'Checklist Item'" [targetHeader]="'Checked Item'" [target]="checkedItem">
+                            <ng-template let-item pTemplate="item">
+                                <div class="ui-helper-clearfix">
+                                    <p>{{item}}</p>
+                                </div>
+                            </ng-template>
+                        </p-pickList>
+                        <div class="text-center claim-value" *ngIf="!actualCheckListLength || actualCheckListLength < 1">
+                            No Checklist Configured.
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-end mt-15 mb-15">
+                    <div class="outline-btn pend mr-30" (click)="(checkForCheckList() || auditForm.invalid) ? '' : saveForLater()"
+                        [class.disabled]="(checkForCheckList() || auditForm.invalid)">Add to Backlog</div>
+                    <div class="solid-btn"
+                        (click)="(auditForm.invalid || !auditForm.get('status').value || checkForCheckList(true)) ? '' : saveForLater(true)"
+                        [class.disabled]="auditForm.invalid || !auditForm.get('status').value || checkForCheckList(true)">
+                        Submit</div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<p-dialog [(visible)]="routeClaimPopup" modal=true header="Transaction Routing" [style]="{width: '50vw'}" (onShow)="loadRolesAndReasons()"
+    (onHide)="routeForm?.reset();">
+    <form [formGroup]="routeForm" style="display: contents;">
+        <div class="d-flex mt-15">
+            <div class="wrap-input100 w-200 mr-30">
+                <div class="label-input100">Role</div>
+                <p-dropdown [options]="routeRoleList" appendTo="body" formControlName="role"
+                    [styleClass]="'w-100'" placeholder="Select" filter="true" optionLabel="name">
+                </p-dropdown>
+                <div class="error-msg" style="top: 50px;"
+                    *ngIf="routeForm.get('role').touched && routeForm.get('role').hasError('required')">
+                    Role is required.
+                </div>
+            </div>
+            <div class="wrap-input100">
+                <div class="label-input100">Manager/Lead Name</div>
+                <p-dropdown [options]="managerLeadNameDetails" appendTo="body" formControlName="leadManagerName"
+                    [disabled]="!routeForm.get('role').value" [styleClass]="'w-100'" placeholder="Select" filter="true" optionLabel="name">
+                </p-dropdown>
+                <div class="error-msg" style="top: 50px;"
+                    *ngIf="routeForm.get('leadManagerName').touched && routeForm.get('leadManagerName').hasError('required')">
+                    Manager/Lead Name is required.
+                </div>
+            </div>
+        </div>
+        <div class="d-flex mt-15">
+            <div class="wrap-input100 w-50">
+                <div class="label-input100">Route Reason</div>
+                <p-dropdown [options]="routeReasons" appendTo="body" formControlName="reason"
+                    [styleClass]="'w-100'" placeholder="Select" filter="true" optionLabel="name"></p-dropdown>
+                <div class="error-msg" style="top: 50px;"
+                    *ngIf="routeForm.get('reason').touched && routeForm.get('reason').hasError('required')">
+                    Reason is required.
+                </div>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="wrap-input100">
+                <div class="label-input100">Comments</div>
+                <textarea class="w-100 input100" [disabled]="!subscription" formControlName="comments"
+                    maxlength="256"></textarea>
+                <span class="focus-input100"></span>
+                <div class="error-msg" style="top: 50px;"
+                    *ngIf="routeForm.get('comments').touched && routeForm.get('comments').hasError('required')">
+                    Comments is required.
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-end">
+            <div class="solid-btn" (click)="routeForm.invalid ? '' : route()" [class.disabled]="routeForm.invalid">
+                Route</div>
+        </div>
+    </form>
+</p-dialog>

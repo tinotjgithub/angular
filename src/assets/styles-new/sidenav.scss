@@ -1,0 +1,126 @@
+/*---------------------------------------------*/
+
+.sidebar {
+    height: 100%;
+    min-height: 800px;
+    width: 85px;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    background-color: #20558B;
+    overflow-x: hidden;
+    transition: 0.5s ease;
+    white-space: nowrap;
+    
+  }
+  
+  /* .sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color:rgba(255, 255, 255, 0.4);
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .sidebar a:hover {
+    color: #fff;
+  } */
+  .promt-logo{
+    color: white;
+    text-align: center;
+    background-color: rgba(50, 60, 71, 0.4);
+    height: 60px;
+    line-height: 60px;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    font-weight: bolder;
+    font-size: 22px;
+    
+  }
+  .sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  .wrap-menu-item{
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 18px;
+    color:rgba(255, 255, 255, 0.4);
+    display: block;
+    transition: 0.3s;
+    margin-bottom: 40px;
+    position: relative;
+    overflow:hidden;
+    opacity: 0.4;
+    cursor: pointer;
+    &.small {
+      margin-bottom: 27px;
+    }
+  }
+  .wrap-menu-item:hover{
+    opacity: 1;
+  }
+  .menu-active{
+    opacity:1;
+  }
+  .menu-unit {
+    width:26px;
+    height:26px;
+    background-size: cover;
+  }
+  .menu-home{
+    background-image: url("src/assets/images-new/Home.png");
+  }
+  .menu-manage-user{
+    background-image: url("src/assets/images-new/manage-user.png");
+  }
+  .menu-report{
+    background-image: url("src/assets/images-new/Report.png");
+  }
+  .menu-configuration{
+    background-image: url("src/assets/images-new/Configuration.png");
+  }
+  .menu-actions {
+    background-image: url("src/assets/images-new/actions.png");
+  }
+  .menu-dashboard {
+    background-image: url("src/assets/images-new/dashboard.png");
+  }
+  .menu-claims-audit {
+    background-image: url("src/assets/images-new/claims audit.png");
+  }
+  .menu-report-dashboard {
+    background-image: url("src/assets/images-new/report dashboard.png");
+  }
+  .menu-usergroup {
+    background-image: url("src/assets/images-new/manage-usergroup.png");
+  }
+  
+  .icon-text {
+    position: absolute;
+    color:white;
+    left: 85px;
+    line-height: 26px;
+  }
+  
+  .wrap-ust-logo{
+    position: fixed;
+    bottom: 0px;
+    width:inherit;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 10px 0;
+  }
+  .ust-logo{
+    width: 30px;
+    height: 30px;
+    background-image: url("src/assets/images-new/ust-logo.png");
+    background-size: cover;
+    margin: 0 auto;
+  
+  }
+  

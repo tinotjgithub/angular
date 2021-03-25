@@ -1,0 +1,49 @@
+<div class="d-flex">
+  <div class="d-flex scroll-graph-x w-100">
+    <p class="horizontal-axis text-center" style="margin-left: 5px;">
+      Claim Count
+    </p>
+    <google-chart
+      *ngIf="isAuditRendered"
+      #chart
+      style="width: 100%;"
+      [title]="titleAudit"
+      [type]="typeAudit"
+      [data]="dataAudit"
+      (select)="openPopUp($event)"
+      [options]="optionsAudit"
+      [width]="widthAudit"
+      [columnNames]="columnNamesAudit"
+      [height]="heightAudit"
+    >
+    </google-chart>
+  </div>
+</div>
+<p class="vertical-axis text-center" style="padding-top: 1px;">Date</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mr-3 mb-3 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [contentStyle]="{ padding: 0, maxHeight: '100%', overflowY: 'auto' }"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Audit Queue Weekly Trend - {{ this.editUser.type }}"
+  (onHide)="closePopUp()"
+>
+  <app-auditor-claims-audited-details
+    #gridView
+    class="w-100"
+    header="Claims List"
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-auditor-claims-audited-details>
+</p-dialog>

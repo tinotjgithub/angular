@@ -1,0 +1,134 @@
+<div class="wrap-manage-user mt-60">
+  <div class="d-flex space-between pr-30 mt-20">
+    <div>
+      <span class="section-title">Template Configuration</span>
+      <span *ngIf="allUserList?.length > 0" class="section-title-count">
+        {{ allUserList?.length }}
+      </span>
+    </div>
+    <div class="d-flex">
+      <div class="search-bar d-flex space-between mr-30">
+        <input
+          type="text"
+          class="search-input"
+          (input)="
+            pendReasonTable
+              ? pendReasonTable.filterGlobal($event.target.value, 'contains')
+              : ''
+          "
+          placeholder="Global Search"
+        />
+        <img
+          alt=" "
+          src="./../../../../../../../assets/images-new/search.png"
+          style="width: 20px; height: 20px; margin-top: 10px;"
+        />
+      </div>
+
+      <div class="outline-btn" (click)="onCreateUser()">
+        Create
+      </div>
+    </div>
+  </div>
+  <!-- editMode="row" -->
+  <div class="mt-30">
+    <p-table
+      [tableStyle]="{ 'table-layout': 'auto' }"
+      #pendReasonTable
+      [columns]="cols"
+      [responsive]="true"
+      [paginator]="true"
+      [value]="allUserList"
+      [rows]="10"
+      dataKey="id"
+      [scrollable]="false"
+      [resizableColumns]="true"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th
+            *ngFor="let col of cols"
+            id="{{ col.field }}"
+            [hidden]="!col.visible"
+          >
+            {{ col.header }}
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template
+        pTemplate="body"
+        let-rowData
+        let-columns="cols"
+        let-ri="rowIndex"
+      >
+        <tr [pSelectableRow]="rowData">
+          <td *ngFor="let col of cols" [hidden]="!col.visible">
+            {{ rowData[col.field] }}
+          </td>
+
+          <div class="mu-hover " id="{{ rowIndex }}">
+            <div class="d-flex">
+              <div>
+                <img
+                  alt=" "
+                  src="./../../../../../assets/images-new/edit-form.png"
+                  pTooltip="Edit"
+                  title="Edit"
+                  (click)="openEdit(rowData)"
+                  style="cursor: pointer; margin-bottom: 20px;"
+                />
+              </div>
+              <div style="margin-left:40px;" id="{{ rowIndex }}">
+                <img
+                  alt=" "
+                  src="./../../../../../assets/images-new/delete.png"
+                  pTooltip="Delete"
+                  style="cursor: pointer; margin-bottom: 20px;"
+                  (click)="deleteRow(ri, pendReasonTable)"
+                />
+              </div>
+            </div>
+          </div>
+        </tr>
+     
+      </ng-template>
+     
+      <ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{
+            allUserList?.length > 0
+              ? "Showing " +
+                (pendReasonTable?.filteredValue
+                  ? pendReasonTable?.filteredValue?.length > 0
+                    ? state.first + 1
+                    : 0
+                  : state.first + 1) +
+                " - " +
+                ((state.first + state.rows >
+                (pendReasonTable?.filteredValue || allUserList)?.length
+                  ? (pendReasonTable?.filteredValue || allUserList).length
+                  : state.first + state.rows
+                ) | number) +
+                " of " +
+                (pendReasonTable?.filteredValue || allUserList)?.length
+              : "Showing 0 - 0 of 0"
+          }}
+        </div>
+      </ng-template>
+    </p-table>
+    <div
+    class="mt-30 text-center mb-30"
+    *ngIf="!allUserList || allUserList?.length < 1"
+  >
+    <p>No Data Present!</p>
+  </div>
+
+  </div>
+</div>
+<p-confirmDialog
+  header="Confirmation"
+  appendTo="body"
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+></p-confirmDialog>

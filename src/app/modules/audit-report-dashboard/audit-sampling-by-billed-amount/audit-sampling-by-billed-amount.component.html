@@ -1,0 +1,57 @@
+<div class="d-flex justify-content-center">
+  <div>
+    <google-chart
+      *ngIf="isAuditRendered"
+      #chart
+      [title]="titleAudit"
+      [type]="typeAudit"
+      [data]="dataAudit"
+      [options]="optionsAudit"
+      [width]="widthAudit"
+      [columnNames]="columnNamesAudit"
+      [height]="heightAudit"
+    >
+    </google-chart>
+  </div>
+</div>
+<div
+  *ngIf="!isDataPresent"
+  class="mr-3 mb-3 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="450"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Audit Sampling By Billed Amount"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center">
+      <google-chart
+        *ngIf="isAuditRendered"
+        #chart
+        [title]="titleAudit"
+        [type]="typeAudit"
+        [data]="dataAudit"
+        [options]="optionsAuditEnlarged"
+        [width]="'100%'"
+        [height]="400"
+        [columnNames]="columnNamesAudit"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-3 mb-3 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>

@@ -1,0 +1,66 @@
+<div class="d-flex cursor-pointer space-between" href="#">
+  <div class="d-flex cursor-pointer mt-60" href="#">
+    <div [routerLink]="'/admin-configuration'">
+      <img
+        alt=" "
+        src="./../../../../../assets/images-new/left.png"
+        style="margin-right: 15px; cursor: pointer;"
+      />
+    </div>
+    <div>Back To Configuration</div>
+  </div>
+</div>
+<div class="wrap-rebuttal-accept mt-30">
+  <div class="claim-id-head">
+    {{
+      mode === "userCheckist"
+        ? "Auditor Checklist Bulk Upload"
+        : mode === "user"
+        ? "User Creation Bulk Upload"
+        : mode === "userGroup"
+        ? "User Group Creation Bulk Upload"
+        : mode === "procedure-code"
+        ? "Procedure Code Bulk Upload"
+        : mode === "diagnosis-code"
+        ? "Diagnosis Code Bulk Upload"
+        : "Reasons Bulk Upload"
+    }}
+  </div>
+  <div
+    class="mt-30 mr-30 d-flex"
+    *ngIf="mode !== 'procedure-code' && mode !== 'diagnosis-code'"
+  >
+    <span class="mr-30"> Download Template:</span>
+    <span>
+      <div class="excel-icon">
+        <img
+          alt=" "
+          src="./../../../../assets/images-new/download-excel.png"
+          (click)="downloadTemplateExcel()"
+          pTooltip="Download Template"
+          tooltipPosition="bottom"
+          alt="Download"
+        /></div
+    ></span>
+  </div>
+  <div class="mt-10">
+    <app-file-input
+      [input]="input"
+      [type]="'bulk'"
+      [maxNoOfFiles]="1"
+      (download)="downloadAttachment($event)"
+      [codeFile]="isCodeFile"
+    ></app-file-input>
+    <div class="d-flex flex-end mt-10">
+      <div
+        class="outline-btn complete mr-30"
+        pTooltip="Upload File"
+        tooltipPosition="bottom"
+        (click)="uploadFile()"
+      >
+        Upload
+      </div>
+    </div>
+  </div>
+</div>
+<app-loader [showSpinner]="showSpinner"></app-loader>

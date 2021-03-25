@@ -1,0 +1,158 @@
+<div class="d-flex">
+  <p class="horizontal-axis" style="padding-top:15px;">Queue Name</p>
+  <div class="scroll-graph" style="max-height: 190px;">
+    <google-chart
+      *ngIf="isStatusRendered"
+      #chart
+      [title]="titleStatus"
+      [type]="typeStatus"
+      [data]="dataStatus"
+      [options]="optionsStatus"
+      [columnNames]="columnNamesStatus"
+      [width]="600"
+      [height]="heightStatus"
+      (select)="selectBar($event)"
+    >
+    </google-chart>
+  </div>
+</div>
+<p class="vertical-axis text-center">Claim Count</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mb-2 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<form [formGroup]="countByStatusGroup" (ngSubmit)="onSubmitStatus()">
+  <div class="d-flex space-between mt-15">
+    <div class="wrap-input100 mb-0 mr-15">
+      <div class="label-input100">Queue Names</div>
+      <p-multiSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="queueList"
+        tooltip="Queue Names"
+        tooltipPosition="bottom"
+        formControlName="queueName"
+        [virtualScroll]="true"
+        (onChange)="validateQueue()"
+        itemSize="30"
+        defaultLabel="Select Queue Name"
+        appendTo="body"
+      ></p-multiSelect>
+      <div
+        style="color: red;
+        font-size: 11px;
+        position: absolute;
+        top: 55px;"
+        *ngIf="getQueue.touched"
+      >
+        <span class="mr-2" *ngIf="getQueue.hasError('required')"
+          >Please select a queue.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="d-flex space-between mt-15">
+    <div class="wrap-input100 mb-0">
+      <div class="label-input100">Processed Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onClose)="validateDates()"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        pTooltip="Processed Date Range"
+        tooltipPosition="bottom"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        appendTo="body"
+      >
+      </p-calendar>
+      <div
+        style="color: red;
+    font-size: 11px;
+    position: absolute;
+    top: 55px;"
+        *ngIf="getDateRange.touched"
+      >
+        <span class="mr-2" *ngIf="getDateRange.hasError('required')"
+          >Date range is required.</span
+        >
+        <span class="mr-2" *ngIf="getDateRange.hasError('inValidDate')"
+          >Date range should not exceed six months.</span
+        >
+      </div>
+    </div>
+  </div>
+</form>
+
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Claims Count by Queue and Status"
+>
+  <div class="d-flex">
+    <p class="horizontal-axis-enlarged" style="padding-top:150px;">
+      Queue Name
+    </p>
+    <div style="overflow-y: scroll; max-height: 400px;  min-height: 400px;">
+      <google-chart
+        *ngIf="isStatusRendered"
+        #chart
+        [title]="titleStatus"
+        [type]="typeStatus"
+        [data]="dataStatus"
+        [options]="optionsStatusEnlarged"
+        [width]="700"
+        [height]="400"
+        [columnNames]="columnNamesStatus"
+        (select)="selectBar($event)"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged text-center">Claim Count</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="detailsView"
+  [style]="{ width: '90vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="detailsView"
+  [contentStyle]="{ padding: 0, maxHeight: '100%' }"
+  [transitionOptions]="'0ms'"
+  header="{{
+    barDetails.type +
+      (barDetails.type === 'Complete' ? 'd' : '') +
+      ' Claims under ' +
+      barDetails.queueName
+  }}"
+>
+  <div class="d-flex">
+    <app-report-table
+      class="w-100"
+      header="{{ barDetails.type }}"
+      [isChart]="true"
+      [data]="chartDetails"
+      [columns]="cols"
+      (exportExcel)="downloadExcel()"
+    ></app-report-table>
+  </div>
+</p-dialog>

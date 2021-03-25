@@ -1,0 +1,377 @@
+<div class="mt-60 position-relative">
+  <div class="manual-sync">
+    <div class="d-flex">
+      <div
+        class="refresh-btn d-flex"
+        [class.disabled]="synching"
+        (click)="synching ? '' : confirm()"
+      >
+        Sync Now
+        <div class="refesh-icon ml-15" [class.refresh-loading]="synching"></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div [ngClass]="''">
+      <div class="block-title">Active Claims User Snapshot</div>
+
+      <div class="w-100 flex-parent">
+        <div
+          class="card-with-icon card-blue d-flex"
+          [ngClass]="'flex-child-25'"
+        >
+          <div>
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/examiner.png"
+            />
+          </div>
+          <div class="ml-15 mt-10">
+            <div class="card-title">Claims Examiner</div>
+            <div class="card-value">
+              {{ activeUsers?.claimExaminerCount || 0 }}
+            </div>
+          </div>
+        </div>
+        <div
+          class="card-with-icon card-green d-flex"
+          [ngClass]="'flex-child-25'"
+        >
+          <div>
+            <img alt=" " src="./../../../../../assets/images-new/manager.png" />
+          </div>
+          <div class="ml-15 mt-10">
+            <div class="card-title">Claims Lead</div>
+            <div class="card-value">
+              {{ activeUsers?.leadUserCount || 0 }}
+            </div>
+          </div>
+        </div>
+        <div class="card-with-icon card-red d-flex" [ngClass]="'flex-child-25'">
+          <div>
+            <img alt=" " src="./../../../../../assets/images-new/auditor.png" />
+          </div>
+          <div class="ml-15 mt-10">
+            <div class="card-title">Claims Auditor</div>
+            <div class="card-value">
+              {{ activeUsers?.auditorCount || 0 }}
+            </div>
+          </div>
+        </div>
+        <div
+          class="card-with-icon card-yellow d-flex"
+          [ngClass]="'flex-child-25'"
+        >
+          <div>
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/usergroup.png"
+            />
+          </div>
+          <div class="ml-15 mt-10">
+            <div class="card-title">User Group</div>
+            <div class="card-value">
+              {{ activeUsers?.userGroupCount || 0 }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-15">
+    <div>
+      <div class="block-title">My Claims Task</div>
+      <div class="w-100 flex-parent">
+        <div
+          class="card card-purple hover"
+          [ngClass]="'flex-child-25'"
+          [routerLink]="
+            auditStatus?.reviewRebuttalCount ? ['/rebut-review-list'] : null
+          "
+        >
+          <div class="card-title-examiner">Review / Rebuttal Queue</div>
+          <div class="card-value-examiner">
+            {{ auditStatus?.reviewRebuttalCount || 0 }}
+          </div>
+          <div class="card-hover">
+            View Review / Rebuttal Queue
+          </div>
+        </div>
+        <div
+          class="card card-yellow hover"
+          [ngClass]="'flex-child-25'"
+          [routerLink]="
+            auditStatus?.routedInCount ? ['/audit-routed-in-detail/list'] : null
+          "
+        >
+          <div class="card-title-examiner">Auditor Routed In</div>
+          <div class="card-value-examiner">
+            {{ auditStatus?.routedInCount || 0 }}
+          </div>
+          <div class="card-hover">
+            View Routed In Queue
+          </div>
+        </div>
+
+        <!-- <div
+       
+      > -->
+        <div
+          class="card card-yellow hover mr-20 "
+          [ngClass]="
+            daysCrossed
+              ? 'flex-child-25 card-amber hover card pulse'
+              : 'flex-child-25 card-amber hover card'
+          "
+          [routerLink]="pendingCount ? ['/pending-assignment-detail'] : null"
+        >
+          <div class="card-title-examiner">Pending Reassignment</div>
+          <div class="card-value-examiner">{{ pendingCount || 0 }}</div>
+          <div class="card-hover">
+            View Pending Assignment
+          </div>
+        </div>
+        <div class="w-25"></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="block-title mb-0">Quick Links</div>
+    <div class="btn-group d-flex mt-10">
+      <div class="big-btn position-relative mr-20">
+        <div class="user-element-1"></div>
+        <div class="btn-label">Actions</div>
+        <div class="ql-hover-dropdown">
+          <ng-container *ngFor="let action of actionLinks">
+            <div class="ql-header">{{ action.header }}</div>
+            <div
+              class="ql-link"
+              *ngFor="let item of action.items"
+              [routerLink]="item.routerLink"
+            >
+              {{ item.label }}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="big-btn mr-20" [routerLink]="'/UserConfig/edit-user'">
+        <div class="user-element-2"></div>
+        <div class="btn-label">Manage Users</div>
+      </div>
+
+      <div class="big-btn mr-20" [routerLink]="'/UsergroupManagement'">
+        <div class="user-element-5"></div>
+        <div class="btn-label">Manage User Group</div>
+      </div>
+
+      <div class="big-btn" [routerLink]="'/claims-audit'">
+        <div class="user-element-4"></div>
+        <div class="btn-label">Claims Audit</div>
+      </div>
+    </div>
+    <div [ngClass]="''">
+      <div [ngClass]="''">
+        <div class="block-title mt-30">Claims Open Inventory By Status</div>
+        <div class="d-flex w-100 flex-parent">
+          <div
+            class="card-with-icon w-25 card-total d-flex"
+            [ngClass]="'flex-child-25'"
+          >
+            <div class="my-auto">
+              <div class="mt-1 ml-1 profile_progress progress-100">
+                <span>100</span>
+              </div>
+            </div>
+            <div class="ml-15 mt-10">
+              <div class="card-title-examiner">Total Claims</div>
+              <div class="card-value-examiner">
+                {{
+                  (piechartCount?.assignedCount || 0) +
+                    (piechartCount?.pendedCount || 0) +
+                    (piechartCount?.toDoCount || 0)
+                }}
+              </div>
+            </div>
+          </div>
+          <div
+            class="card-with-icon w-25 card-to-do d-flex"
+            [ngClass]="'flex-child-25'"
+          >
+            <div>
+              <div
+                class="mt-1 ml-1 profile_progress progress-{{
+                  getPercentage(piechartCount?.toDoCount)
+                }}"
+              >
+                <span>{{ getPercentage(piechartCount?.toDoCount) }}</span>
+              </div>
+            </div>
+            <div class="ml-15 mt-10">
+              <div class="card-title-examiner">Claims To Do</div>
+              <div class="card-value-examiner">
+                {{ piechartCount?.toDoCount }}
+              </div>
+            </div>
+          </div>
+          <div
+            class="card-with-icon w-25 card-pended d-flex "
+            [ngClass]="'flex-child-25'"
+          >
+            <div>
+              <div
+                class="mt-1 ml-1 profile_progress progress-{{
+                  getPercentage(piechartCount?.pendedCount)
+                }}"
+              >
+                <span>{{ getPercentage(piechartCount?.pendedCount) }}</span>
+              </div>
+            </div>
+            <div class="ml-15 mt-10">
+              <div class="card-title-examiner">Claims Pended</div>
+              <div class="card-value-examiner">
+                {{ piechartCount?.pendedCount }}
+              </div>
+            </div>
+          </div>
+          <div
+            class="card-with-icon w-25 card-assigned d-flex "
+            [ngClass]="'flex-child-25'"
+          >
+            <div>
+              <div
+                class="mt-1 ml-1 profile_progress progress-{{
+                  getPercentage(piechartCount?.assignedCount)
+                }}"
+              >
+                <span>{{ getPercentage(piechartCount?.assignedCount) }}</span>
+              </div>
+            </div>
+            <div class="ml-15 mt-10">
+              <div class="card-title-examiner">Claims Assigned</div>
+              <div class="card-value-examiner">
+                {{ piechartCount?.assignedCount }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex mt-30 w-100">
+      <div class="wrap-claim-count w-50 mr-30 mt-20">
+        <div class="d-flex space-between ">
+          <div class="section-label">Claims Open Inventory by Queue</div>
+        </div>
+        <div class="mt-12">
+          <div
+            class="d-flex scroll-graph-x"
+            style="max-height: 260px; min-height: 260px;"
+            [class.justify-content-center]="cont.clientWidth > 800"
+            #cont
+          >
+            <google-chart
+              #chart1
+              title=""
+              type="ColumnChart"
+              [data]="dataStatus"
+              [options]="optionsStatusEnlarged"
+              [height]="'100%'"
+              [columnNames]="columnNamesStatus"
+            ></google-chart>
+          </div>
+        </div>
+        <p class="vertical-axis text-center">Queue Names</p>
+        <div
+          *ngIf="!isDataPresent"
+          class="mb-2 d-flex space-between justify-content-center"
+        >
+          <p-message severity="warn" text="No Data Present!"></p-message>
+        </div>
+      </div>
+
+      <div class="wrap-claim-volume  w-50 mr-30 mt-20">
+        <div class="d-flex space-between ">
+          <div class="section-label">Claims Nearing SLA</div>
+          <div>
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/max.png"
+              (click)="openInv.enlargedDisplay = true"
+              style="cursor: pointer;"
+            />
+          </div>
+        </div>
+        <div class="mt-29">
+          <app-claims-open-inventory-sla
+            #openInv
+          ></app-claims-open-inventory-sla>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-confirmDialog
+    [acceptButtonStyleClass]="'accept-button'"
+    [rejectButtonStyleClass]="'reject-button'"
+    header="Confirmation"
+  ></p-confirmDialog>
+</div>
+<p-confirmDialog
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+  header="Confirmation"
+></p-confirmDialog>
+<!-- <p-dialog
+  *ngIf="enlargedDisplay"
+  height="400"
+  width="800"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Claims Open Inventory by Queue"
+  [(visible)]="enlargedDisplay"
+> -->
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Claims Open Inventory by Queue"
+>
+  <!-- <div class="d-flex">
+    <div
+      class="d-flex scroll-graph-x"
+      style="min-height: 90%;"
+      [class.justify-content-center]="cont.clientWidth > 800"
+      #cont
+    > -->
+  <div class="d-flex scroll-graph-x">
+    <p class="horizontal-axis" style="padding-top:160px;">Claim Count</p>
+    <google-chart
+      #chart1
+      title=""
+      type="ColumnChart"
+      [data]="dataStatus"
+      [options]="optionsStatusEnlarged"
+      [width]="750"
+      [height]="400"
+      [columnNames]="columnNamesStatus"
+    ></google-chart>
+  </div>
+  <p class="vertical-axis-enlarged text-center">Queue Names</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>

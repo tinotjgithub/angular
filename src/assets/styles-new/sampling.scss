@@ -1,0 +1,252 @@
+
+/*--------------------------Horizontal Stepper Starts---------------*/
+.attachment-comment-sampling{
+  color:#323C47;
+  font-size: 15px;
+  text-align: justify; 
+}
+.md-stepper-horizontal {
+  cursor: pointer;
+  display: table;
+  width: 100%;
+  margin: 0 auto;
+  background-color: #ffffff;
+}
+.md-stepper-horizontal .md-step {
+  display: table-cell;
+  position: relative;
+  padding: 15px 24px;
+  width: 12.5%;
+}
+.md-stepper-horizontal .md-step:hover,
+.md-stepper-horizontal .md-step:active {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+.md-stepper-horizontal .md-step:active {
+  border-radius: 15% / 75%;
+}
+.md-stepper-horizontal .md-step:first-child:active {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.md-stepper-horizontal .md-step:last-child:active {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.md-stepper-horizontal .md-step:hover .md-step-circle {
+  background-color: #757575;
+}
+.md-stepper-horizontal .md-step:first-child .md-step-bar-left,
+.md-stepper-horizontal .md-step:last-child .md-step-bar-right {
+  display: none;
+}
+.md-stepper-horizontal .md-step .md-step-circle {
+  width: 30px;
+  height: 30px;
+  margin: 0 auto;
+  background-color: #999999;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+}
+.md-stepper-horizontal.green .md-step.active .md-step-circle {
+  background-color: #00ae4d;
+}
+.md-stepper-horizontal.orange .md-step.active .md-step-circle {
+  background-color: #f96302;
+}
+.md-stepper-horizontal.blue .md-step.active .md-step-circle {
+  background-color: #20558b;
+}
+.md-stepper-horizontal .md-step.done .md-step-circle:before {
+  background-color: #00ae4d;
+}
+.md-stepper-horizontal .md-step.editable .md-step-circle {
+  background-color: orange !important;
+}
+
+.md-stepper-horizontal .md-step.editable:before {
+    content: '';
+    border-bottom: 20px solid white;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    position: absolute;
+    bottom:0;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%)
+  }
+
+
+.md-stepper-horizontal .md-step.done .md-step-circle {
+  background-color: green;
+}
+
+.md-stepper-horizontal .md-step .md-step-title {
+  margin-top: 16px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.md-stepper-horizontal .md-step .md-step-title,
+.md-stepper-horizontal .md-step .md-step-optional {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.8);
+}
+.md-stepper-horizontal .md-step.active .md-step-title {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.87);
+}
+.md-stepper-horizontal .md-step.active.done .md-step-title,
+.md-stepper-horizontal .md-step.active.editable .md-step-title {
+  font-weight: 600;
+}
+.md-stepper-horizontal .md-step .md-step-optional {
+  font-size: 12px;
+}
+.md-stepper-horizontal .md-step.active .md-step-optional {
+  color: rgba(0, 0, 0, 0.54);
+}
+.md-stepper-horizontal .md-step .md-step-bar-left,
+.md-stepper-horizontal .md-step .md-step-bar-right {
+  position: absolute;
+  top: 36px;
+  height: 1px;
+  border-top: 1px solid #dddddd;
+}
+.md-stepper-horizontal .md-step .md-step-bar-right {
+  right: 0;
+  left: 50%;
+  margin-left: 20px;
+}
+.md-stepper-horizontal .md-step .md-step-bar-left {
+  left: 0;
+  right: 50%;
+  margin-right: 20px;
+}
+/*---------------------------Horizontal Stepper Ends-----------------------*/
+.wrap-stepper-content {
+  background-color: white;
+  width: 100%;
+}
+.section-title {
+  font-size: 18px;
+  color: #20558b;
+  margin-left: 30px;
+  font-weight: bold;
+  line-height: 35px;
+}
+
+/* CSS tab core */
+.tab-menu-radio:checked + label {
+  -webkit-transition: all 0.2s; /* Optional */
+  -moz-transition: all 0.2s; /* Optional */
+  transition: all 0.2s; /* Optional */
+  border-bottom: 7px solid #20558b;
+  color: #20558b;
+  font-weight: 600;
+}
+.tab-content .tab {
+  height: 0;
+  opacity: 0;
+  display: none;
+}
+#tab-menu1:checked ~ .tab-content .tab-1,
+#tab-menu2:checked ~ .tab-content .tab-2,
+#tab-menu3:checked ~ .tab-content .tab-3,
+#tab-menu4:checked ~ .tab-content .tab-4,
+#tab-menu5:checked ~ .tab-content .tab-5 {
+  -webkit-transition: opacity 1s; /* Optional */
+  -moz-transition: opacity 1s; /* Optional */
+  transition: opacity 1s; /* Optional */
+  height: auto;
+  opacity: 1;
+  display: block;
+}
+/* End CSS tab core */
+.link {
+  color: #20558b;
+  cursor: pointer;
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+.md-stepper-horizontal-grey {
+  display: table;
+  width: 100%;
+  margin: 0 auto;
+}
+
+
+
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: white;
+  border-radius: 8px;
+  padding: 30px;
+}
+.grid-item-total {
+  grid-column: 5/5 ;
+  padding-right: 50px;
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 30px;
+  padding-right: 50px;
+}
+.grid-end{
+  grid-column-end: span 4;
+}
+
+.incluison-header {
+  width: 100%;
+  &.auto {
+    padding-left: calc(12.5% + 48px);
+    padding-right: calc(25% + 96px);
+  }
+  &.manual {
+    padding-left: 12.5%;
+    padding-right: 12.5%;
+  }
+  .header-item {
+    position: relative;
+    width: 100%;
+    padding-bottom: 15px;
+    text-align: center;
+    border-bottom: 2px solid #aab9dc;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.87);
+    span {
+      padding-bottom: 15px;
+      &::after {
+        content: "";
+        width: 2px;
+        position: absolute;
+        background: #aab9dc;
+        height: 15px;
+        bottom: 0;
+        left: 50%;
+      }
+    }
+    &::before,
+    &::after {
+      content: "";
+      width: 2px;
+      position: absolute;
+      background: #aab9dc;
+      height: 15px;
+      bottom: -15px;
+    }
+    &::before {
+      left: 0;
+    }
+    &::after {
+      right: 0;
+    }
+  }  
+}

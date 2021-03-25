@@ -1,0 +1,456 @@
+<div class="container-card" [class.m-3]="!editMode" [class.mx-5]="!editMode">
+  <h5 class="mb-2 heading d-inline-block" *ngIf="!editMode">Add New User</h5>
+  <a
+    class="float-right back_link"
+    href="javascript:void(0);"
+    *ngIf="backToEdit"
+    routerLink="/UserConfig/edit-user"
+    >&nbsp;Back</a
+  >
+  <form [formGroup]="userForm" class="p-2">
+    <div class="row mb-3">
+      <div class="col" [class.col-12]="editMode">
+        <div class="row" [class.mb-3]="editMode">
+          <label
+            class="form-control-label required"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >First Name</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <input
+              formControlName="firstName"
+              class="form-control"
+              [class.is_invalid]="
+                this.getControl('firstName').touched &&
+                this.getControl('firstName').invalid
+              "
+              type="text"
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="this.getControl('firstName').touched"
+            >
+              <p
+                class="mb-0"
+                *ngIf="this.getControl('firstName').hasError('required')"
+              >
+                First Name is required.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col" [class.col-12]="editMode">
+        <div class="row">
+          <label
+            class="form-control-label required"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >Last Name</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <input
+              formControlName="lastName"
+              class="form-control"
+              [class.is_invalid]="
+                this.getControl('lastName').touched &&
+                this.getControl('lastName').invalid
+              "
+              type="text"
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="this.getControl('lastName').touched"
+            >
+              <p
+                class="mb-0"
+                *ngIf="this.getControl('lastName').hasError('required')"
+              >
+                Last Name is required.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col" [class.col-12]="editMode">
+        <div class="row" [class.mb-3]="editMode">
+          <label
+            class="form-control-label required"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >Date of Birth</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <p-calendar
+              [styleClass]="editMode ? 'ui-datepicker-edit' : ''"
+              formControlName="dob"
+              [inputStyleClass]="'form-control'"
+              [showIcon]="true"
+              dateFormat="mm/dd/yy"
+              yearRange="1970:2099"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+            >
+            </p-calendar>
+            <div
+              class="invalid-feedback d-flex"
+              *ngIf="this.getControl('dob').touched"
+            >
+              <p
+                class="mb-0"
+                *ngIf="this.getControl('dob').hasError('required')"
+              >
+                Date of Birth is required.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col" [class.col-12]="editMode">
+        <div class="row">
+          <label
+            class="form-control-label required"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >User Name</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <input
+              formControlName="userName"
+              class="form-control"
+              [class.is_invalid]="
+                this.getControl('userName').touched &&
+                this.getControl('userName').invalid
+              "
+              type="text"
+              [attr.disabled]="editMode ? '' : null"
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="this.getControl('userName').touched"
+            >
+              <p
+                class="mb-0"
+                *ngIf="this.getControl('userName').hasError('required')"
+              >
+                User Name is required.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col" [class.col-12]="editMode">
+        <div class="row" [class.mb-3]="editMode">
+          <label
+            class="form-control-label required"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >Role</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <ng-container *ngIf="!editMode; else editModeRole">
+              <div class="group">
+                <select
+                  formControlName="role"
+                  [attr.disabled]="editMode ? '' : null"
+                  class="form-control"
+                  [class.is_invalid]="
+                    this.getControl('role').touched &&
+                    this.getControl('role').invalid
+                  "
+                >
+                  <option value="" selected>-- Select Role --</option>
+                  <option *ngFor="let role of userRoles" [value]="role.id">{{
+                    role.roleName
+                  }}</option>
+                </select>
+              </div>
+              <div
+                class="invalid-feedback d-block"
+                *ngIf="this.getControl('role').touched"
+              >
+                <p
+                  class="mb-0"
+                  *ngIf="this.getControl('role').hasError('required')"
+                >
+                  Role is required.
+                </p>
+              </div>
+            </ng-container>
+            <ng-template #editModeRole>
+              <input
+                type="text"
+                formControlName="role"
+                class="form-control"
+                [attr.disabled]="editMode"
+              />
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="col" [class.col-12]="editMode">
+        <div class="row">
+          <label
+            class="form-control-label required"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >Email</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <input
+              formControlName="email"
+              class="form-control"
+              [class.is_invalid]="
+                this.getControl('email').touched &&
+                this.getControl('userName').invalid
+              "
+              type="text"
+            />
+            <div
+              class="invalid-feedback"
+              *ngIf="this.getControl('email').touched"
+            >
+              <p
+                class="mb-0"
+                *ngIf="this.getControl('email').hasError('required')"
+              >
+                Email is required.
+              </p>
+              <p
+                class="mb-0"
+                *ngIf="this.getControl('email').hasError('email')"
+              >
+                Please enter valid email.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col" [class.col-12]="editMode">
+        <div class="row" [class.mb-3]="editMode">
+          <label
+            class="form-control-label required"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >Active Date</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <p-calendar
+              [styleClass]="editMode ? 'ui-datepicker-edit' : ''"
+              formControlName="activeDate"
+              [inputStyleClass]="'form-control'"
+              [showIcon]="true"
+              dateFormat="mm/dd/yy"
+              yearRange="1970:2099"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              [disabled]="editMode"
+            ></p-calendar>
+            <div
+              class="invalid-feedback d-flex"
+              *ngIf="this.getControl('activeDate').touched"
+            >
+              <p
+                class="mb-0"
+                *ngIf="this.getControl('activeDate').hasError('required')"
+              >
+                Active Date is required.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6" [class.col-12]="editMode">
+        <div class="row">
+          <label
+            class="form-control-label"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >Deactive Date</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <p-calendar
+              [styleClass]="editMode ? 'ui-datepicker-edit' : ''"
+              formControlName="deactiveDate"
+              [showIcon]="true"
+              dateFormat="mm/dd/yy"
+              yearRange="1970:2099"
+              [inputStyleClass]="'form-control'"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              [minDate]="minDeactivateDate()"
+            ></p-calendar>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-6" [class.col-12]="editMode">
+        <div class="row" [class.mb-3]="editMode">
+          <label
+            class="form-control-label required"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >LDAP/Local user</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <div class="group">
+              <select
+                formControlName="ldapUser"
+                class="form-control"
+                [class.is_invalid]="
+                  this.getControl('ldapUser').touched &&
+                  this.getControl('ldapUser').invalid
+                "
+                [attr.disabled]="editMode ? '' : null"
+              >
+                <option value="" selected>-- Select Type --</option>
+                <option value="LDAP">LDAP</option>
+                <option value="Local">Local user</option>
+              </select>
+            </div>
+            <div
+              class="invalid-feedback"
+              *ngIf="this.getControl('ldapUser').touched"
+            >
+              <p
+                class="mb-0"
+                *ngIf="this.getControl('ldapUser').hasError('required')"
+              >
+                LDAP/Local is required.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col" [class.col-12]="editMode">
+        <div class="row">
+          <label
+            class="form-control-label"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >Target Count</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <input
+              formControlName="target"
+              class="form-control"
+              maxlength="3"
+              (keyup)="preventInput($event, target)"
+              min="minTarget"
+              max="maxTarget"
+              numbersOnly
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="row mb-3"
+      *ngIf="getControl('userGroupName') || getControl('managerName')"
+    >
+      <div
+        class="col-6"
+        [class.col-12]="editMode"
+        *ngIf="getControl('userGroupName')"
+      >
+        <div class="row" [class.mb-3]="editMode">
+          <label
+            class="form-control-label required"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >User Group Name</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <div class="group">
+              <select
+                formControlName="userGroupName"
+                class="form-control"
+                [class.is_invalid]="
+                  this.getControl('userGroupName').touched &&
+                  this.getControl('userGroupName').invalid
+                "
+              >
+                <option value="" selected>-- Select User Group --</option>
+                <option
+                  *ngFor="let group of userGroups"
+                  [value]="group.groupId"
+                  >{{ group.groupName }}</option
+                >
+              </select>
+            </div>
+            <div
+              class="invalid-feedback"
+              *ngIf="this.getControl('userGroupName').touched"
+            >
+              <p
+                class="mb-0"
+                *ngIf="this.getControl('userGroupName').hasError('required')"
+              >
+                User Group Name is required.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-6"
+        [class.col-12]="editMode"
+        *ngIf="getControl('managerName')"
+      >
+        <div class="row">
+          <label
+            class="form-control-label required"
+            [ngClass]="editMode ? 'col-3' : 'col-4'"
+            >Manager Name</label
+          ><span style="padding-top: 6px;">:</span>
+          <div class="col">
+            <ng-container *ngIf="!editMode; else editModeusrGroup">
+              <div class="group">
+                <select
+                  formControlName="managerName"
+                  class="form-control"
+                  [class.is_invalid]="
+                    this.getControl('managerName').touched &&
+                    this.getControl('managerName').invalid
+                  "
+                >
+                  <option value="" selected>-- Select Manager --</option>
+                  <option *ngFor="let manager of managers" [value]="manager.id"
+                    >{{ manager.firstName }}&nbsp;{{ manager.lastName }}</option
+                  >
+                </select>
+              </div>
+            </ng-container>
+            <ng-template #editModeusrGroup>
+              <input
+                formControlName="managerName"
+                class="form-control"
+                type="text"
+                [attr.disabled]="editMode"
+              />
+            </ng-template>
+            <div
+              class="invalid-feedback"
+              *ngIf="this.getControl('managerName').touched"
+            >
+              <p
+                class="mb-0"
+                *ngIf="this.getControl('managerName').hasError('required')"
+              >
+                Manager Name is required.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-end">
+      <button
+        pTooltip="Update User"
+        pButton
+        tooltipPosition="bottom"
+        class="promt_buttom primary"
+        (click)="search()"
+        [disabled]="userForm.invalid"
+        label="{{ editMode ? 'Update' : 'Create' }}"
+      ></button>
+    </div>
+  </form>
+</div>

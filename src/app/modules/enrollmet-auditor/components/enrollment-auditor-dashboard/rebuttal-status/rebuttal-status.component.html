@@ -1,0 +1,185 @@
+<div id="small_donut" class="mt-30">
+  <div id="donutchart-small" style="display: flex; justify-content: center;">
+    <google-chart
+      #chart
+      [title]="titleProcessed"
+      *ngIf="isProcessedRendered"
+      [type]="typeProcessed"
+      [data]="dataProcessed"
+      [options]="optionsProcessed"
+      [columnNames]="columnNamesProcessed"
+      [height]="heightProcessed"
+      [width]="widthProcessed"
+      (select)="hasData ? openPopUp($event) : null"
+    >
+    </google-chart>
+    <div
+      *ngIf="hasData"
+      class="d-flex labelOverlay-small"
+      [ngStyle]="{
+        left:
+          total.length > 3
+            ? '46.5%'
+            : total.length > 2
+            ? '47.5%'
+            : total.length > 1
+            ? '48.5%'
+            : '49.5%'
+      }"
+      pTooltip="Total Rebuttal Count"
+    >
+      <div class="graph-total-small" #textSmal (click)="openPopUp([], true)">
+        <span *ngFor="let item of total">{{ item }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!isDataPresent" class="d-flex space-between justify-content-center">
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<form [formGroup]="processedDates" (ngSubmit)="onSubmitProcessed()">
+  <div class="row d-flex pl-30 pr-30 space-between mt-10 position-relative">
+    <div class="wrap-input100 mb-0 mr-30">
+      <div class="label-input100">Processed Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onClose)="validateDates()"
+        appendTo="body"
+        selectionMode="range"
+        pTooltip="Processed Date Range"
+        tooltipPosition="bottom"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      
+      <div class="error-msg" style="top:49px" *ngIf="getDateRange.touched">
+        <span class="mr-2" *ngIf="!isValid"
+          >Date range should not exceed six months.</span
+        >
+      </div>
+      </div>
+    </div>
+
+  <div class="row d-flex pl-30 pr-30 space-between mt-3 position-relative">
+    <div class="wrap-input100 w-100 mb-0">
+      <div class="label-input100">User Group Name</div>
+      <p-multiSelect
+        #userGrpSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="userGrpList"
+        pTooltip="User Group Names"
+        tooltipPosition="bottom"
+        formControlName="userGrpName"
+        [virtualScroll]="true"
+        (onChange)="validateUserGroups()"
+        itemSize="30"
+        defaultLabel="Select User Group"
+        appendTo="body"
+      ></p-multiSelect>
+      <div class="error-msg" style="top:50px" *ngIf="getGroup.touched">
+        <span class="mr-2" *ngIf="getGroup.hasError('required')"
+          >Please select a user group.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex pl-30 pr-30 space-between mt-10 position-relative">
+    <div class="wrap-input100 w-100 mb-0 mt-3">
+      <div class="label-input100">Specialist Name</div>
+      <p-multiSelect
+        #SpecialistSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="specialistListArray"
+        pTooltip="Enrollment Specialist"
+        tooltipPosition="bottom"
+        formControlName="specialistName"
+        [virtualScroll]="true"
+        (onChange)="validateSpecialist()"
+        itemSize="30"
+        defaultLabel="Select Specialist"
+        appendTo="body"
+      ></p-multiSelect>
+      <div
+        class="error-msg"
+        style="top:50px"
+        *ngIf="getSpecialistsSelect.touched"
+      >
+        <span class="mr-2" *ngIf="getSpecialistsSelect.hasError('required')"
+          >Please select a specialist.</span
+        >
+      </div>
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="810"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Rebuttal Status"
+>
+  <div id="donutchart" class="w-100 h-100 d-flex justify-content-center">
+    <google-chart
+      #chart
+      [title]="titleProcessed"
+      *ngIf="isProcessedRendered"
+      [type]="typeProcessed"
+      [data]="dataProcessed"
+      [options]="optionsProcessedEnlarged"
+      [columnNames]="columnNamesProcessed"
+      [width]="700"
+      [height]="400"
+      (select)="hasData ? openPopUp($event) : null"
+    >
+    </google-chart>
+    <div
+      *ngIf="hasData"
+      class="arrange-horizontally labelOverlay"
+      [ngStyle]="{
+        left: 'calc(50% - ' + text.clientWidth / 2 + 'px)',
+        top: 'calc(50% - 22.5px)'
+      }"
+      pTooltip="Total Rebuttal Count"
+    >
+      <div class="graph-total" #text (click)="openPopUp([], true)">
+        <span *ngFor="let item of total">{{ item }}</span>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  [style]="{ marginbottom: '20px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Rebuttal Status ({{ status }})"
+  (onHide)="closePopUp()"
+>
+  <app-enrollment-auditor-dashboard-pop-up
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-enrollment-auditor-dashboard-pop-up>
+</p-dialog>

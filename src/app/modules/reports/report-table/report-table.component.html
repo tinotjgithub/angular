@@ -1,0 +1,123 @@
+<div class="mt-30">
+  <div class="d-flex space-between">
+    <div>
+      <span class="section-title">{{header}}</span>
+      <span class="section-title-count" *ngIf="data?.length > 0">{{data.length}}</span>
+    </div>
+    <div class="d-flex">
+      <ng-content select="[userCount]"></ng-content>
+    </div>
+    <div class="d-flex">
+      <div class="outline-btn mr-30" [class.disabled]="!data || data.length < 1"
+        (click)="!data || data.length < 1 ? '' : downloadExcel()">
+        Export to Excel
+      </div>
+    </div>
+  </div>
+  <div class="mt-30" [class.chart-table-wrapper]="isChart">
+    <p-table [styleClass]="'td200'" [responsive]="true" [columns]="columns"
+      [tableStyle]="{ 'table-layout': 'auto' }" #routeRoleTable [value]="data" [paginator]="true" [rows]="isChart ? 5 : 10"
+      [resizableColumns]="true" [scrollable]="false">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" id="{{ col.field }}" [pSortableColumn]="col.field" [pSortableColumnDisabled]="
+              col.field === 'claimType' ||
+              col.field === 'errorDescription' ||
+              col.field === 'errorType' ||
+              col.field === 'firstName' ||
+              col.field === 'lastName' ||
+              col.field === 'userName' ||
+              col.field === 'role' ||
+              col.field === 'status' ||
+              col.field === 'ldapOrLocal' ||
+              col.field === 'leadName' ||
+              col.field === 'managerName' ||
+              col.field === 'claimStatus' ||
+              col.field === 'processorName' ||
+              col.field === 'claimExaminerName' ||
+              col.field === 'memberName' ||
+              col.field === 'supplierName' ||
+              col.field === 'overPaidOrUnderPaid' ||
+              col.field === 'auditedBy' ||
+              col.field === 'passedOrFailed' ||
+              col.field === 'userGroup'
+                ? true
+                : false
+            ">
+            {{ col.header }}
+            <p-sortIcon *ngIf="
+                col.field !== 'firstName' &&
+                col.field !== 'claimStatus' &&
+                col.field !== 'processorName' &&
+                col.field !== 'claimExaminerName' &&
+                col.field !== 'memberName' &&
+                col.field !== 'supplierName' &&
+                col.field !== 'overPaidOrUnderPaid' &&
+                col.field !== 'auditedBy' &&
+                col.field !== 'passedOrFailed' &&
+                col.field !== 'lastName' &&
+                col.field !== 'userName' &&
+                col.field !== 'role' &&
+                col.field !== 'status' &&
+                col.field !== 'ldapOrLocal' &&
+                col.field !== 'leadName' &&
+                col.field !== 'managerName' &&
+                col.field !== 'claimType' &&
+                col.field !== 'errorDescription' &&
+                col.field !== 'errorType' &&
+                col.field !== 'userGroup'
+              " [field]="col.field">
+            </p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+        <tr style="text-align:left; align-items: left; align-content: left;">
+          <td *ngFor="let col of columns">
+            {{
+              col.dateFilter
+                ? (rowData[col.field] | date: "MM/dd/yyyy")
+                : rowData[col.field]
+            }}
+          </td>
+        </tr>
+      
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td class="text-center" [attr.colspan]="columns ? columns.length : 0">
+            No data available.
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{
+            data?.length > 0
+              ? "Showing " +
+                (state.first + 1) +
+                " - " +
+                ((state.first + state.rows > state.totalRecords
+                  ? state.totalRecords
+                  : state.first + state.rows
+                ) | number) +
+                " of " +
+                state.totalRecords
+              : "Showing 0 - 0 of 0"
+          }}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <div class="result-no d-flex" [ngStyle]="{visibility: isChart ? 'hidden' : 'visible'}">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select class="input100 result-no" style="width: 50px;" [(ngModel)]="routeRoleTable.rows"
+            [ngModelOptions]="{standalone: true}">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

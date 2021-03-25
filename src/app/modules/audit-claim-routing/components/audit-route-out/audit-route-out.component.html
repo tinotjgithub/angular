@@ -1,0 +1,139 @@
+<form [formGroup]="auditForm" id="auditFailed">
+  <div class="d-flex cursor-pointer mt-60" href="#">
+    <div> <img alt = " " src="./../../../../../assets/images-new/left.png" [routerLink]="'/actions'"
+        style="margin-right: 15px; cursor: pointer;"></div>
+    <div>Back To Action Menu</div>
+  </div>
+
+  <div class="btn-claim mt-30" *ngIf="!claim?.claimId" pTooltip="Get a new claim" [class.disabled]="claim?.claimId"
+    (click)="claim?.claimId ? '' : getClaim()">
+    <div>Get a Claim</div>
+  </div>
+
+  <div class="mt-30" *ngIf="!claim?.claimId">
+    <span style="color: red;">Click on the Get a Claim button to load a claim.</span>
+  </div>
+
+  <div class="wrap-claim pb-30 mt-15" *ngIf="claim?.claimId">
+    <div class="popup-header d-flex">
+      <div class="section-label mr-30" pTooltip="Open Claim in HRP" for="chck1" (click)="openClaimInHRP(claimId)">
+        Claim ID -
+        <input style="position: absolute; top: 0; left: 0; opacity: 0;" value="{{claim?.claimId}}" #claimId><span id="claimId">{{claim?.claimId}}</span>
+      </div>
+      <div><img alt = " " src="./../../../../../assets/images-new/copy.png" style="cursor: pointer;"
+          pTooltip="Click to copy Claim ID" (click)="justCopy(claimId)"></div>
+    </div>
+    <div class="popup-body">
+      <div class="d-flex pl-30 pr-30 mt-30">
+        <ng-container *ngFor="let col of cols; index as i">
+          <div class="w-15" *ngIf="i < 6" [class.mr-30]="i < 5">
+            <div class="label-placeholder">{{col.header}}</div>
+            <div class="label-value">{{claim[col.field]}}</div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="d-flex pl-30 pr-30 mt-30">
+        <ng-container *ngFor="let col of cols; index as i">
+          <div class="w-15" *ngIf="i > 5" [class.mr-30]="i < (cols.length - 1)">
+            <div class="label-placeholder">{{col.header}}</div>
+            <div class="label-value">{{claim[col.field]}}</div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex mt-30" *ngIf="claim?.claimId">
+    <div class="wrap-route-from pb-30 mr-15">
+      <div class="popup-header d-flex space-between">
+        <div class="section-label">Route From</div>
+      </div>
+      <div class="popup-body mt-30">
+        <div class="d-flex pl-30 pr-30 mt-30">
+          <div class="mr-30 w-50">
+            <div class="label-placeholder">User Group</div>
+            <input type="text" class="label-value" formControlName="fromUserGroup" />
+          </div>
+
+          <div class="mr-30 w-50">
+            <div class="label-placeholder">Name</div>
+            <input type="text" class="label-value" formControlName="fromUserName" />
+          </div>
+        </div>
+
+        <div class="d-flex w-100 pl-30 pr-30 mt-30">
+          <div class="w-100">
+            <div class="label-placeholder">Route Reason</div>
+            <input type="text" class="label-value w-100" formControlName="fromRouteReason" />
+          </div>
+        </div>
+
+        <div class="d-flex pl-30 w-100 pr-30 mt-30">
+          <div class="w-100 mr-30">
+            <div class="label-placeholder">Route Comment</div>
+            <textarea class="label-value w-100" formControlName="fromRouteComments" maxlength="256"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mr-15" style="margin-top: 15%;">
+      <img alt = " " src="./../../../../../assets/images-new/right.png">
+    </div>
+
+    <div class="wrap-route-to h-100 pb-30">
+      <div class="popup-header d-flex space-between">
+        <div class="section-label">Route To</div>
+      </div>
+      <div class="popup-body">
+        <div class="d-flex pl-30 pr-30 mt-15">
+
+          <div class="wrap-input100 w-50 mr-30">
+            <span class="label-input100">Name</span>
+            <p-dropdown [options]="toAuditorNamesList" [style]="{width: '100%'}" formControlName="toAuditorName"
+              [placeholder]="'--Select--'" [optionLabel]="'name'" appendTo="body"
+              [disabled]="!(this.claim && this.claim.claimId)">
+            </p-dropdown>
+            <span class="focus-input100"></span>
+          </div>
+          <div class="mr-30 w-50">
+            <div class="label-placeholder mt-10">Role</div>
+            <input class="label-value mt-10" formControlName="toUserRole" [readOnly]="!(this.claim && this.claim.claimId)" />
+          </div>
+        </div>
+
+        <div class="d-flex pl-30 pr-30">
+          <div class="wrap-input100">
+            <span class="label-input100">Route Reason</span>
+            <p-dropdown [style]="{width: '100%'}" [options]="toRouteReasonList" formControlName="toRouteReason"
+              [placeholder]="'--Select--'" [optionLabel]="'routeReason'" appendTo="body"
+              [disabled]="!(this.claim && this.claim.claimId)">
+            </p-dropdown>
+            <span class="focus-input100"></span>
+          </div>
+        </div>
+
+        <div class="d-flex pl-30 pr-30">
+          <div class="wrap-input100 ">
+            <span class="label-input100">Route Comment</span>
+            <textarea class="input100" formControlName="toRouteComments" maxlength="256"
+              [readOnly]="!(this.claim && this.claim.claimId)"></textarea>
+            <span class="focus-input100"></span>
+          </div>
+        </div>
+
+        <div class="d-flex flex-end space-between pl-30 pr-30">
+          <div class="d-flex">
+            <div class="cancel-btn mr-30" (click)="!claim?.claimId ? '' : confirm()" [class.disabled]="!claim?.claimId">
+              Cancel</div>
+            <div class="solid-btn" (click)="auditForm.invalid ? '' : routeClaim()" [class.disabled]="auditForm.invalid">
+              Route</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</form>
+
+<p-confirmDialog header="Confirmation" [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"></p-confirmDialog>

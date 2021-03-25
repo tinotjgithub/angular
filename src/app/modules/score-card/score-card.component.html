@@ -1,0 +1,40 @@
+<div class="d-flex mt-60">
+  <div class="wrap-claim-count mr-30">
+    <app-status-date></app-status-date>
+  </div>
+  <div class="wrap-claim-count">
+    <app-productivity-by-schedule></app-productivity-by-schedule>
+  </div>
+</div>
+
+<div class="d-flex mt-30">
+  <div class="wrap-claim-count mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">My Quality Score</div>
+      <div>
+        <img
+          src="./../../../../../assets/images-new/max.png"
+          (click)="auditScore.displayEnlarged = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-30">
+      <app-audit-score #auditScore></app-audit-score>
+    </div>
+  </div>
+
+  <div class="wrap-claim-count">
+    <app-financial-score></app-financial-score>
+  </div>
+</div>
+
+<div class="d-flex mt-30">
+  <div class="wrap-claim-count mr-30">
+    <app-procedural-score></app-procedural-score>
+  </div>
+
+  <div class="wrap-claim-count">
+    <app-audit-failed-vs-rebuttal-accepted></app-audit-failed-vs-rebuttal-accepted>
+  </div>
+</div>

@@ -1,0 +1,94 @@
+<div class="d-flex space-between">
+  <div class="section-label">{{ OpenInv }}</div>
+  <div>
+    <img
+      alt=" "
+      src="./../../../assets/images-new/max.png"
+      style="cursor: pointer;"
+      (click)="showDialog()"
+    />
+  </div>
+</div>
+<div class="d-flex scroll-graph-x mt-10">
+  <p class="horizontal-axis" style="padding-top:50px;">Open Inventory Count</p>
+  <google-chart
+    *ngIf="isAgeRendered"
+    #chart
+    [title]="titleAge"
+    [type]="typeAge"
+    (select)="isDataPresent ? openPopUp($event) : null"
+    [data]="dataAge"
+    [options]="optionsAge"
+    [columnNames]="columnNamesAge"
+    [width]="widthAge"
+    [height]="heightAge"
+  >
+  </google-chart>
+</div>
+<div
+  *ngIf="!isDataPresent"
+  class="ml-5 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<p class="vertical-axis text-center">Ageing Bracket (Days)</p>
+
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="{{ OpenInv }} "
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex scroll-graph-x">
+    <p class="horizontal-axis-enlarged" style="padding-top:150px;">
+      Open Inventory Count
+    </p>
+    <google-chart
+      *ngIf="isAgeRendered"
+      #chart
+      [title]="titleAge"
+      (select)="isDataPresent ? openPopUp($event) : null"
+      [type]="typeAge"
+      [data]="dataAge"
+      [options]="optionsAgeEnlarged"
+      [width]="widthAgeEnlarged"
+      [height]="450"
+      [columnNames]="columnNamesAge"
+    >
+    </google-chart>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="ml-5 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <p class="vertical-axis-enlarged text-center">
+    Ageing Bracket (Days)
+  </p>
+</p-dialog>
+
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '90%', maxHeight: '900px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Open Inventory Age by Work Category ({{ action }} ({{ age }} Days) )"
+  (onHide)="closePopUp()"
+>
+  <app-enrollment-manager-dashboard-pop-up
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-enrollment-manager-dashboard-pop-up>
+</p-dialog>

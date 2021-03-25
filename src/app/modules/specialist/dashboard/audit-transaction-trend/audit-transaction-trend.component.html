@@ -1,0 +1,177 @@
+<div class="d-flex space-between ">
+  <div class="section-label">Audit Transaction Trend</div>
+  <div>
+    <img
+      alt=" "
+      src="./../../../assets/images-new/max.png"
+      style="cursor: pointer;"
+      (click)="showDialog()"
+    />
+  </div>
+</div>
+<div class="d-flex">
+  <p class="horizontal-axis text-center">Audit Count</p>
+  <div class="d-flex scroll-graph-x">
+    <google-chart
+      *ngIf="isAuditRendered"
+      #chart
+      [title]="titleAudit"
+      [type]="typeAudit"
+      [data]="dataAudit"
+      [options]="optionsAudit"
+      [width]="widthAudit"
+      [columnNames]="columnNamesAudit"
+      [height]="heightAudit"
+      (select)="openPopUp($event)"
+    >
+    </google-chart>
+    <div
+      *ngIf="!isDataPresent"
+      class="d-flex space-between justify-content-center"
+    >
+      <p-message severity="warn" text="No Data Present!"></p-message>
+    </div>
+  </div>
+</div>
+<p class="vertical-axis text-center">Audit Completion Date</p>
+<form class="ml-2 " [formGroup]="auditDates" (ngSubmit)="onSubmitAudit()">
+  <div class="d-flex">
+    <div class="wrap-input100">
+      <div class="label-input100">Frequency</div>
+      <p-dropdown
+        appendTo="body"
+        [styleClass]="'w-100'"
+        [autoWidth]="false"
+        tooltipPosition="bottom"
+        pTooltip="Frequency"
+        [options]="freqList"
+        (onChange)="OnSelectFrequency($event)"
+        formControlName="frequency"
+        placeholder="Select a frequency"
+      >
+      </p-dropdown>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="wrap-input100 mb-0" *ngIf="showMonthlyCalendar">
+      <div class="label-input100">Audit Completion Date Range</div>
+      <p-calendar
+        appendTo="body"
+        (onClose)="validateDates()"
+        selectionMode="range"
+        view="month"
+        rangeSeparator=" - "
+        [maxDate]="maxMonth"
+        [readonlyInput]="true"
+        [showIcon]="true"
+        pTooltip="Audit Completion Date Range"
+        tooltipPosition="bottom"
+        formControlName="dateRange"
+        dateFormat="mm/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <div
+        style="  color: red;
+font-size: 11px;
+position: absolute;
+top:55px;"
+      >
+        <span class="mr-2" *ngIf="getDateRange.hasError('rangeError')">
+          Date range should not exceed six months.</span
+        >
+      </div>
+    </div>
+    <div class="wrap-input100 mb-0" *ngIf="showDailyCalendar">
+      <div class="label-input100">Audit Completion Date Range</div>
+      <p-calendar
+        appendTo="body"
+        (onClose)="validateDates()"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        tooltipPosition="bottom"
+        pTooltip="Audit Completion Date Range"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [maxDate]="maxDate"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <div
+        style="  color: red;
+font-size: 11px;
+position: absolute;
+top:55px;"
+      >
+        <span class="mr-2" *ngIf="getDateRange.hasError('invalidDaily')"
+          >Daily selection should be less than 30 days.</span
+        >
+      </div>
+    </div>
+  </div>
+</form>
+
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Audit Transaction Trend"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex">
+    <p class="horizontal-axis-enlarged" style="padding-top:150px;">
+      Audit Count
+    </p>
+    <div class="d-flex scroll-graph-x">
+      <google-chart
+        *ngIf="isAuditRendered"
+        #chart
+        [title]="titleAudit"
+        [type]="typeAudit"
+        [data]="dataAudit"
+        [options]="optionsAuditEnlarged"
+        [width]="widthEnlargedAudit"
+        [height]="400"
+        [columnNames]="columnNamesAudit"
+        (select)="openPopUp($event)"
+      >
+      </google-chart>
+      <div
+        *ngIf="!isDataPresent"
+        class="d-flex space-between justify-content-center"
+      >
+        <p-message severity="warn" text="No Data Present!"></p-message>
+      </div>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged">Audit Completion Date</p>
+</p-dialog>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Audit Transaction Trend ({{ status }} on {{ date }})"
+  (onHide)="closePopUp()"
+>
+  <app-specialist-dashboard-pop
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-specialist-dashboard-pop>
+</p-dialog>

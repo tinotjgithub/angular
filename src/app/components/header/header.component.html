@@ -1,0 +1,182 @@
+<div class="promt-header d-flex space-between">
+  <div class="d-flex">
+    <div>PROMT</div>
+    <div class="ml-10">/</div>
+    <ng-container *ngFor="let bread of items; index as i">
+      <ng-container *ngIf="i < (items.length - 1); else lastItem">
+        <div class="ml-10 breadcrumb-text" [routerLink]="bread.routerLink"
+          (click)="bread.target === 'home' ? navigateToRoleBasedHome() : ''"
+          [queryParams]="bread.queryParams ? bread.queryParams : {}">
+          {{ bread.label }}
+        </div>
+        <div class="ml-10">/</div>
+      </ng-container>
+      <ng-template #lastItem>
+        <div class="ml-10 breadcrumb-text">{{bread.label}}</div>
+      </ng-template>
+    </ng-container>
+  </div>
+
+  <div class="d-flex wrap-switch">
+    <ng-container *ngIf="loggedInManagerType === 'both'">
+      <label style="font-size: 12px">Claims </label>
+      <div class="container d-flex flex-column justify-content-center">
+        <div class="cm-3-state-switch align-middle">
+          <input id="state-1" name="state" class="toggle" type="radio" />
+          <label
+            #claims
+            for="state-1"
+            (click)="setToggleState('claims')"
+          ></label>
+          <input
+            id="state-3"
+            name="state"
+            class="toggle"
+            type="radio"
+            value="checked"
+          />
+          <label
+            #enrollment
+            style="left:66.66%"
+            for="state-3"
+            (click)="setToggleState('enrollment')"
+          ></label>
+          <div class="switch-background">
+            <span class="thumb-button"></span>
+          </div>
+        </div>
+      </div>
+      <label style="font-size: 12px" class="mr-30">Enrollment</label>
+    </ng-container>
+    <div class="icon-dropdown">
+      <img
+        alt=" "
+        src="../../../assets/images-new/question.png"
+        style="margin-right: 45px; width: 30px; cursor: pointer;"
+      />
+      <div class="dropdown-content">
+        <p (click)="this.hrpConnector = true">HRP UI Connector</p>
+      </div>
+    </div>
+    <div class="header-dropdown" *ngIf="role !== 'ADMINISTRATOR'" (mouseenter)="updateNotification()" (mouseleave)="checkForNewNotification() ? getNotifications() : ''">
+      <img alt = " " src="../../../assets/images-new/Notification.png"
+        style="margin-right: 45px; width: 30px; cursor: pointer;" *ngIf="!checkForNewNotification()">
+        <img alt = " " src="../../../assets/images-new/New Notification.png"
+          style="margin-right: 45px; width: 30px; cursor: pointer;" *ngIf="checkForNewNotification()">
+        <div class="noti-container">
+          <div class="wrap-noti-list">
+              <div class="noti-list" [class.noti-new]="!notification.viewedStatus" *ngFor="let notification of notificationList">
+                  <div>
+                      <img src="../../../assets/images-new/Scheduled Maintenance.png" style="margin-right: 15px; cursor: pointer;"> 
+                  </div>
+                  <div>
+                      <div class="d-flex space-between">
+                          <div class="noti-title noti-title-color-blue">Scheduled Maintenance </div>
+                          <!-- <div class="noti-date">Today</div>     -->
+              </div>
+              <div class="noti-content">
+                {{ notification.emailSubject }} <br />
+                {{ notification.maintenanceMessage }}
+                <br *ngIf="notification.maintenanceFrom" />
+                <span style="text-align: none;">{{
+                  notification.maintenanceFrom
+                }}</span>
+                <span
+                  style="text-align: none;"
+                  *ngIf="
+                    notification.maintenanceTo &&
+                    notification.maintenanceFrom !== notification.maintenanceTo
+                  "
+                >
+                  - {{ notification.maintenanceTo }}</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="p-3 text-center" *ngIf="notificationList?.length < 1">
+            No notifications
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <img
+        alt=" "
+        src="../../../assets/images-new/account.png"
+        style="margin-right: 15px; width: 30px; cursor: pointer;"
+      />
+    </div>
+    <div class="header-dropdown">
+      <div class="wrap-username d-flex">
+        <div class="username mr-auto">{{ userName }}</div>
+        <span
+          ><img
+            alt=" "
+            src="../../../assets/images-new/drop-down.png"
+            style="margin-left: 10px;"
+        /></span>
+      </div>
+      <div class="role">{{ role | titlecase }}</div>
+      <div class="dropdown-content">
+        <p (click)="logout()">Logout</p>
+        <p *ngIf="showChangePassword" (click)="this.changePassword = true">
+          Change Password
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<p-dialog
+  [(visible)]="changePassword"
+  modal="true"
+  header="Change Password"
+  [style]="{ width: '50vw', overflow: 'hidden' }"
+>
+  <app-change-password
+    *ngIf="changePassword"
+    [headerNeeded]="false"
+    (resetSuccess)="this.changePassword = false"
+  >
+  </app-change-password>
+</p-dialog>
+<p-dialog
+  [(visible)]="hrpConnector"
+  modal="true"
+  header="Download HRP UI Connector"
+  [style]="{ width: '50vw', overflow: 'hidden', height: '160px' }"
+>
+  <div class="mt-10">
+    <div class="d-flex">
+      <div class="connector-icon w-30"></div>
+      <div class="ml-10">
+        <div class="text-justify">
+          Download the setup file from below link and follow the instructions to
+          set-up the HRP UI Connector.
+        </div>
+        <div class="sub-menu d-flex mb-10">
+          <span class="link-wrapper mb-10 mr-10">
+            <a
+              href="javascript:void(0);"
+              (click)="fileLoading ? '' : downloadConnector()"
+              [class.disabled]="fileLoading"
+              >download link</a
+            >
+          </span>
+          <div *ngIf="fileLoading">
+            <img
+              alt=" "
+              src="./../../../../assets/images-new/loader-gif.gif"
+              alt="loading..."
+              style="width: 20px;"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+<p-confirmDialog
+  header="Confirmation"
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+></p-confirmDialog>

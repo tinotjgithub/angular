@@ -1,0 +1,163 @@
+<form [formGroup]="statusDates">
+  <div class="d-flex space-between ">
+    <div class="section-label">Production Count By Status</div>
+    <div>
+      <img
+        alt=" "
+        src="./../../../assets/images-new/max.png"
+        style="cursor: pointer;"
+        (click)="showDialog()"
+      />
+    </div>
+  </div>
+  <div class="d-flex" *ngIf="dataStatus?.length > 0">
+    <google-chart
+      #chart
+       (select)="isDataPresent ? openPopUp($event) : null"
+      [title]="titleStatus"
+      *ngIf="isStatusRendered"
+      [type]="typeStatus"
+      [data]="dataStatus"
+      [options]="optionsStatus"
+      [columnNames]="columnNamesStatus"
+      [height]="heightStatus"
+      [width]="widthStatus"
+    >
+    </google-chart>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-5 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <div class="row d-flex pl-30 pr-30 space-between mt-10 position-relative">
+    <div class="wrap-input100 w-100 mb-0">
+      <div class="label-input100">User Group Name</div>
+      <p-multiSelect
+        #userGrpSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="userGrpList"
+        pTooltip="User Group Names"
+        tooltipPosition="bottom"
+        formControlName="userGrpName"
+        [virtualScroll]="true"
+        (onChange)="validateUserGroups()"
+        itemSize="30"
+        defaultLabel="Select User Group"
+        appendTo="body"
+      ></p-multiSelect>
+      <div class="error-msg" style="top:50px" *ngIf="getGroup.touched">
+        <span class="mr-2" *ngIf="getGroup.hasError('required')"
+          >Please select a user group.</span
+        >
+      </div>
+    </div>
+    <div class="wrap-input100 w-100 mb-0 mt-3">
+      <div class="label-input100">Specialist Name</div>
+      <p-multiSelect
+        #SpecialistSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="specialistListArray"
+        pTooltip="Enrollment Specialist"
+        tooltipPosition="bottom"
+        formControlName="specialistName"
+        [virtualScroll]="true"
+        (onChange)="validateSpecialist()"
+        itemSize="30"
+        defaultLabel="Select Specialist"
+        appendTo="body"
+      ></p-multiSelect>
+      <div
+        class="error-msg"
+        style="top:50px"
+        *ngIf="getSpecialistsSelect.touched"
+      >
+        <span class="mr-2" *ngIf="getSpecialistsSelect.hasError('required')"
+          >Please select a specialist.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex pl-30 pr-30 space-between mt-20 position-relative">
+    <div class="wrap-input100">
+      <div class="label-input100">Completion Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onSelect)="validateDates()"
+        selectionMode="range"
+        pTooltip="Date Range"
+        tooltipPosition="bottom"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        appendTo="body"
+        (onClose)="onSubmitStatus()"
+      >
+      </p-calendar>
+    </div>
+    <div class="error-msg" style="top:50px" *ngIf="getDateRange.touched">
+      <span class="mr-2" *ngIf="!isValid"
+        >Date range should not exceed six months.</span
+      >
+    </div>
+  </div>
+
+  <p-dialog
+    *ngIf="displayEnlarged"
+    width="800"
+    height="480"
+    modal="true"
+    dismissableMask="true"
+    [responsive]="true"
+    [(visible)]="displayEnlarged"
+    [transitionOptions]="'0ms'"
+    header="Production Count By Status"
+    [(visible)]="displayEnlarged"
+  >
+    <google-chart
+      #chart
+       (select)="isDataPresent ? openPopUp($event) : null"
+      [title]="titleStatus"
+      *ngIf="isStatusRendered"
+      [type]="typeStatus"
+      [data]="dataStatus"
+      [options]="optionsStatusEnlarged"
+      [width]="700"
+      [columnNames]="columnNamesStatus"
+      [height]="400"
+    >
+    </google-chart>
+    <div
+      *ngIf="!isDataPresent"
+      class="ml-5 mb-2 d-flex space-between justify-content-center"
+    >
+      <p-message severity="warn" text="No Data Present!"></p-message>
+    </div>
+  </p-dialog>
+</form>
+
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  [style]="{ marginbottom: '20px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Production Count By Status ({{ status }})"
+  (onHide)="closePopUp()"
+>
+  <app-enrollment-lead-dashboard-popup
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-enrollment-lead-dashboard-popup>
+</p-dialog>

@@ -1,0 +1,576 @@
+<div class="wrap-manage-user mt-60 pt-0" style="border-radius: 10px;">
+  <div class="tab-wrapper mb-20">
+    <div class="tab-container scroll-graph-x" style="border-radius: 0;" *ngIf="showTabs.tab">
+      <input type="radio" name="tab-menu" *ngIf="showTabs.manager" id="tab1" class="tab-menu-radio"
+        [attr.checked]="type === 'Manager' ? '' : null" #tab1 />
+      <label for="tab1" class="tab-menu" [class.border-bottom]="type !== 'Manager'" *ngIf="showTabs.manager"
+        id="tab-label1" (click)="scrollItemToView('Manager')">Manager Users</label>
+      <input type="radio" name="tab-menu" id="tab2" class="tab-menu-radio"
+        [attr.checked]="type === 'Claims' ? '' : null" #tab2 *ngIf="showTabs.claims" />
+      <label for="tab2" class="tab-menu" [class.border-bottom]="type !== 'Claims'" id="tab-label2"
+        (click)="scrollItemToView('Claims')" *ngIf="showTabs.claims">Claims Users</label>
+      <input type="radio" name="tab-menu" id="tab3" class="tab-menu-radio" #tab3 *ngIf="showTabs.enrollment"/>
+      <label for="tab3" id="tab-label3" [class.border-bottom]="type !== 'Enrollment'" class="tab-menu"
+        (click)="scrollItemToView('Enrollment')" *ngIf="showTabs.enrollment">Enrollment Users</label>
+    </div>
+  </div>
+  <div class="d-flex space-between pr-30">
+    <div>
+      <span class="section-title">{{type}} Users</span>
+      <!-- Server Side Pagination -->
+      <!-- <ng-container *ngIf="!searchDone || !filterValue">
+        <span *ngIf="totalRecords && !userLoading" class="section-title-count">
+          {{ totalRecords }}
+        </span>
+      </ng-container>
+      <ng-container *ngIf="searchDone && filterValue">
+        <span class="section-title-count">
+          {{ userList?.length || totalRecords || 0 }}
+        </span>
+      </ng-container> -->
+      <span *ngIf="allUserList?.length && !userLoading" class="section-title-count">
+        {{ userAllTable?.filteredValue ? userAllTable?.filteredValue.length : allUserList.length }}
+      </span>
+    </div>
+    <div class="d-flex">
+      <div class="d-flex search-bar-with-dropdown">
+        <div>
+          <select [(ngModel)]="filterType" (change)="filterChange()">
+            <option value="userName">User Name</option>
+            <option value="firstName">First Name</option>
+          </select>
+        </div>
+        <div class="">
+          <input type="text" id="search" [(ngModel)]="filterValue" (keyup.enter)="filterValue ? search(userAllTable) : ''"
+            name="search" placeholder="Search User" (input)="clearValues()" />
+        </div>
+        <div>
+          <em class="pi pi-search icon" (click)="filterValue ? search(userAllTable) : ''"></em>
+        </div>
+      </div>
+      <div class="outline-btn" (click)="this.addUser = true">
+        Add User
+      </div>
+    </div>
+  </div>
+<!-- 
+  <div class="mt-30" *ngIf="!searchDone || userList?.length < 1">
+    <ng-container *ngIf="type !== 'Manager' && !userLoading">
+      <ng-container *ngIf="allUserList?.length > 0; else empty">
+        <div class="d-flex pl-30 pr-30 space-between table-header ">
+          <div class="mu-name">Full Name</div>
+          <div class="mu-username">User Name</div>
+          <div class="mu-role">Role</div>
+          <div class="mu-status w-7">Status</div>
+          <div class="mu-activation-date">Activation<br />Date</div>
+          <div class="mu-deactivation-date">Deactivation<br />Date</div>
+          <div class="mu-manager-name">Manager Name</div>
+          <div class="mu-user-group">User Group</div>
+          <div class="mu-user-group">Account Locked</div>
+        </div>
+        <div class="d-flex pl-30 pr-30 space-between wrap-row" *ngFor="let user of allUserList"
+          [class.inactive]="user.status === 'Inactive'" [class.activate]="user.status === 'Active'"
+          [class.goingto]="getGoingToDeactivate(user.deactivateDate, user.status)">
+          <div class="mu-name link">{{ user.firstName }} {{ user.lastName }}</div>
+          <div class="mu-username">{{ user.userName }}</div>
+          <div class="mu-role wrap-label">{{ user.role }}</div>
+          <div class="mu-status color-status w-7">{{ user.status }}</div>
+          <div class="mu-activation-date wrap-label">{{ user.activeDate }}</div>
+          <div class="mu-deactivation-date wrap-label">
+            {{ user.deactivateDate }}
+          </div>
+          <div class="mu-manager-name wrap-label">{{ user.managerName }}</div>
+          <div class="mu-user-group wrap-label wrap-label">
+            <ng-container *ngIf="user?.userGroups && user?.userGroups.length > 0">
+              <span *ngFor="let userGroupName of user.userGroups; index as i">
+                {{
+                  userGroupName.groupName +
+                    (user.userGroups.length === i + 1 ? "" : ",")
+                }}
+              </span>
+            </ng-container>
+          </div>
+          <div class="mu-manager-name wrap-label">{{ user.isAccountLocked }}</div>
+          <div class="mu-hover " id="{{ rowIndex }}">
+            <div class="d-flex">
+              <div>
+                <img alt=" " src="./../../../../../assets/images-new/edit-form.png" (click)="openEdit(user)"
+                  title="Edit" style="cursor: pointer; margin-bottom: 20px;" />
+              </div>
+              <div style="margin-left:40px;" id="{{ rowIndex }}" *ngIf="user.isAccountLocked === 'Locked'">
+                <img alt=" " src="./../../../../../assets/images-new/unlock.png" (click)="onRowSelect(user)"
+                  title="Unlock" style="cursor: pointer; margin-bottom: 20px;" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #empty>
+        <p class="text-center mb-30">
+          No users present!! Please add a user.
+        </p>
+      </ng-template>
+      <ng-template #templateLeft>
+        <div class="result-no">
+          {{
+            allUserList?.length > 0
+              ? "Showing " +
+                (currentPage * rows - (rows - 1)) +
+                " - " +
+                (currentPage * rows > totalRecords
+                  ? totalRecords
+                  : currentPage * rows) +
+                " of " +
+                totalRecords
+              : "Showing 0 - 0 of 0"
+          }}
+        </div>
+      </ng-template>
+      <ng-template #templateRight>
+        <div class="result-no d-flex">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select class="input100 result-no" style="width: 50px;" [(ngModel)]="rows"
+            [ngModelOptions]="{ standalone: true }" (change)="getAllusers(1, rows)">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+      <p-paginator [rows]="rows" [totalRecords]="totalRecords" pageLinkSize="3" (onPageChange)="paginate($event)"
+        [templateRight]="templateRight" [templateLeft]="templateLeft" #pagi></p-paginator>
+    </ng-container>
+    <ng-container *ngIf="type === 'Manager' && !userLoading">
+      <p-table [responsive]="true" #userAllTable [columns]="col" [value]="allUserList" [resizableColumns]="true"
+        dataKey="userName" [paginator]="true" [rows]="10">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns" id="{{ col.field }}" [hidden]="!col.visible">
+              {{ col.header }}
+            </th>
+          </tr>
+          <tr>
+            <th id="col" style="padding-top: 9px;" *ngFor="let col of columns" [hidden]="!col.visible" [ngSwitch]="col.field">
+              <div class="wrap-input100 w-200 my-auto" *ngSwitchCase="'operationType'">
+                <select class="input100" [value]="userAllTable.filters[col.field] ? userAllTable.filters[col.field].value : ''"
+                  (change)="userAllTable.filter($event.target.value, col.field, 'contains')">
+                  <option value="" selected>All</option>
+                  <option *ngFor="let val of operationTypesList" [value]="val.name">{{val.name}}</option>
+                </select>
+                <span class="focus-input100"></span>
+              </div>
+              <div class="wrap-input100 my-auto w-150" *ngSwitchCase="'status'">
+                <select class="input100" [value]="userAllTable.filters[col.field] ? userAllTable.filters[col.field].value : ''"
+                  (change)="userAllTable.filter($event.target.value, col.field, 'equals')">
+                  <option value="" selected>All</option>
+                  <option *ngFor="let val of getOptions(col, allUserList)" [value]="val">{{val}}</option>
+                </select>
+                <span class="focus-input100"></span>
+              </div>
+              <div class="wrap-input100 my-auto" style="visibility: hidden;" *ngSwitchDefault>
+                <input class="input100" style="min-width: 200px;" type="text"
+                  (input)="userAllTable.filter($event.target.value, col.field, 'contains')" />
+                <span class="focus-input100"></span>
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user let-columns="columns" let-rowIndex="rowIndex">
+          <tr class="border-large" style="text-align:left; align-items: left; align-content: left; position: relative;"
+            [class.active]="user.status === 'Active'" [class.goingto]="
+              getGoingToDeactivate(user.deactivateDate, user.status)
+            " [class.inactive]="user.status === 'Inactive'">
+            <td *ngFor="let col of columns" [ngSwitch]="col.field" [hidden]="!col.visible">
+              <ng-container *ngSwitchCase="'ldapOrLocal'">
+                <span title="{{ user[col.field] ? 'LDAP' : 'Local user' }}">
+                  {{ user[col.field] ? "LDAP" : "Local user" }}
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'fullName'">
+                <span title="{{ user['firstName'] + ' ' + user['lastName'] }}">
+                  {{ user["firstName"] + " " + user["lastName"] }}
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'activeDate'">
+                <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="'deactivateDate'">
+                <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="'userGroups'">
+                <ng-container *ngIf="user?.userGroups && user?.userGroups.length > 0">
+                  <span *ngFor="let userGroupName of user[col.field]; index as i">
+                    {{
+                      userGroupName.groupName +
+                        (user.userGroups.length === i + 1 ? "" : ",")
+                    }}
+                  </span>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <span title="{{ user[col.field] }}" [class.color-status]="col.field === 'status'">
+                  {{ user[col.field] }}
+                </span>
+              </ng-container>
+              <ng-template #dateParse>
+                <span title="{{ user[col.field] | date: 'MM/dd/yyyy' }}">
+                  {{ user[col.field] | date: "MM/dd/yyyy" }}
+                </span>
+              </ng-template>
+            </td>
+            <div class="mu-hover " id="{{ rowIndex }}">
+              <div class="d-flex">
+                <div>
+                  <img alt=" " src="./../../../../../assets/images-new/edit-form.png" (click)="openEdit(user)"
+                    title="Edit" style="cursor: pointer; margin-bottom: 20px;" />
+                </div>
+                <div style="margin-left:40px;" id="{{ rowIndex }}" *ngIf="user.isAccountLocked === 'Locked'">
+                  <img alt=" " src="./../../../../../assets/images-new/unlock.png" (click)="onRowSelect(user)"
+                    title="Unlock" style="cursor: pointer; margin-bottom: 20px;" />
+                </div>
+              </div>
+            </div>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td class="text-center" [attr.colSpan]="col.length">
+              No users available.
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          <div class="result-no">
+            {{
+              allUserList?.length > 0
+                ? "Showing " +
+                  (state.first + 1) +
+                  " - " +
+                  ((state.first + state.rows > state.totalRecords
+                    ? state.totalRecords
+                    : state.first + state.rows
+                  ) | number) +
+                  " of " +
+                  state.totalRecords
+                : "Showing 0 - 0 of 0"
+            }}
+          </div>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+          <div class="result-no d-flex">
+            <div>Rows per page &nbsp; &nbsp;</div>
+            <select class="input100 result-no" style="width: 50px;" [(ngModel)]="userAllTable.rows"
+              (change)="userAllTable.reset()" [ngModelOptions]="{ standalone: true }">
+              <option>10</option>
+              <option>25</option>
+              <option>50</option>
+            </select>
+          </div>
+        </ng-template>
+      </p-table>
+    </ng-container>
+    <div class="mt-30" style="padding: 10px;" *ngIf="userLoading">
+      <div class="text-center p-3">
+        <img alt=" " src="../../../../../assets/loader.svg" alt="loading..." />
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-30" *ngIf="searchDone && userList?.length > 0">
+    <p-table [responsive]="true" #userTable [columns]="col" [value]="userList" [resizableColumns]="true"
+      dataKey="userName" [paginator]="true" [rows]="10">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" id="{{ col.field }}" [hidden]="!col.visible">
+            {{ col.header }}
+          </th>
+        </tr>
+        <tr>          
+          <th id="col" style="padding-top: 9px;" *ngFor="let col of columns" [hidden]="!col.visible" [ngSwitch]="col.field">
+            <div class="wrap-input100 my-auto" *ngSwitchCase="'operationType'">
+              <select class="input100" [value]="userTable.filters[col.field] ? userTable.filters[col.field].value : ''"
+                (change)="userTable.filter($event.target.value, col.field, 'contains')">
+                <option value="" selected>All</option>
+                <option *ngFor="let val of operationTypesList" [value]="val.name">{{val.name}}</option>
+              </select>
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 my-auto" *ngSwitchCase="'status'">
+              <select class="input100" [value]="userTable.filters[col.field] ? userTable.filters[col.field].value : ''"
+                (change)="userTable.filter($event.target.value, col.field, 'equals')">
+                <option value="" selected>All</option>
+                <option *ngFor="let val of getOptions(col, userList)" [value]="val">{{val}}</option>
+              </select>
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 my-auto" *ngSwitchCase="'role'">
+              <select class="input100" [value]="userTable.filters[col.field] ? userTable.filters[col.field].value : ''"
+                (change)="userTable.filter($event.target.value, col.field, 'equals')">
+                <option value="" selected>All</option>
+                <option *ngFor="let val of getOptions(col, userList)" [value]="val">{{val}}</option>
+              </select>
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 my-auto" style="visibility: hidden;" *ngSwitchDefault>
+              <input class="input100" style="min-width: 200px;" type="text"
+                (input)="userTable.filter($event.target.value, col.field, 'contains')" />
+              <span class="focus-input100"></span>
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user let-columns="columns" let-rowIndex="rowIndex">
+        <tr class="border-large" style="text-align:left; align-items: left; align-content: left; position: relative;"
+          [class.active]="user.status === 'Active'" [class.goingto]="
+            getGoingToDeactivate(user.deactivateDate, user.status)
+          " [class.inactive]="user.status === 'Inactive'">
+          <td *ngFor="let col of columns" [ngSwitch]="col.field" [hidden]="!col.visible">
+            <ng-container *ngSwitchCase="'ldapOrLocal'">
+              <span title="{{ user[col.field] ? 'LDAP' : 'Local user' }}">
+                {{ user[col.field] ? "LDAP" : "Local user" }}
+              </span>
+            </ng-container>
+            <ng-container *ngSwitchCase="'fullName'">
+              <span title="{{ user['firstName'] + ' ' + user['lastName'] }}">
+                {{ user["firstName"] + " " + user["lastName"] }}
+              </span>
+            </ng-container>
+            <ng-container *ngSwitchCase="'activeDate'">
+              <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'deactivateDate'">
+              <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'userGroups'">
+              <ng-container *ngIf="user?.userGroups && user?.userGroups.length > 0">
+                <span *ngFor="let userGroupName of user[col.field]; index as i">
+                  {{
+                    userGroupName.groupName +
+                      (user.userGroups.length === i + 1 ? "" : ",")
+                  }}
+                </span>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              <span title="{{ user[col.field] }}" [class.color-status]="col.field === 'status'">
+                {{ user[col.field] }}
+              </span>
+            </ng-container>
+            <ng-template #dateParse>
+              <span title="{{ user[col.field] | date: 'MM/dd/yyyy' }}">
+                {{ user[col.field] | date: "MM/dd/yyyy" }}
+              </span>
+            </ng-template>
+          </td>
+          <div class="mu-hover " id="{{ rowIndex }}">
+            <div class="d-flex">
+              <div>
+                <img alt=" " src="./../../../../../assets/images-new/edit-form.png" (click)="openEdit(user)"
+                  title="Edit" style="cursor: pointer; margin-bottom: 20px;" />
+              </div>
+              <div style="margin-left:40px;" id="{{ rowIndex }}" *ngIf="user.isAccountLocked === 'Locked'">
+                <img alt=" " src="./../../../../../assets/images-new/unlock.png" (click)="onRowSelect(user)"
+                  title="Unlock" style="cursor: pointer; margin-bottom: 20px;" />
+              </div>
+            </div>
+          </div>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td class="text-center" [attr.colSpan]="col.length">
+            No users available.
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{
+            userList?.length > 0
+              ? "Showing " +
+                (state.first + 1) +
+                " - " +
+                ((state.first + state.rows > state.totalRecords
+                  ? state.totalRecords
+                  : state.first + state.rows
+                ) | number) +
+                " of " +
+                state.totalRecords
+              : "Showing 0 - 0 of 0"
+          }}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <div class="result-no d-flex">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select class="input100 result-no" style="width: 50px;" [(ngModel)]="userTable.rows"
+            (change)="userTable.reset()" [ngModelOptions]="{ standalone: true }">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+    </p-table>
+  </div> -->
+  
+  <div class="mt-30">
+    <p-table [responsive]="true" #userAllTable [columns]="col" *ngIf="!userLoading" [value]="allUserList" [resizableColumns]="true"
+      dataKey="userName" [paginator]="true" [rows]="10">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" id="{{ col.field }}" [hidden]="!col.visible">
+            {{ col.header }}
+          </th>
+        </tr>
+        <tr>
+          <th id="col" style="padding-top: 9px;" *ngFor="let col of columns" [hidden]="!col.visible"
+            [ngSwitch]="col.field">
+            <div class="wrap-input100 w-200 my-auto" *ngSwitchCase="'operationType'">
+              <select class="input100"
+                [value]="userAllTable.filters[col.field] ? userAllTable.filters[col.field].value : ''"
+                (change)="userAllTable.filter($event.target.value, col.field, 'contains')">
+                <option value="" selected>All</option>
+                <option *ngFor="let val of operationTypesList" [value]="val.name">{{val.name}}</option>
+              </select>
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 my-auto w-150" *ngSwitchCase="'status'">
+              <select class="input100"
+                [value]="userAllTable.filters[col.field] ? userAllTable.filters[col.field].value : ''"
+                (change)="userAllTable.filter($event.target.value, col.field, 'equals')">
+                <option value="" selected>All</option>
+                <option *ngFor="let val of getOptions(col, allUserList)" [value]="val">{{val}}</option>
+              </select>
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 my-auto" *ngSwitchCase="'role'">
+              <select class="input100" [value]="userAllTable.filters[col.field] ? userAllTable.filters[col.field].value : ''"
+                (change)="userAllTable.filter($event.target.value, col.field, 'equals')">
+                <option value="" selected>All</option>
+                <option *ngFor="let val of getOptions(col, allUserList)" [value]="val">{{val}}</option>
+              </select>
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 my-auto" style="visibility: hidden;" *ngSwitchDefault>
+              <input class="input100" style="min-width: 200px;" type="text"
+                (input)="userAllTable.filter($event.target.value, col.field, 'contains')" />
+              <span class="focus-input100"></span>
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user let-columns="columns" let-rowIndex="rowIndex">
+        <tr class="border-large" style="text-align:left; align-items: left; align-content: left; position: relative;"
+          [class.activate]="user.status === 'Active'" [class.goingto]="
+            getGoingToDeactivate(user.deactivateDate, user.status)
+          " [class.inactive]="user.status === 'Inactive'">
+          <td *ngFor="let col of columns" [ngSwitch]="col.field" [hidden]="!col.visible">
+            <ng-container *ngSwitchCase="'ldapOrLocal'">
+              <span title="{{ user[col.field] ? 'LDAP' : 'Local user' }}">
+                {{ user[col.field] ? "LDAP" : "Local user" }}
+              </span>
+            </ng-container>
+            <ng-container *ngSwitchCase="'fullName'">
+              <span title="{{ user['firstName'] + ' ' + user['lastName'] }}">
+                {{ user["firstName"] + " " + user["lastName"] }}
+              </span>
+            </ng-container>
+            <ng-container *ngSwitchCase="'activeDate'">
+              <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'deactivateDate'">
+              <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'userGroups'">
+              <ng-container *ngIf="user?.userGroups && user?.userGroups.length > 0">
+                <span *ngFor="let userGroupName of user[col.field]; index as i">
+                  {{
+                    userGroupName.groupName +
+                      (user.userGroups.length === i + 1 ? "" : ",")
+                  }}
+                </span>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              <span title="{{ user[col.field] }}" [class.color-status]="col.field === 'status'">
+                {{ user[col.field] }}
+              </span>
+            </ng-container>
+            <ng-template #dateParse>
+              <span title="{{ user[col.field] | date: 'MM/dd/yyyy' }}">
+                {{ user[col.field] | date: "MM/dd/yyyy" }}
+              </span>
+            </ng-template>
+          </td>
+          <div class="mu-hover " id="{{ rowIndex }}">
+            <div class="d-flex">
+              <div>
+                <img alt=" " src="./../../../../../assets/images-new/edit-form.png" (click)="openEdit(user)"
+                  title="Edit" style="cursor: pointer; margin-bottom: 20px;" />
+              </div>
+              <div style="margin-left:40px;" id="{{ rowIndex }}" *ngIf="user.isAccountLocked === 'Locked'">
+                <img alt=" " src="./../../../../../assets/images-new/unlock.png" (click)="onRowSelect(user)"
+                  title="Unlock" style="cursor: pointer; margin-bottom: 20px;" />
+              </div>
+            </div>
+          </div>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td class="text-center" [attr.colSpan]="col.length">
+            No users available.
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{
+            allUserList?.length > 0
+              ? "Showing " +
+              (userAllTable?.filteredValue
+              ? userAllTable?.filteredValue?.length > 0
+                ? state.first + 1
+                : 0
+              : state.first + 1) +
+                " - " +
+                ((state.first + state.rows >
+                (userAllTable?.filteredValue || allUserList)?.length
+                ? (userAllTable?.filteredValue || allUserList).length
+                : state.first + state.rows
+                ) | number) +
+                " of " +
+                (userAllTable?.filteredValue || allUserList)?.length
+                : "Showing 0 - 0 of 0"
+          }}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <div class="result-no d-flex">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select class="input100 result-no" style="width: 50px;" [(ngModel)]="userAllTable.rows"
+            (change)="userAllTable.reset()" [ngModelOptions]="{ standalone: true }">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+    </p-table>
+    <div class="mt-30" style="padding: 10px;" *ngIf="userLoading">
+      <div class="text-center p-3">
+        <img alt=" " src="../../../../../assets/loader.svg" alt="loading..." />
+      </div>
+    </div>
+  </div>
+</div>
+<p-dialog [(visible)]="editMode" modal="true" header="Edit User" [style]="{ width: '900px' }"
+  (onHide)="edit.clearForm(); closeEdit()">
+  <app-add-user [editUser]="editUser" (updateSuccess)="onUpdateSucces()" #edit (cancelProcess)="this.editMode = false">
+  </app-add-user>
+</p-dialog>
+<p-dialog [(visible)]="addUser" modal="true" header="Add New User" [style]="{ width: '900px' }"
+  (onHide)="add.clearForm(); closeEdit(); getAllusers(currentPage, currentRows)">
+  <app-add-user #add (cancelProcess)="this.addUser = false"> </app-add-user>
+</p-dialog>

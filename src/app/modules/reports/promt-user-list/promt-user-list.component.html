@@ -1,0 +1,183 @@
+<form [formGroup]="userListForm" id="userList">
+  <div [class.mt-60]="!fromTab">
+    <div class="wrap-report">
+      <div class="section-title d-flex space-between" *ngIf="!fromTab">
+        <div class=" mt-30">User Report</div>
+      </div>
+      <div class="popup-body">
+        <div class="review-grid pl-30 pr-30 mt-15">
+          <div class="wrap-input100">
+            <span class="label-input100">Active From</span>
+            <p-calendar
+              formControlName="activeFrom"
+              [showIcon]="true"
+              dateFormat="mm/dd/yy"
+              yearRange="1970:2099"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              [maxDate]="getActiveTo.value ? getActiveTo.value : today"
+              (onSelect)="checkToDate()"
+              [placeholder]="'dd-mm-yyyyy'"
+              [styleClass]="e.focus ? 'focus-calendar' : ''"
+              (onFocus)="e.focus = true"
+              appendTo="body"
+              #e
+            ></p-calendar>
+            <span class="focus-input100"></span>
+            <div class="error-msg" *ngIf="getActiveFrom.touched">
+              <span class="mb-0" *ngIf="getActiveFrom.hasError('required')">
+                Active From Date is required.
+              </span>
+            </div>
+          </div>
+
+          <div class="wrap-input100">
+            <span class="label-input100">Active To</span>
+            <p-calendar
+              formControlName="activeTo"
+              [showIcon]="true"
+              dateFormat="mm/dd/yy"
+              yearRange="1970:2099"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              [minDate]="getActiveFrom.value"
+              [maxDate]="today"
+              appendTo="body"
+              [styleClass]="f.focus ? 'focus-calendar' : ''"
+              (onFocus)="f.focus = true"
+              #f
+            ></p-calendar>
+            <span class="focus-input100"></span>
+            <div class="error-msg" *ngIf="getActiveTo.touched">
+              <span class="mb-0" *ngIf="getActiveTo.hasError('required')">
+                Active To Date is required.
+              </span>
+            </div>
+          </div>
+          <div class="wrap-input100">
+            <span class="label-input100">Status</span>
+            <select
+              class="input100"
+              name="pass"
+              placeholder="Select Status"
+              formControlName="status"
+            >
+              <option value="" disabled selected hidden data-default
+                >Select Status
+              </option>
+              <option value="All">All</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+            <span class="focus-input100"></span>
+            <div class="error-msg" *ngIf="getStatus.touched">
+              <span class="mb-0" *ngIf="getStatus.hasError('required')">
+                Status is required.
+              </span>
+            </div>
+          </div>
+
+          <div
+            class="wrap-input100"
+            *ngIf="role === 'Administrator'"
+          >
+            <span class="label-input100">Role</span>
+            <select class="input100" formControlName="role"  (onChange)="onChangeRoles()">
+              <option [ngValue]="allRole">All</option>
+              <option *ngFor="let rol of roleList" [ngValue]="rol">{{
+                rol.roleName
+              }}</option>
+            </select>
+            <span class="focus-input100"></span>
+            <div class="error-msg" *ngIf="getRole.touched">
+              <span class="mb-0" *ngIf="getRole.hasError('required')">
+                Role is required.
+              </span>
+            </div>
+          </div>
+          <div class="wrap-input100"
+          *ngIf="role === 'Administrator' && getRole.value && (getRole.value.roleName === 'Manager')">
+            <span class="label-input100">Operations Type</span>      
+            <select formControlName="operationType" class="input100" placeholder="Select Type" (change)="onOpChange()">
+              <option value="" disabled selected hidden>Select</option>        
+              <option value="both">Both</option>
+              <option *ngFor="let type of operationTypes" [value]="type.id">
+                {{ type.name }}
+              </option>
+            </select>
+            <div class="error-msg" *ngIf="getOpType?.touched">
+              <span class="mb-0" *ngIf="getOpType.hasError('required')">
+                Operation Type is required.
+              </span>
+            </div>
+          </div>
+          <div
+            class="wrap-input100"
+            *ngIf="role === 'Administrator' && getRole.value && showDropdown"
+          >
+            <span class="label-input100">{{ getRole.value.roleName }}</span>
+            <p-multiSelect
+              #usersSelect
+              (onChange)="onChangeNames()"
+              showTransitionOptions="225ms ease-out"
+              [options]="nameList"
+              formControlName="name"
+              [virtualScroll]="true"
+              tooltipPosition="bottom"
+              itemSize="30"
+              defaultLabel="Select User(s)"
+              appendTo="body"
+            ></p-multiSelect>
+            <span class="focus-input100"></span>
+
+            <div class="error-msg" *ngIf="getRole.touched">
+              <span class="mb-0" *ngIf="getRole.hasError('required')">
+                Role is required.
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex flex-end pr-30">
+          <div
+            class="solid-btn"
+            (click)="submit()"
+            [class.disabled]="userListForm.invalid"
+            pTooltip="Generate Report"
+            tooltipPosition="bottom"
+          >
+            Generate
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="reportLoaded" class="wrap-report d-flex flex-start mt-30 pb-0">
+      <div class="w-100">
+        <app-report-table
+          [columns]="columns"
+          [header]="'User List'"
+          [data]="reportData"
+          (exportExcel)="downloadExcel()"
+        >
+          <ng-container
+            userCount
+            *ngIf="role === 'Administrator' && reportLoaded"
+          >
+            <div class="mr-30" *ngIf="showLeadCountManager">
+              <label class="label-placeholder">No of Leads</label>
+              <div class="label-value">{{ leadCount || 0 }}</div>
+            </div>
+            <div class="" *ngIf="(showLeadCountManager || showCountLead) && examinerCount">
+              <label class="label-placeholder">No of Claims Examiners</label>
+              <div class="label-value">{{ examinerCount || 0 }}</div>
+            </div>
+            <div class="" *ngIf="(showLeadCountManager || showCountLead) && specialistCount">
+              <label class="label-placeholder">No of Enrollment Specialist</label>
+              <div class="label-value">{{ specialistCount || 0 }}</div>
+            </div>
+          </ng-container>
+        </app-report-table>
+      </div>
+    </div>
+  </div>
+</form>

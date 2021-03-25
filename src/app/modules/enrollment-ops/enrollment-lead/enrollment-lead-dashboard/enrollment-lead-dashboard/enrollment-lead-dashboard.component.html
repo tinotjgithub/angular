@@ -1,0 +1,111 @@
+<div class="d-flex mt-30">
+  <div class="wrap-claim-count mt-30 w-50 mr-30">
+    <div class="mt-10">
+      <app-production-count-by-status #prod></app-production-count-by-status>
+    </div>
+  </div>
+  <!-- <div class="wrap-claim-count  w-50 mr-30 mt-30">
+    <div class="mt-10">
+      <app-production-count-by-transaction-category
+        #comp
+      ></app-production-count-by-transaction-category>
+    </div>
+  </div> -->
+  <div class="wrap-claim-volume mt-30 w-50 mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Production Count By Specialist</div>
+      <div>
+        <img
+          alt=" "
+          src="./../../../../../assets/images-new/max.png"
+          (click)="prodspl.triggerZoom = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-30">
+      <app-production-count-specialist
+        #prodspl
+      ></app-production-count-specialist>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex mt-30">
+  <div class="wrap-claim-count  w-50 mr-30">
+    <div class="mt-10">
+      <app-specialist-hourly-productivity
+        #hrl
+      ></app-specialist-hourly-productivity>
+    </div>
+  </div>
+  <div class="wrap-claim-count  w-50 mr-30">
+    <div class="mt-10">
+      <app-enrollment-transaction-trend #et></app-enrollment-transaction-trend>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex mt-30">
+  <div class="wrap-claim-count  w-50 mr-30 ">
+    <div class="mt-10">
+      <app-enrollment-request-trend #er></app-enrollment-request-trend>
+    </div>
+  </div>
+  <div class="wrap-claim-count  w-50 mr-30">
+    <div class="mt-10">
+      <app-pended-request-age #pr></app-pended-request-age>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex mt-30">
+  <div class="wrap-claim-count  w-50 mr-30">
+    <div class="mt-10">
+      <app-audit-count-by-work-category
+        #enrol
+      ></app-audit-count-by-work-category>
+    </div>
+  </div>
+  <div class="wrap-claim-volume w-50 mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Enrollment Audit Summary By Auditor</div>
+      <div>
+        <img
+          alt=" "
+          src="./../../../../../assets/images-new/max.png"
+          (click)="prodvol.triggerZoom = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-30">
+      <app-enrollment-audit-summary-by-auditor
+        #prodvol
+      ></app-enrollment-audit-summary-by-auditor>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex mt-30">
+  <div class="wrap-claim-count  w-50 mr-30">
+    <div class="mt-10">
+      <app-lead-rebuttal-status #lr></app-lead-rebuttal-status>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="d-flex mt-30">
+  <div class="wrap-claim-count  w-50 mr-30">
+    <div class="mt-10">
+      <app-specialist-working-time-trend
+        #sw
+      ></app-specialist-working-time-trend>
+    </div>
+  </div>
+  <div class="wrap-claim-count  w-50 mr-30">
+    <div class="mt-10">
+      <app-auditor-working-time #aw></app-auditor-working-time>
+    </div>
+  </div>
+</div> -->

@@ -1,0 +1,138 @@
+<div class="mt-60">
+    <div class="wrap-pend-reason">
+        <div class="d-flex">
+            <div class="">
+                <span class="section-title">{{claimsType === 'backlog' ? 'Backlog' : "Today's"}} Queue</span>
+                <span *ngIf="tableData?.length > 0" class="section-title-count">{{tableData?.length}}</span>
+            </div>
+            <div class="d-flex claim-status ml-30 mr-auto mt-10">
+                <div class="wrap-label">Unassigned Claim Count</div>
+                <div class="count">{{unassignedOrBacklogClaimCount}}</div>
+            </div>
+            <div class="refresh-btn d-flex mr-30" [class.disabled]="!(auditorName || selectedClaims?.length > 0)" (click)="!(auditorName || selectedClaims?.length > 0) ? '' : cancelAssign()">
+                <div>Reset</div>
+                <div class="refesh-icon ml-15"></div>
+            </div>
+        </div>
+        <div class="d-flex mt-30 pl-30 pr-30">
+            <div class="wrap-input100 w-30 mr-auto">
+                <div class="label-input100">Auditor Name</div>
+                <p-dropdown appendTo="body" placeholder="Select an Auditor" styleClass="w-100" [(ngModel)]="auditorName" [options]="auditorNames" (onChange)="auditorNameChange(auditorName)">
+                    <ng-template let-auditor pTemplate="item">
+                        <div class="ui-helper-clearfix auditor-name">{{auditor.label}}</div>
+                        <div class="ui-helper-clearfix queue-count" *ngIf="auditor.count !== 'all'">{{auditor.count}} Assigned Claims</div>
+                    </ng-template>
+                </p-dropdown>
+                <span class="focus-input100"></span>
+            </div>
+            <div class="outline-btn delete" [class.disabled]="!selectedClaims.length || auditorName" (click)="(!selectedClaims.length || auditorName) ? '' : toggleDelete(true)">
+                Delete {{auditorName ? '' : (selectedClaims.length || '')}} from Queue
+            </div>
+        </div>
+        <div class="d-flex space-between pl-30">            
+            <div class="solid-btn" [class.disabled]="!selectedClaims.length || !auditorName"
+                (click)="(!selectedClaims.length || !auditorName) ? '' : assignClaims()">
+                Assign {{!auditorName ? '' : (selectedClaims.length || '')}} Claims To Auditor
+            </div>
+            <div class="d-flex mr-20">
+                <div class="search-bar d-flex space-between">
+                    <input type="text" class="search-input"
+                        (input)="dt ? dt.filterGlobal($event.target.value, 'contains') : ''"
+                        placeholder="Search Claims">
+                    <img alt = " " src="./../../../assets/images-new/search.png"
+                        style="width: 20px; height: 20px; margin-top: 10px;">
+                </div>
+            </div>
+        </div>
+        <div class="mt-30">
+            <p-table #dt [columns]="cols" [value]="tableData" [styleClass]="'no_border left_select'"
+                [(selection)]="selectedClaims" [tableStyle]="{ 'table-layout': 'auto' }" dataKey="claimId"
+                [responsive]="true" [paginator]="true" [rows]="10" [resizableColumns]="true">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" id="col" [class.select_row]="col.field === 'select'" [ngStyle]="col.field === 'select' ? {width: '72px'} : ''">
+                            <ng-container *ngIf="col.field !== 'select'; else selectTemplate">
+                                {{col.header}}
+                            </ng-container>
+                            <ng-template #selectTemplate>
+                                <div class="relative_div">
+                                    <p-checkbox (click)="selectAllUnassigned(e.checked)" [(ngModel)]="allCheckbox" [binary]="true" [disabled]="!(getUnassignedClaims().length > 0)" #e></p-checkbox>
+                                </div>
+                            </ng-template>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th *ngFor="let col of columns" [ngSwitch]="col.filter" id="col" [class.select_row]="col.field === 'select'">
+                            <div class="wrap-input100 my-auto w-200" *ngSwitchCase="'text'">
+                                <input class="input100" pInputText type="text"
+                                    (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)" />
+                                <span class="focus-input100"></span>
+                            </div>
+                            <div class="wrap-input100 w-200 my-auto" *ngSwitchCase="'dropdown'">
+                                <select class="input100" [value]="dt.filters[col.field] ? dt.filters[col.field].value : ''"
+                                    (change)="dt.filter($event.target.value, col.field, 'equals')">
+                                    <option value="" selected>All</option>
+                                    <option *ngFor="let val of getOptions(col)" [value]="val">{{val}}</option>
+                                </select>
+                                <span class="focus-input100"></span>
+                            </div>
+                            <div class="relative_div" *ngSwitchDefault>
+                                <input class="input100" style="visibility: hidden;" pInputText type="text"
+                                    (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)" />
+                                <span class="focus-input100"></span>
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td *ngFor="let col of columns" [class.select_row]="col.field === 'select'">
+                            <ng-container *ngIf="col.field === 'select'; else rowDataInterpolation">
+                                <p-tableCheckbox [value]="rowData" (ngModelChange)="checkAllSelected()"  [disabled]="rowData.assignmentStatus === 'Yes'">
+                                </p-tableCheckbox>
+                            </ng-container>
+                            <ng-template #rowDataInterpolation>
+                                {{rowData[col.field]}}
+                            </ng-template>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="paginatorleft" let-state>
+                    <div class="result-no">
+                      {{tableData?.length > 0 ?
+                        ('Showing ' + (dt?.filteredValue ? (dt?.filteredValue?.length > 0 ? (state.first + 1) : 0) : (state.first + 1)) +' - ' +
+                        (
+                          (
+                          (state.first + state.rows) > (dt?.filteredValue || tableData)?.length ? ((dt?.filteredValue || tableData).length) : (state.first + state.rows)
+                          )| number
+                        ) + ' of '+ (dt?.filteredValue || tableData)?.length) : 'Showing 0 - 0 of 0'}}
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="paginatorright">
+                    <div class="result-no d-flex">
+                      <div>Rows per page &nbsp; &nbsp;</div>
+                      <select class="input100 result-no" style="width: 50px;" (click)="dt.reset()" [(ngModel)]="dt.rows" [ngModelOptions]="{standalone: true}">
+                        <option>10</option>
+                        <option>25</option>
+                        <option>50</option>
+                      </select>
+                    </div>
+                  </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<p-dialog width="500" modal="true" dismissableMask="true" [responsive]="true" [(visible)]="delete"
+    [transitionOptions]="'0ms'" header="Delete Reason" (onHide)="toggleDelete(false)">
+    <div class="d-flex mt-15">
+        <div class="wrap-input100">
+            <div class="label-input100">Reason</div>
+            <textarea class="input100" [(ngModel)]="reason" placeholder="Please enter the reason for delete"></textarea>
+            <span class="focus-input100"></span>
+        </div>
+    </div>
+    <div class="d-flex flex-end">
+        <div class="outline-btn delete" [class.disabled]="!reason" (click)="!reason ? '' : deleteClaimFromQueue()">Delete</div>
+    </div>
+</p-dialog>
+<p-confirmDialog [acceptButtonStyleClass]="'accept-button'" [rejectButtonStyleClass]="'reject-button'" header="Confirmation" [acceptLabel]="'Ok'" [rejectLabel]="'Cancel'"></p-confirmDialog>

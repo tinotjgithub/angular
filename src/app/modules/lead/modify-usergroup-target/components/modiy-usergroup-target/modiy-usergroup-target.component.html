@@ -1,0 +1,110 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+  <div [routerLink]="'/actions'">
+    <img alt = " " src="./../../../../../../assets/images-new/left.png" style="margin-right: 15px; cursor: pointer;">
+  </div>
+  <div>Back To Configuration</div>
+</div>
+<div class="wrap-pend-reason mt-30">
+  <div class="d-flex space-between">
+    <div>
+      <span class="section-title">Modify Usergroup Target</span><span *ngIf="userGroupList?.length > 0"
+        class="section-title-count">{{userGroupList.length}}</span>
+    </div>
+    <div class="search-bar d-flex space-between mr-30">
+      <input type="text" class="search-input"
+        (input)="pendReasonTable.filterGlobal($event.target.value, 'contains')"
+        placeholder="Search User Group">
+      <img alt = " " src="./../../../../../assets/images-new/search.png" style="width: 20px; height: 20px; margin-top: 10px;">
+    </div>
+  </div>
+  <div class="d-flex justify-content-center mt-30">
+    <p-table [tableStyle]="{ 'table-layout': 'fixed', width: '100%' }" #pendReasonTable editMode="row"
+      [value]="userGroupList" [columns]="cols" [paginator]="true" [rows]="10" dataKey="groupId" [resizableColumns]="true"
+      [scrollable]="false">
+      <ng-template pTemplate="header">
+        <tr>
+          <th id="grpname">User Group Name</th>
+          <th id="description">Description</th>
+          <th id="manager">Manager Name</th>
+          <th id="lead">Lead Name</th>
+          <th id="queue">Queue Name</th>
+          <th id="grptype">Operation Type</th>
+          <th id="target" style="width: 100px;">Target Count</th>
+          <th class="text-center" id="edit" style="width: 125px;">Edit</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+        <tr [pEditableRow]="rowData">
+          <td>
+            {{ rowData.groupName }}
+          </td>
+          <td>
+            {{ rowData.description }}
+          </td>
+          <td>
+            {{ rowData.managerName }}
+          </td>
+          <td>
+            {{ rowData.leadName }}
+          </td>
+          <td>
+            {{ rowData.queueName.queueName }}
+          </td>
+          <td>
+            {{ rowData.userGroupType.name }}
+          </td>
+          <td>
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <div class="wrap-input100 mb-0" style="max-width: 100px;">
+                  <input maxlength="3" (keyup)="preventInput($event, rowData)" min="minTarget" max="maxTarget" numbersOnly
+                    type="number" [(ngModel)]="rowData.target" class="input100" required />
+                    <span class="focus-input100"></span>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.target }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          <td class="text-center">
+            <em *ngIf="editing" pSaveEditableRow class="pi pi-check" pTooltip="Save"
+              (click)="onRowEditSave(rowData, ri)" style="cursor: pointer; font-size: 30px; color:#20bc55;"></em>
+            <em *ngIf="editing" pSaveEditableRow class="pi pi-times" pTooltip="Cancel"
+              (click)="onRowEditCancel(rowData, ri)" style="cursor: pointer; margin-left: 20px;"></em>
+            <img alt = " " src="./../../../../../assets/images-new/edit-form.png" *ngIf="!editing" pTooltip="Edit"
+              pInitEditableRow title="Edit" (click)="onRowEditInit(rowData)" style="cursor: pointer;">
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr class="position-relative" style="height: 50px;">
+          <span class="text-center position-absolute" style="width: calc(100% + 105px); padding: 10px; border-bottom: 1px solid #DFE0EB;" [attr.colspan]="cols.length + 1">
+            No usergroups available.
+          </span>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{userGroupList?.length > 0 ?
+            ('Showing ' + (pendReasonTable?.filteredValue ? (pendReasonTable?.filteredValue?.length > 0 ? (state.first + 1) : 0) : (state.first + 1)) +' - ' +
+            (
+              (
+              (state.first + state.rows) > (pendReasonTable?.filteredValue || userGroupList)?.length ? ((pendReasonTable?.filteredValue || userGroupList).length) : (state.first + state.rows)
+              )| number
+            ) + ' of '+ (pendReasonTable?.filteredValue || userGroupList)?.length) : 'Showing 0 - 0 of 0'}}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <div class="result-no d-flex">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select class="input100 result-no" style="width: 50px;" [(ngModel)]="pendReasonTable.rows" [ngModelOptions]="{standalone: true}">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

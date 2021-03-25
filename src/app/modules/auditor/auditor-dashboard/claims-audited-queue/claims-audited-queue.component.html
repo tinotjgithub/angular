@@ -1,0 +1,83 @@
+<div class="d-flex">
+  <p class="horizontal-axis text-center">Queue Name</p>
+  <div class="scroll-graph-y" style="max-height: 250px;  min-height: 250px;">
+    <google-chart
+      *ngIf="isAuditRendered"
+      #chart
+      [title]="titleAudit"
+      [type]="typeAudit"
+      (select)="openPopUp($event)"
+      [data]="dataAudit"
+      [options]="optionsAudit"
+      [width]="widthAudit"
+      [columnNames]="columnNamesAudit"
+      [height]="heightAudit"
+    >
+    </google-chart>
+  </div>
+</div>
+<p class="vertical-axis text-center">Claim Count</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mr-3 mb-3 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Claims Audited By Queue"
+>
+  <div class="d-flex">
+    <p class="horizontal-axis-enlarged text-center">Queue Name</p>
+    <div class="scroll-graph-y" style="max-height: 400px;  min-height: 400px;">
+      <google-chart
+        *ngIf="isAuditRendered"
+        #chart
+        [title]="titleAudit"
+        [type]="typeAudit"
+        [data]="dataAudit"
+        (select)="openPopUp($event)"
+        [options]="optionsAuditEnlarged"
+        [width]="750"
+        [height]="400"
+        [columnNames]="columnNamesAudit"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged">Claim Count</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-3 mb-3 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [contentStyle]="{ padding: 0, maxHeight: '100%', overflowY: 'auto' }"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Claims Audited By Queue - {{ this.editUser.queueName }}"
+  (onHide)="closePopUp()"
+>
+  <app-audited-claims-details
+    #gridView
+    class="w-100"
+    header="Claims Audited By Queue"
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-audited-claims-details>
+</p-dialog>

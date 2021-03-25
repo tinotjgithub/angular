@@ -1,0 +1,72 @@
+<div class="mt-60">
+  <div
+    *ngFor="let menu of menuItem"
+    class="wrap-claims-operations w-100 sub-menu mb-30" 
+  >
+    <div class="popup-header d-flex ">
+      <div>
+        <img
+          alt=" "
+          [src]="'./../../../../assets/images-new/' + menu.icon"
+          style="margin-right: 15px; margin-top: 19px;"
+        />
+      </div>
+
+      <div class="block-header">{{ menu.header }}</div>
+    </div>
+    <div class="row d-flex space-between pl-30 pr-30 mt-30" *ngFor="let link of menu.links">
+      <!-- <div class="mt-20" > -->
+        <ng-template #normal>
+          <div class="">
+            <div></div>
+            <div
+              class="d-flex mt-20"
+              *ngIf="link.items && link.items?.length > 0"
+            >
+              <div *ngFor="let subLink of link.items">
+                <div class="mr-30 link-wrapper">
+                  <a
+                    [routerLink]="subLink.routerLink"
+                    [queryParams]="
+                      subLink.queryParams ? subLink.queryParams : null
+                    "
+                  >
+                    {{ subLink.label }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-container *ngIf="link.routerLink; else normal">
+          <div class="">
+            <div class="link-wrapper">
+              <a
+                [routerLink]="link.routerLink"
+                [queryParams]="link.queryParams"
+              >
+              </a>
+            </div>
+            <div
+              class="d-flex mt-20"
+              *ngIf="link.items && link.items?.length > 0"
+            >
+              <div *ngFor="let subLink of link.items">
+                <div class="mr-30 link-wrapper">
+                  <a
+                    [routerLink]="subLink.routerLink"
+                    [queryParams]="
+                      subLink.queryParams ? subLink.queryParams : null
+                    "
+                  >
+                    {{ subLink.label }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      <!-- </div> -->
+    </div>
+  </div>
+</div>

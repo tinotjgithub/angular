@@ -1,0 +1,123 @@
+<div class="d-flex space-between mt-60" href="#">
+    <div class="d-flex">
+        <div [routerLink]="'/configuration-menu'"> <img alt = " " src="./../../../../assets/images-new/left.png" style="margin-right: 15px; cursor: pointer;"></div>
+        <div>Back To Configuration</div>
+    </div>
+    <div class="solid-btn" (click)="addChecklist = true">
+        Add New Checklist
+    </div>
+</div>
+<div class="d-flex mt-30">
+    <div class="wrap-claim-count p-0 h-100 mr-30 pb-0">
+        <div class="d-flex pl-30 mt-15 space-between ">
+            <div class="section-label">Professional Claims</div>
+            <div class="outline-btn delete mr-30" (click)="(!selectedClaims.Professional || (selectedClaims.Professional.length < 1)) ? '' : deleteChecklist('Professional')" [class.disabled]="!selectedClaims.Professional || (selectedClaims.Professional.length < 1)">Delete</div>
+        </div>
+        <div class="d-flex pl-30 mt-30 space-between table-header ">
+          <div class="mu-name w-75">Checkpoint</div>
+          <div class="mu-username text-center">Select</div>
+        </div>
+        <div class="scroll-graph-y" style="height: 125px;">
+            <div class="d-flex pl-30 space-between wrap-row" *ngFor="let row of claimsData.Professional">
+                <div class="mu-name link w-75">{{row}}</div>
+                <div class="mu-username text-center">
+                    <p-checkbox name="professional" value="{{row}}" [(ngModel)]="selectedClaims.Professional"></p-checkbox>
+                </div>
+            </div>
+            <div class="text-center mt-30" *ngIf="!claimsData.Professional || (claimsData.Professional?.length < 1)">No Checkpoint available</div>
+        </div>
+    </div>
+    <div class="wrap-claim-count p-0 h-100">
+        <div class="d-flex pl-30 mt-15 space-between ">
+            <div class="section-label">Institutional Claims (Out-Patient)</div>
+            <div class="outline-btn delete mr-30" (click)="(!selectedClaims['Institutional-OP'] || (selectedClaims['Institutional-OP'].length < 1)) ? '' : deleteChecklist('Institutional-OP')" [class.disabled]="!selectedClaims['Institutional-OP'] || (selectedClaims['Institutional-OP'].length < 1)">Delete</div>
+        </div>
+        <div class="d-flex pl-30 mt-30 space-between table-header ">
+          <div class="mu-name w-75">Checkpoint</div>
+          <div class="mu-username text-center">Select</div>
+        </div>
+        <div class="scroll-graph-y" style="height: 125px;">
+            <div class="d-flex pl-30 space-between wrap-row" *ngFor="let row of claimsData['Institutional-OP']">
+                <div class="mu-name link w-75">{{row}}</div>
+                <div class="mu-username text-center">
+                    <p-checkbox name="professional" value="{{row}}" [(ngModel)]="selectedClaims['Institutional-OP']"></p-checkbox>
+                </div>
+            </div>
+            <div class="text-center mt-30" *ngIf="!claimsData['Institutional-OP'] || (claimsData['Institutional-OP'].length < 1)">No Checkpoint available</div>
+        </div>
+    </div>
+</div>
+<div class="d-flex mt-30">
+    <div class="wrap-claim-count p-0 h-100 mr-30">
+        <div class="d-flex pl-30 mt-15 space-between ">
+            <div class="section-label">Institutional Claims (In-Patient)</div>
+            <div class="outline-btn delete mr-30" (click)="(!selectedClaims['Institutional-IP'] || (selectedClaims['Institutional-IP'].length < 1)) ? '' : deleteChecklist('Institutional-IP')" [class.disabled]="!selectedClaims['Institutional-IP'] || (selectedClaims['Institutional-IP'].length < 1)">Delete</div>
+        </div>
+        <div class="d-flex pl-30 mt-30 space-between table-header ">
+          <div class="mu-name w-75">Checkpoint</div>
+          <div class="mu-username text-center">Select</div>
+        </div>
+        <div class="scroll-graph-y" style="height: 125px;">
+            <div class="d-flex pl-30 space-between wrap-row" *ngFor="let row of claimsData['Institutional-IP']">
+                <div class="mu-name link w-75">{{row}}</div>
+                <div class="mu-username text-center">
+                    <p-checkbox name="professional" value="{{row}}" [(ngModel)]="selectedClaims['Institutional-IP']"></p-checkbox>
+                </div>
+            </div>
+            <div class="text-center mt-30" *ngIf="!claimsData['Institutional-IP'] || (claimsData['Institutional-IP'].length < 1)">No Checkpoint available</div>
+        </div>
+    </div>
+    <div class="wrap-claim-count p-0 h-100">
+        <div class="d-flex pl-30 mt-15 space-between ">
+            <div class="section-label">Other Claims</div>
+            <div class="outline-btn delete mr-30" (click)="(!selectedClaims.Others || (selectedClaims.Others.length < 1)) ? '' : deleteChecklist('Others')" [class.disabled]="!selectedClaims.Others || (selectedClaims.Others.length < 1)">Delete</div>
+        </div>
+        <div class="d-flex pl-30 mt-30 space-between table-header ">
+          <div class="mu-name w-75">Checkpoint</div>
+          <div class="mu-username text-center">Select</div>
+        </div>
+        <div class="scroll-graph-y" style="height: 125px;">
+            <div class="d-flex pl-30 space-between wrap-row" *ngFor="let row of claimsData.Others">
+                <div class="mu-name link w-75">{{row}}</div>
+                <div class="mu-username text-center">
+                    <p-checkbox name="professional" value="{{row}}" [(ngModel)]="selectedClaims.Others"></p-checkbox>
+                </div>
+            </div>
+            <div class="text-center mt-30" *ngIf="!claimsData.Others || (claimsData.Others.length < 1)">No Checkpoint available</div>
+        </div>
+    </div>
+</div>
+<p-dialog [(visible)]="addChecklist" modal=true [header]="'Add New Checklist'" [width]="400" (onHide)="checklistForm.reset()">
+    <form style="display: contents;" [formGroup]="checklistForm">
+        <div class="d-flex mt-30">
+            <div class="wrap-input100">
+                <div class="label-input100">Claim Type</div>
+                <select class="input100" formControlName="type">
+                    <option value="" selected>Select Type</option>
+                    <option value="Professional">Professional</option>
+                    <option value="Institutional-IP">Institutional (IP)</option>
+                    <option value="Institutional-OP">Institutional (OP)</option>
+                    <option value="Others">Others</option>
+                </select>
+                <span class="focus-input100"></span>
+                <div class="error-msg" style="top:45px" *ngIf="checklistForm.get('type').touched && checklistForm.get('type').hasError('required')">
+                    Claim Type is required.
+                </div>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="wrap-input100">
+                <div class="label-input100">Checkpoint</div>
+                <input maxlength="32" class="input100" type="text" formControlName="checkpoint"/>
+                <span class="focus-input100"></span>
+                <div class="error-msg" style="top:45px" *ngIf="checklistForm.get('checkpoint').touched && checklistForm.get('checkpoint').hasError('required')">
+                    Checkpoint is required.
+                </div>
+            </div>
+        </div>
+        <div class="d-flex mt-10 flex-end">
+            <div class="cancel-btn mr-30" (click)="addChecklist = false;">Cancel</div>
+            <div class="solid-btn" [class.disabled]="checklistForm.invalid" (click)="checklistForm.invalid ? '' : addCheckPoint()">Add</div>
+        </div>
+    </form>
+</p-dialog>

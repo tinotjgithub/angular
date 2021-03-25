@@ -1,0 +1,169 @@
+<div class=" d-flex mt-60">
+  <div class="w-50 mr-30">
+    <div class="block-title">Audit Queue Summary</div>
+    <div class="d-flex">
+      <div class="card card-blue hover mr-30 w-50"
+        [routerLink]="queueSummary?.todaysCount ? ['/claims-audit/queue-summary'] : null"
+        [queryParams]="{ type: 'todays' }">
+        <div class="card-title-examiner">Todays Queue</div>
+        <div class="card-value-examiner">{{queueSummary?.todaysCount || 0}}</div>
+        <div class="card-hover">
+          View Todays Queue
+        </div>
+      </div>
+      <div class="card card-yellow hover w-50"
+        [routerLink]="queueSummary?.backlogCount ? ['/claims-audit/queue-summary'] : null"
+        [queryParams]="{ type: 'backlog' }">
+        <div class="card-title-examiner">Backlog</div>
+        <div class="card-value-examiner">{{queueSummary?.backlogCount || 0}}</div>
+        <div class="card-hover">
+          View Backlog Queue
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-50">
+    <div class="block-title">My Queue Summary</div>
+    <div class="d-flex">
+      <div class="card card-purple hover mr-30 w-50"
+        [routerLink]="auditStatus?.reviewRebuttalCount ? ['/rebut-review-list'] : null">
+        <div class="card-title-examiner">Review / Rebuttal Queue</div>
+        <div class="card-value-examiner">{{auditStatus?.reviewRebuttalCount || 0}}</div>
+        <div class="card-hover">
+          View Review / Rebuttal Queue
+        </div>
+      </div>
+      <div class="card card-grey hover w-50"
+        [routerLink]="auditStatus?.routedInCount ? ['/audit-routed-in-detail/list'] : null">
+        <div class="card-title-examiner">Routed In</div>
+        <div class="card-value-examiner">{{auditStatus?.routedInCount || 0}}</div>
+        <div class="card-hover">
+          View Routed In Queue
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="mt-30">
+  <div class="block-title">Processed Claims Inventory Since Last Audit</div>
+  <div class="d-flex">
+    <div class="card-with-icon card-blue w-50 pl-30 mr-30" pTooltip="Total number of Claims Processed">
+      <div class="d-flex">
+        <div>
+          <img alt = " " src="./../../../../assets/images-new/Total Processed Claim.png" alt="Total Claim">
+        </div>
+        <div class="ml-25 mt-10 card-content">
+          <div class="card-title-examiner">Total Processed Claim</div>
+          <div class="card-value-examiner">{{inventoryStatus?.totalClaimsCount || 0}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-with-icon card-red pl-30 w-50 mr-30" pTooltip="Total number of Manually Adjudicated Claims">
+      <div class="d-flex">
+        <div>
+          <img alt = " " src="./../../../../assets/images-new/Manually Adjudicated.png" alt="Manual Claim">
+        </div>
+        <div class="ml-25 mt-10 card-content">
+          <div class="card-title-examiner">Manually Adjudicated</div>
+          <div class="card-value-examiner">{{inventoryStatus?.manualClaimsCount || 0}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-with-icon card-green pl-30 w-50" pTooltip="Total number of Adjusted Claims">
+      <div class="d-flex">
+        <div>
+          <img alt = " " src="./../../../../assets/images-new/Adjusted (1).png" alt="Adjusted Claim">
+        </div>
+        <div class="ml-25 mt-10 card-content">
+          <div class="card-title-examiner">Adjusted</div>
+          <div class="card-value-examiner">{{inventoryStatus?.adjustedClaimsCount || 0}}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="d-flex mt-30">
+  <div class="wrap-claim-count mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Claim Source</div>
+    </div>
+    <div class="">
+      <google-chart [type]="'BarChart'" style="height: 200px; width: 100%;" [options]="optionsAgeEnlarged"
+        [data]="claimSourceData" [columnNames]="claimSourceColumnNames" #chart1></google-chart>
+    </div>
+
+  </div>
+
+  <div class="wrap-claim-count mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Claim Type</div>
+    </div>
+    <div class="">
+      <google-chart [type]="'BarChart'" style="height: 200px; width: 100%;" [options]="optionsAgeEnlarged"
+        [data]="claimTypeData" [columnNames]="claimTypeColumnNames" #chart2></google-chart>
+    </div>
+
+  </div>
+
+  <div class="wrap-claim-count">
+    <div class="d-flex space-between ">
+      <div class="section-label">Claim Decision</div>
+    </div>
+    <div class="">
+      <google-chart [type]="'BarChart'" style="height: 200px; width: 100%;" [options]="optionsAgeEnlarged"
+        [data]="claimStatusData" [columnNames]="claimStatusColumnNames" #chart3></google-chart>
+    </div>
+
+  </div>
+</div>
+
+<div class="d-flex mt-30">
+  <div class="claim-processed-date w-100">
+    <form [formGroup]="samplingForm">
+      <div class="d-flex space-between ">
+        <div class="section-label">Audit Sampling Selection</div>
+      </div>
+      <div class="d-flex mt-20">
+        <div class="attachment-comment-head">Claim Processed Date</div>
+      </div>
+      <div class="d-flex mt-10">
+        <div class="wrap-input100 w-25 mr-30 ">
+          <span class="label-input100">From Date</span>
+          <p-calendar appendTo="body" [showIcon]="true" formControlName="from" [maxDate] = "this.samplingForm.get('to').value"></p-calendar>
+        </div>
+        <div class="wrap-input100 w-25 mr-30 ">
+          <span class="label-input100">To Date</span>
+          <p-calendar appendTo="body" [showIcon]="true" formControlName="to" [minDate] = "this.samplingForm.get('from').value" [maxDate]= "today"></p-calendar>
+        </div>
+        <div class="mt-30">
+          <input formControlName="criteriaType" value="AUTO" type="radio" />
+          <label class="ml-10 mr-20">Automated Audit Sampling</label>
+          <input formControlName="criteriaType" value="MANUAL" type="radio" />
+          <label class="ml-10">Manual Audit Sampling</label>
+        </div>
+      </div>
+      <div class="d-flex flex-end mb-12">
+        <div class="d-flex mr-20 claim-status">
+          <div class="wrap-label">Sample Count </div>
+          <div class="count">{{claimCountDetails?.autoSamplingCount || claimCountDetails?.manualSamplingCount || 0}}
+          </div>
+        </div>
+        <div>
+          <div *ngIf="claimCountLoading"><img alt = " " src="./../../../../assets/images-new/loader-gif.gif" alt="loading..."
+              style="width: 30px;"> Refreshing</div>
+        </div>
+        <div>
+          <div class="solid-btn loading"
+            (click)="(samplingForm.invalid || !(claimCountDetails?.autoSamplingCount || claimCountDetails?.manualSamplingCount) || addingToClaim) ? '' : addTolaimsQueue()"
+            [class.disabled]="samplingForm.invalid || !(claimCountDetails?.autoSamplingCount || claimCountDetails?.manualSamplingCount) || addingToClaim">
+            Add To Audit Queue</div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<app-loader [showSpinner]="inventoryLoading"></app-loader>

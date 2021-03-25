@@ -1,0 +1,667 @@
+<div class="mt-60" id="enrollment-landing" *ngIf="!subscription">
+  <div class="mt-10 ng-star-inserted">
+    <div class="card card-purple mt-15 p-2" *ngIf="requestSnapshot">
+      <div class="wrap-section-title">
+        <div class="section-title">Audit Failed</div>
+        &nbsp;
+        <div class="section-title-count card-purple-bg">
+          {{ requestSnapshot?.auditFail?.total || 0 }}
+        </div>
+      </div>
+      <div class="d-grid card-grid-template-column">
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Workbasket')"
+          [routerLink]="['/specialist/work-category/audit-failed-details']"
+          [queryParams]="{ type: 'Workbasket' }"
+        >
+          <div class="request-type">Workbasket</div>
+          <div class="request-count">
+            {{ requestSnapshot?.auditFail?.workbasketCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Workbasket Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Reconciliation')"
+          [routerLink]="['/specialist/work-category/audit-failed-details']"
+          [queryParams]="{ type: 'Reconciliation' }"
+        >
+          <div class="request-type">Reconciliation</div>
+          <div class="request-count">
+            {{ requestSnapshot?.auditFail?.reconciliationCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Reconciliation Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Fallout')"
+          [routerLink]="['/specialist/work-category/audit-failed-details']"
+          [queryParams]="{ type: 'Fallout' }"
+        >
+          <div class="request-type">Fallout</div>
+          <div class="request-count">
+            {{ requestSnapshot?.auditFail?.fallOutCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">Open Fallout Detail Page</div>
+        </div>
+
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('New Group Enrollment')"
+        >
+          <div class="request-type">New Group Enrollment</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open New Group Enrollment Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Group Renewal')"
+        >
+          <div class="request-type">Group Renewal</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Group Renewal Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Id Card Request')"
+        >
+          <div class="request-type">ID Card</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open ID Card Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Term By Absence')"
+        >
+          <div class="request-type">Term By Absence</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Term By Absence Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Payment Posting')"
+        >
+          <div class="request-type">Payment Posting</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Payment Posting Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Other Tickets')"
+        >
+          <div class="request-type">Other Tickets</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Other Tickets Detail Page
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form [formGroup]="auditForm" id="auditFailed">
+  <div class="d-flex w-200 mt-20" *ngIf="!subscription">
+    <div class="wrap-input100">
+      <span class="label-input100">Work Category</span>
+      <select
+        formControlName="requestType"
+        class="input100"
+        placeholder="Select Category"
+      >
+        <option value="" disabled selected hidden data-default
+          >Select Category</option
+        >
+        <option *ngFor="let type of requestTypes" value="{{ type.id }}">{{
+          type.name
+        }}</option>
+      </select>
+      <span class="focus-input100"></span>
+    </div>
+  </div>
+
+  <div
+    class="btn-claim mt-05"
+    pTooltip="Get a new subscription"
+    [class.disabled]="subscription || !auditForm.value.requestType"
+    (click)="
+      subscription || !auditForm.value.requestType ? '' : getSubscription()
+    "
+    *ngIf="!subscription"
+  >
+    <div>Get a Transaction</div>
+  </div>
+
+  <div class="mt-60" *ngIf="!subscription">
+    <span style="color: red;"
+      >Click on the 'Get a Transaction' to pull a transaction.</span
+    >
+  </div>
+
+  <div class="wrap-claim-details-accordian mt-60" *ngIf="subscription">
+    <div class="tabs">
+      <div class="tab">
+        <div class="d-flex wrap-tab" for="chck1" *ngIf="subscription">
+          <label
+            class="tab-label claim-id-head mr-20"
+            pTooltip="Open Subscription in HRP"
+            for="chck1"
+            (click)="openClaimInHRP(claimId)"
+            >Subscription ID -
+            <input
+              style="position: absolute; top: 0; left: 0; opacity: 0;"
+              value="{{ subscription?.subscriptionId }}"
+              #claimId
+            /><span id="claimId">{{
+              subscription?.subscriptionId
+            }}</span></label
+          >
+          <div>
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/copy.png"
+              style="cursor: pointer;"
+              pTooltip="Click to copy Subscription ID"
+              (click)="justCopy(claimId)"
+            />
+          </div>
+
+          <label
+            class="ml-auto rebuttal-style"
+            *ngIf="subscription?.currentLevel && subscription?.currentLevel > 0"
+            >Rebuttal Level - {{ subscription?.currentLevel }}</label
+          >
+        </div>
+        <div class="audit-failed-enrol-grid mt-20">
+          <ng-container *ngFor="let col of cols; index as i">
+            <div class="" [class.grid-span-2]="col.large">
+              <div class="label-placeholder">{{ col.header }}</div>
+              <div class="label-value">
+                {{ subscription[col.field] || "-" }}
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <div class=" mt-20 mb-15">
+          <div class="d-flex">
+            <div class="attachment-comment-head new mr-auto">
+              Auditor Review
+            </div>
+          </div>
+          <div class="audit-failed-enrol-grid mt-20">
+            <div class="">
+              <div class="label-placeholder">Auditor Name</div>
+              <div class="label-value">
+                {{ subscription?.auditorName || "-" }}
+              </div>
+            </div>
+            <div class="">
+              <div class="label-placeholder">Audit Date</div>
+              <div class="label-value">
+                {{ subscription?.auditDate || "-" }}
+              </div>
+            </div>
+            <div class="">
+              <div class="label-placeholder">Attachments</div>
+              <div
+                *ngIf="
+                  subscription?.auditorCommentsAndAttachments?.attachments &&
+                  subscription?.auditorCommentsAndAttachments?.attachments
+                    .length > 0
+                "
+              >
+                <div
+                  class="d-flex link"
+                  style="overflow: hidden; font-size: 12px;"
+                  *ngFor="
+                    let file of subscription?.auditorCommentsAndAttachments
+                      ?.attachments
+                  "
+                  (click)="downloadFile(file)"
+                >
+                  <div>
+                    <img
+                      alt=" "
+                      src="./../../../../../assets/images-new/attach.png"
+                      style="height: 16px;"
+                    />
+                  </div>
+                  <div class="ml-10" title="{{ file.fileName }}">
+                    {{ file.fileName }}
+                  </div>
+                </div>
+              </div>
+              <div
+                class="claim-value"
+                *ngIf="
+                  !subscription?.auditorCommentsAndAttachments?.attachments ||
+                  subscription?.auditorCommentsAndAttachments?.attachments
+                    .length < 1
+                "
+              >
+                -
+              </div>
+            </div>
+            <div class="grid-span-2">
+              <div class="label-placeholder">Comments</div>
+              <div class="label-value">
+                {{
+                  subscription?.auditorCommentsAndAttachments?.comments || "-"
+                }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex" *ngIf="subscription">
+    <div class="left-content">
+      <div class="wrap-auditor-review mt-30 mr-30">
+        <div class="d-flex space-between">
+          <div>
+            <div class="claim-id-head no-hover">Workflow</div>
+            <div class="d-flex mt-15" *ngIf="subscription?.status">
+              <div class="attachment-comment-head new">Accept/Rebut :</div>
+              <div class="ml-25 attachment-comment-head">
+                {{ subscription?.status }}
+              </div>
+            </div>
+          </div>
+          <div
+            class="wrap-input100 mb-0 w-200"
+            *ngIf="
+              subscription?.auditWorkflowAttachmentsAndComments &&
+              subscription?.auditWorkflowAttachmentsAndComments.length > 0
+            "
+          >
+            <span class="label-input100">Filter By Role</span>
+            <select
+              class="input100"
+              name="pass"
+              placeholder="Select Role"
+              (change)="roleChange($event.target.value)"
+              #role
+            >
+              <option value="" selected data-default>All</option>
+              <option value="Enrollment Specialist"
+                >Enrollment Specialist</option
+              >
+              <option value="Enrollment Lead">Lead</option>
+              <option value="Enrollment Auditor">Auditor</option>
+              <option value="Manager">Manager</option>
+            </select>
+            <span class="focus-input100"></span>
+          </div>
+        </div>
+        <div *ngIf="!role?.value">
+          <ul class="legend-list">
+            <li class="examiner">Enrollment Specialist</li>
+            <li class="lead">Enrollment Lead</li>
+            <li class="manager">Manager</li>
+            <li class="auditor">Enrollment Auditor</li>
+          </ul>
+        </div>
+        <div class=" wrap-workflow mt-20">
+          <div
+            class="text-center label-value"
+            *ngIf="
+              !subscription?.auditWorkflowAttachmentsAndComments ||
+              subscription?.auditWorkflowAttachmentsAndComments.length < 1
+            "
+          >
+            No Comments & Attachments
+          </div>
+          <ol
+            *ngIf="
+              subscription?.auditWorkflowAttachmentsAndComments &&
+              subscription?.auditWorkflowAttachmentsAndComments.length > 0
+            "
+          >
+            <ng-container *ngIf="allUserCommentsAttachments[0].length > 0">
+              <ul>
+                <li class="level">
+                  <div class="level-wrapper">
+                    <div class="tl-rebutal-level">&nbsp;Review&nbsp;</div>
+                  </div>
+                </li>
+                <li
+                  [class.manager]="review.userRole === 'Manager'"
+                  [class.lead]="review.userRole === 'Enrollment Lead'"
+                  [class.auditor]="review.userRole === 'Enrollment Auditor'"
+                  [class.examiner]="review.userRole === 'Enrollment Specialist'"
+                  *ngFor="let review of allUserCommentsAttachments[0]"
+                >
+                  <div class="attachment-comment timeline-date new">
+                    {{ review.timestamp }}
+                  </div>
+                  <div class="tl-role-name">{{ review.userName }}</div>
+                  <div class="attachment-comment">
+                    {{ review.comments }}
+                  </div>
+                  <div class="mt-10" *ngIf="review.attachments">
+                    <div class="d-flex">
+                      <div
+                        class="wrap-attachment d-flex"
+                        *ngFor="let attachment of review.attachments"
+                      >
+                        <div>
+                          <img
+                            alt=" "
+                            src="./../../../../../assets/images-new/attach.png"
+                            style="width:16px; height:16px;"
+                          />
+                        </div>
+                        <div
+                          class="ml-10 attachment-label"
+                          title="{{ attachment.fileName }}"
+                          (click)="downloadFile(attachment)"
+                        >
+                          {{ attachment.fileName }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </ng-container>
+            <ng-container *ngIf="allUserCommentsAttachments[3].length > 0">
+              <ul>
+                <li class="level">
+                  <div class="level-wrapper">
+                    <div class="tl-rebutal-level">Rebuttal Level 3</div>
+                  </div>
+                </li>
+                <li
+                  [class.manager]="review.userRole === 'Manager'"
+                  [class.lead]="review.userRole === 'Enrollment Lead'"
+                  [class.auditor]="review.userRole === 'Enrollment Auditor'"
+                  [class.examiner]="review.userRole === 'Enrollment Specialist'"
+                  *ngFor="let review of allUserCommentsAttachments[3]"
+                >
+                  <div class="attachment-comment timeline-date new">
+                    {{ review.timestamp }}
+                  </div>
+                  <div class="tl-role-name">{{ review.userName }}</div>
+                  <div class="attachment-comment">
+                    {{ review.comments }}
+                  </div>
+                  <div class="mt-10" *ngIf="review.attachments">
+                    <div class="d-flex">
+                      <div
+                        class="wrap-attachment d-flex"
+                        *ngFor="let attachment of review.attachments"
+                      >
+                        <div>
+                          <img
+                            alt=" "
+                            src="./../../../../../assets/images-new/attach.png"
+                            style="width:16px; height:16px;"
+                          />
+                        </div>
+                        <div
+                          class="ml-10 attachment-label"
+                          title="{{ attachment.fileName }}"
+                          (click)="downloadFile(attachment)"
+                        >
+                          {{ attachment.fileName }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </ng-container>
+            <ng-container *ngIf="allUserCommentsAttachments[2].length > 0">
+              <ul>
+                <li class="level">
+                  <div class="level-wrapper">
+                    <div class="tl-rebutal-level">Rebuttal Level 2</div>
+                  </div>
+                </li>
+                <li
+                  [class.manager]="review.userRole === 'Manager'"
+                  [class.lead]="review.userRole === 'Enrollment Lead'"
+                  [class.auditor]="review.userRole === 'Enrollment Auditor'"
+                  [class.examiner]="review.userRole === 'Enrollment Specialist'"
+                  *ngFor="let review of allUserCommentsAttachments[2]"
+                >
+                  <div class="attachment-comment timeline-date new">
+                    {{ review.timestamp }}
+                  </div>
+                  <div class="tl-role-name">{{ review.userName }}</div>
+                  <div class="attachment-comment">
+                    {{ review.comments }}
+                  </div>
+                  <div class="mt-10" *ngIf="review.attachments">
+                    <div class="d-flex">
+                      <div
+                        class="wrap-attachment d-flex"
+                        *ngFor="let attachment of review.attachments"
+                      >
+                        <div>
+                          <img
+                            alt=" "
+                            src="./../../../../../assets/images-new/attach.png"
+                            style="width:16px; height:16px;"
+                          />
+                        </div>
+                        <div
+                          class="ml-10 attachment-label"
+                          title="{{ attachment.fileName }}"
+                          (click)="downloadFile(attachment)"
+                        >
+                          {{ attachment.fileName }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </ng-container>
+            <ng-container *ngIf="allUserCommentsAttachments[1].length > 0">
+              <ul>
+                <li class="level">
+                  <div class="level-wrapper">
+                    <div class="tl-rebutal-level">Rebuttal Level 1</div>
+                  </div>
+                </li>
+                <li
+                  [class.manager]="review.userRole === 'Manager'"
+                  [class.lead]="review.userRole === 'Enrollment Lead'"
+                  [class.auditor]="review.userRole === 'Enrollment Auditor'"
+                  [class.examiner]="review.userRole === 'Enrollment Specialist'"
+                  *ngFor="let review of allUserCommentsAttachments[1]"
+                >
+                  <div class="attachment-comment timeline-date new">
+                    {{ review.timestamp }}
+                  </div>
+                  <div class="tl-role-name">{{ review.userName }}</div>
+                  <div class="attachment-comment">
+                    {{ review.comments }}
+                  </div>
+                  <div class="mt-10" *ngIf="review.attachments">
+                    <div class="d-flex">
+                      <div
+                        class="wrap-attachment d-flex"
+                        *ngFor="let attachment of review.attachments"
+                      >
+                        <div>
+                          <img
+                            alt=" "
+                            src="./../../../../../assets/images-new/attach.png"
+                            style="width:16px; height:16px;"
+                          />
+                        </div>
+                        <div
+                          class="ml-10 attachment-label"
+                          title="{{ attachment.fileName }}"
+                          (click)="downloadFile(attachment)"
+                        >
+                          {{ attachment.fileName }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </ng-container>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap-rebuttal-accept mt-30">
+      <div class="claim-id-head no-hover">Rebut / Accept</div>
+      <div class="mt-30">
+        <div
+          class="wrap-input100 border-0 mr-30 d-flex space-between"
+          *ngIf="subscription?.isTransactionCountMismatch"
+        >
+          <span class="label-input100">Update Transaction Count</span>
+          <div class="d-flex">
+            <div
+              class="minus-button"
+              (click)="decrement('transactionCount')"
+              pTooltip="Decrement"
+            ></div>
+            <div class="wrap-input100 mb-0 mx-1" style="width: 50px;">
+              <input
+                type="number"
+                formControlName="transactionCount"
+                class="input100 text-center"
+                (keyup)="preventInput($event)"
+                name=""
+                id=""
+                min="1"
+              />
+              <span class="focus-input100"></span>
+            </div>
+            <div
+              class="add-button"
+              (click)="increment('transactionCount')"
+              pTooltip="Increment"
+            ></div>
+          </div>
+          <div
+            class="error-msg"
+            style="top: 40px;"
+            *ngIf="this.auditForm.get('transactionCount').touched"
+          >
+            <span
+              *ngIf="
+                this.auditForm.get('transactionCount').hasError('required')
+              "
+            >
+              Transaction Count is required.
+            </span>
+          </div>
+        </div>
+        <div class="wrap-input100 mr-30">
+          <span class="label-input100">Comment</span>
+          <textarea
+            placeholder="Enter Comments"
+            [attr.disabled]="
+              !(this.subscription && this.subscription.subscriptionId)
+                ? ''
+                : null
+            "
+            class="input100"
+            formControlName="specialistComment"
+            maxlength="256"
+          ></textarea>
+          <span class="focus-input100"></span>
+          <div
+            class="error-msg"
+            *ngIf="this.auditForm.get('specialistComment').touched"
+          >
+            <span
+              *ngIf="
+                this.auditForm.get('specialistComment').hasError('required')
+              "
+            >
+              Comment is required.
+            </span>
+          </div>
+        </div>
+        <app-file-input
+          [disabled]="!(this.subscription && this.subscription.subscriptionId)"
+          [disabledownload]="false"
+          [input]="input"
+          [maxNoOfFiles]="5"
+          (deleteFile)="deleteFile($event)"
+          (download)="downloadFile($event)"
+        >
+        </app-file-input>
+        <div class="d-flex flex-end">
+          <div
+            class="outline-btn complete mr-30"
+            [class.disabled]="
+              this.auditForm.invalid || this.auditForm.get('routeToLead').value
+            "
+            (click)="
+              this.auditForm.invalid || this.auditForm.get('routeToLead').value
+                ? ''
+                : accept()
+            "
+          >
+            Accept
+          </div>
+          <div
+            class="outline-btn pend"
+            [class.disabled]="
+              this.auditForm.invalid || this.auditForm.get('routeToLead').value
+            "
+            (click)="
+              this.auditForm.invalid || this.auditForm.get('routeToLead').value
+                ? ''
+                : pend()
+            "
+          >
+            Pend
+          </div>
+        </div>
+        <div class="d-flex flex-end mt-20">
+          <div class="mr-20">
+            <input
+              type="checkbox"
+              formControlName="routeToLead"
+              (change)="selectRouteToLead()"
+              [attr.disabled]="!subscription?.subscriptionId ? '' : null"
+              value="true"
+            />
+          </div>
+          <div class="mr-30" for="routeToLead">Route To Enrollment Lead</div>
+          <div
+            class="outline-btn route"
+            [class.disabled]="!isRebutEnabled || this.auditForm.invalid"
+            (click)="isRebutEnabled && this.auditForm.valid ? rebut() : ''"
+          >
+            Rebut
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<p-confirmDialog
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+  header="Confirmation"
+></p-confirmDialog>

@@ -1,0 +1,146 @@
+<div class="d-flex">
+  <p style="padding-top:20px;" class="horizontal-axis">Transaction Count</p>
+  <div class="d-flex scroll-graph-x" style="min-width: 100%;">
+    <google-chart
+      #chart
+      [title]="myTitleProductivity"
+      *ngIf="isProductivityRendered"
+      [type]="myTypeProductivity"
+      [data]="myDataProductivity"
+      [options]="myOptionsProductivity"
+      [columnNames]="myColumnNamesProductivity"
+      [height]="myHeightProductivity"
+      [width]="myWidthProductivity"
+    >
+    </google-chart>
+  </div>
+</div>
+<p class="vertical-axis">Time (am/pm)</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mb-2 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<form
+  [formGroup]="myTeamProductivityDates"
+  (ngSubmit)="onSubmitMyTeamProductivity()"
+>
+  <div class="row justify-content-center">
+    <div class="wrap-input100 w-100 mb-0">
+      <div class="label-input100">User Group Name</div>
+      <p-multiSelect
+        #userGrpSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="userGrpList"
+        pTooltip="User Group Names"
+        tooltipPosition="bottom"
+        formControlName="userGrpName"
+        [virtualScroll]="true"
+        (onChange)="validateUserGroups()"
+        itemSize="30"
+        defaultLabel="Select User Group"
+        appendTo="body"
+      ></p-multiSelect>
+      <div class="error-msg" style="top:50px" *ngIf="getGroup.touched">
+        <span class="mr-2" *ngIf="getGroup.hasError('required')"
+          >Please select a user group.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center mt-1">
+    <div class="wrap-input100 w-100 mb-0 mt-3">
+      <div class="label-input100">Leads Name</div>
+      <p-multiSelect
+        #LeadSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="leadListArray"
+        pTooltip="Enrollment Lead"
+        tooltipPosition="bottom"
+        formControlName="leadName"
+        [virtualScroll]="true"
+        (onChange)="validateLead()"
+        itemSize="30"
+        defaultLabel="Select Lead"
+        appendTo="body"
+      ></p-multiSelect>
+      <div
+        class="error-msg"
+        style="top:50px"
+        *ngIf="getLeadsSelect.touched"
+      >
+        <span class="mr-2" *ngIf="getLeadsSelect.hasError('required')"
+          >Please select an enrollment lead.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center mt-3">
+    <div class="wrap-input100 w-100 mb-0">
+      <div class="label-input100">Completion Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onSelect)="validateDates()"
+        appendTo="body"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        pTooltip="Completion Date Range"
+        tooltipPosition="bottom"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        (onClose)="isValid ? onSubmitMyTeamProductivity() : ''"
+      >
+      </p-calendar>
+      <div class="error-msg" *ngIf="!isValid">
+        Date range should not exceed six months
+      </div>
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="My Team Productivity By Lead"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex">
+    <p style="padding-top:150px;" class="horizontal-axis-enlarged">
+      Transaction Count
+    </p>
+    <div class="d-flex scroll-graph-x" style="min-width: 100%;">
+      <google-chart
+        #chart
+        [ngStyle]="{ width: '80%' }"
+        [title]="myTitleProductivity"
+        *ngIf="isProductivityRendered"
+        [type]="myTypeProductivity"
+        [data]="myDataProductivity"
+        [options]="myOptionsProductivityEnlarged"
+        [width]="700"
+        [columnNames]="myColumnNamesProductivity"
+        [height]="400"
+        [width]="myWidthProductivityEnlarged"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged">Time (am/pm)</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>

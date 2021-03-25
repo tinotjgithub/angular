@@ -1,0 +1,105 @@
+<form [formGroup]="statusDates">
+  <div class="d-flex space-between ">
+    <div class="section-label">Claims Count By Status</div>
+    <div>
+      <img
+        alt=" "
+        src="./../../../assets/images-new/max.png"
+        style="cursor: pointer;"
+        (click)="showDialog()"
+      />
+    </div>
+  </div>
+  <div class="d-flex mt-10 justify-content-center">
+    <div style="display: flex; justify-content: center;">
+      <google-chart
+        #chart
+        [title]="titleStatus"
+        *ngIf="isStatusRendered"
+        [type]="typeStatus"
+        [data]="dataStatus"
+        [options]="optionsStatus"
+        [columnNames]="columnNamesStatus"
+        [height]="heightStatus"
+        [width]="widthStatus"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="ml-3 mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <div class="d-flex space-between">
+    <div class="wrap-input100 mb-0 mr-30">
+      <span class="label-input100">Processed Date Range</span>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onSelect)="validateDates()"
+        selectionMode="range"
+        pTooltip="Processed Date Range"
+        tooltipPosition="bottom"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        appendTo="body"
+        (onClose)="onSubmitStatus()"
+      >
+      </p-calendar>
+      <span class="focus-input100"></span>
+      <div class="error-msg" *ngIf="!isValid">
+        <span class="m-1 invalid-feedback d-inline-block"
+          >Date range should not exceed six months</span
+        >
+      </div>
+    </div>
+    <div class="excel-icon">
+      <img
+        alt=" "
+        src="./../../../../assets/images-new/download-excel.png"
+        (click)="!isValid ? '' : downloadExcel()"
+        pTooltip="Export to Excel"
+        alt="Export"
+      />
+    </div>
+  </div>
+
+  <p-dialog
+    *ngIf="displayEnlarged"
+    width="800"
+    height="500"
+    modal="true"
+    dismissableMask="true"
+    [responsive]="true"
+    [(visible)]="displayEnlarged"
+    [transitionOptions]="'0ms'"
+    header="Claims Count By Status"
+    [(visible)]="displayEnlarged"
+  >
+    <google-chart
+      #chart
+      [title]="titleStatus"
+      *ngIf="isStatusRendered"
+      [type]="typeStatus"
+      [data]="dataStatus"
+      [options]="optionsStatusEnlarged"
+      [width]="700"
+      [columnNames]="columnNamesStatus"
+      [height]="400"
+    >
+    </google-chart>
+    <div
+      *ngIf="!isDataPresent"
+      class="ml-3 mb-2 d-flex space-between justify-content-center"
+    >
+      <p-message severity="warn" text="No Data Present!"></p-message>
+    </div>
+  </p-dialog>
+</form>

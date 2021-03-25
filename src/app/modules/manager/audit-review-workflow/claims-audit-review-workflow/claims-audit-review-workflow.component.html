@@ -1,0 +1,78 @@
+<div class="d-flex space-between mt-60" href="#">
+  <div class="d-flex">
+    <div [routerLink]="'/configuration-menu'">
+      <img
+        alt=" "
+        src="./../../../../assets/images-new/left.png"
+        style="margin-right: 15px; cursor: pointer;"
+      />
+    </div>
+
+    <div>Back To Configuration</div>
+  </div>
+</div>
+<div class="mt-30">
+  <div class="wrap-pend-reason">
+    <div class="d-flex space-between">
+      <div >
+        <span class="section-title">Audit Review Workflow</span>
+      </div>
+    </div>
+    <div class="d-flex mt-30 pl-30 pr-30" *ngIf="isrendered">
+      <div class="d-flex">
+        <form [formGroup]="roleGrp" style="display: flex; width: 100%;">
+          <div
+            class="d-flex"
+            *ngFor="let role of workRoles; index as i"
+            [class.mr-30]="i < workRoles?.length - 1"
+          >
+            <div class="card-title-examiner pt-1 mr-20">
+              {{ role.roleName }}
+            </div>
+            <div class="toggle-switch">
+              <input
+                type="checkbox"
+                (change)="onChange(i, $event.target.checked)"
+                [formControl]="$any(roleGrp.controls.roles).controls[i]"
+                name="lead"
+              />
+              <label for="lead" class="toggle"></label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="mt-30" style="padding: 30px;" *ngIf="isrendered">
+      <div class="d-flex justify-content-center workflow">
+        <div class="card-with-icon-boderless stage card-blue">
+          <div class="small-icon">
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/examiner.png"
+              class="w-100 h-auto"
+            />
+          </div>
+          <div class="ml-10 card-content">
+            <div class="card-title-examiner">Claims Examiner</div>
+          </div>
+        </div>
+        <div class="stage-connector" *ngIf="getEnabledRoles().length > 0"></div>
+        <ng-container *ngFor="let role of getEnabledRoles(); index as i">
+          <div
+            class="card-with-icon-boderless stage"
+            [ngClass]="getAsClass(role.roleName)"
+          >
+            <div class="small-icon bg-img"></div>
+            <div class="card-content ml-10">
+              <div class="card-title-examiner">{{ role.roleName }}</div>
+            </div>
+          </div>
+          <div
+            class="stage-connector"
+            *ngIf="i < getEnabledRoles().length - 1"
+          ></div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,526 @@
+<div class="mt-60">
+  <div class="block-title">Claims Snapshot</div>
+  <div class="d-flex">
+    <div
+      class="w-25 card w20 hover card-assigned mr-20"
+      (click)="targetClick('Assigned')"
+    >
+      <div class="card-title-examiner">Assigned</div>
+      <div class="card-value-examiner">
+        {{ userDashboardValues?.assignedCount || 0 }}
+      </div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/assigned.png" />
+      </div>
+      <div class="card-hover">
+        View Assigned Claims
+      </div>
+    </div>
+    <div
+      class="w-25 card w20 card-grey hover mr-20"
+      (click)="targetClick('Routed In')"
+    >
+      <div class="card-title-examiner">Routed In Claims</div>
+      <div class="card-value-examiner">
+        {{ userDashboardValues?.routedInCount || 0 }}
+      </div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/routed-in.png" />
+      </div>
+      <div class="card-hover">
+        View Routed In Claims
+      </div>
+    </div>
+    <div class="card w-25 card-red hover mr-20" (click)="targetClick('Pended')">
+      <div class="card-title-examiner">Pended Claims</div>
+      <div class="card-value-examiner">
+        {{ userDashboardValues?.pendCount || 0 }}
+      </div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/pended.png" />
+      </div>
+      <div class="card-hover">
+        View Pended Claims
+      </div>
+    </div>
+    <div
+      class="card w-25 card-green hover mr-20"
+      (click)="targetClick('Completed')"
+    >
+      <div class="card-title-examiner">Completed Claims</div>
+      <div class="card-value-examiner">
+        {{ userDashboardValues?.completedCount || 0 }}
+      </div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/completed.png" />
+      </div>
+      <div class="card-hover">
+        View Completed Claims
+      </div>
+    </div>
+  </div>
+  <div class="d-flex mt-30">
+    <div
+      class="card w-25 card-yellow hover mr-20"
+      (click)="targetClick('Routed Out')"
+    >
+      <div class="card-title-examiner">Routed Out Claims</div>
+      <div class="card-value-examiner">
+        {{ userDashboardValues?.routedOutCount || 0 }}
+      </div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/routed-out.png" />
+      </div>
+      <div class="card-hover">
+        View Routed Out Claims
+      </div>
+    </div>
+    <div
+      class="card w-25 hover card-pink mr-20"
+      (click)="targetClick('AuditFailed')"
+    >
+      <div class="card-title-examiner">Audit Failed Claims</div>
+      <div class="card-value-examiner">{{ auditFailedCount || 0 }}</div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/audit-failed.png" />
+      </div>
+      <div class="card-hover">
+        View Audit Failed Claims
+      </div>
+    </div>
+    <div
+      class="card w-25 hover card-purple mr-20"
+      (click)="targetClick('ReviewRebut')"
+    >
+      <div class="card-title-examiner">Review/Rebut</div>
+      <div class="card-value-examiner">{{ reviewRebuttalCount || 0 }}</div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/audit-failed.png" />
+      </div>
+      <div class="card-hover">
+        View Review/Rebut Claims
+      </div>
+    </div>
+    <div
+      class="w-25 mr-20"
+      style="visibility: hidden;"
+    ></div>
+  </div>
+</div>
+
+<div class="btn-group d-flex">
+  <div
+    pTooltip="Get a new claim"
+    class="btn-claim"
+    [class.disabled]="claimDetails?.claimId"
+    (click)="claimDetails?.claimId ? '' : getNextClaim()"
+  >
+    <div>Get a Claim</div>
+  </div>
+  <div class="d-flex">
+    <div>
+      <img alt=" " src="./../../../assets/images-new/target.png" />
+    </div>
+    <div class="mt-10 ml-10">
+      <div class="target-label">Daily Target</div>
+      <div>
+        <span class="target-count"
+          >{{ userDashboardValues?.userTarget || 0 }}&nbsp;</span
+        ><span class="target-count-label">Claims / day</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap-claim-details" [class.enabled]="claimDetails?.claimId">
+  <div class="d-flex space-between">
+    <div class="d-flex">
+      <div
+        class="claim-id-head mr-20"
+        pTooltip="Click to Open Claim in HRP"
+        (click)="copyAndOpenHRP(claimId)"
+      >
+        Claim ID -
+        <input
+          style="position: absolute; top: 0; left: 0; opacity: 0;"
+          value="{{ claimDetails?.claimId }}"
+          #claimId
+        /><span id="claimId">{{ claimDetails?.claimId }}</span>
+      </div>
+      <div>
+        <img
+          alt=" "
+          src="./../../../assets/images-new/copy.png"
+          style="cursor: pointer;"
+          pTooltip="Click to copy Claim ID"
+          (click)="justCopy(claimId)"
+        />
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <div>
+        <img alt=" " src="./../../../assets/images-new/stop-watch.png" />
+      </div>
+      <div class="ml-10">
+        <div class="target-label">Claim Processing Time</div>
+        <div>
+          <span class="target-count" [ngStyle]="{ color: timerColor }">
+            {{ timer }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex space-between mt-30">
+    <div class="mr-30 claim-details">
+      <div class="claim-label">Received Date</div>
+      <div class="claim-value">{{ claimDetails?.claimReceivedDate }}</div>
+    </div>
+    <div class="mr-30 claim-details">
+      <div class="claim-label">Claim Age</div>
+      <div>{{ claimDetails?.age + " Days" }}</div>
+    </div>
+    <div class="mr-30 claim-details">
+      <div class="claim-label">Status</div>
+      <div>{{ claimDetails?.status }}</div>
+    </div>
+    <div class="mr-30 claim-details" *ngIf="claimDetails?.status === 'Pended'">
+      <div class="claim-label">First Pend Date</div>
+      <div>{{ claimDetails?.firstPendDate }}</div>
+    </div>
+    <div class="mr-30 claim-details" *ngIf="claimDetails?.status === 'Pended'">
+      <div class="claim-label">Last Pend Date</div>
+      <div>{{ claimDetails.lastPendDate }}</div>
+    </div>
+  </div>
+
+  <div
+    class="d-flex mt-30"
+    *ngIf="
+      claimDetails?.status === 'Routed In' || claimDetails?.status === 'Pended'
+    "
+  >
+    <div class="w-50 mr-30" *ngIf="claimDetails?.status === 'Pended'">
+      <div class="claim-label">Pend Reason</div>
+      <div>{{ claimDetails?.pendReason }}</div>
+    </div>
+    <div class="w-50 mr-30" *ngIf="claimDetails?.status === 'Routed In'">
+      <div class="claim-label">Route Reason</div>
+      <div>{{ claimDetails?.routeReason }}</div>
+    </div>
+    <div class="mr-30 w-50">
+      <div class="claim-label">Comments</div>
+      <div>{{ claimDetails?.comments }}</div>
+    </div>
+  </div>
+
+  <div class="d-flex space-between" style="flex-wrap: wrap;">
+    <div
+      class="outline-btn route mt-30"
+      (click)="setAction('ROUTED')"
+      style="min-width: 190px;"
+      pTooltip="Route Claim"
+    >
+      Route My Task
+    </div>
+    <div
+      class="outline-btn pend mt-30"
+      (click)="setAction('PENDED')"
+      style="min-width: 190px;"
+      pTooltip="Pend Claim"
+    >
+      Pend My Task
+    </div>
+    <div
+      class="outline-btn complete mt-30"
+      (click)="setAction('COMPLETED')"
+      style="min-width: 190px;"
+      pTooltip="Complete Claim"
+    >
+      Complete My Task
+    </div>
+    <div
+      class="outline-btn complete mt-30"
+      (click)="setAction('COMPLETANDROUTE')"
+      style="min-width: 190px;"
+      pTooltip="Complete & Route Claim"
+    >
+      Complete & Route
+    </div>
+  </div>
+</div>
+<p-dialog
+  [modal]="true"
+  header="Complete My Task"
+  [transitionOptions]="'0ms'"
+  [(visible)]="this.displayFinalizeDialog"
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="10000"
+>
+  <p class="mt-30">Click OK to Complete</p>
+  <p-footer>
+    <div class="d-flex flex-end">
+      <div class="footer-cancel-btn mr-20" (click)="hideFinalizeDialog()">
+        Cancel
+      </div>
+      <div class="footer-ok-btn" (click)="triggerClaimCompletion(action)">
+        OK
+      </div>
+    </div>
+  </p-footer>
+</p-dialog>
+<p-dialog
+  [blockScroll]="true"
+  [style]="{ width: '50vw' }"
+  [modal]="true"
+  header="{{ dialogHeader }}"
+  [(visible)]="display"
+>
+  <form
+    class="mt-30"
+    [formGroup]="form"
+    (ngSubmit)="form.valid && triggerClaimCompletion(action)"
+  >
+    <div *ngIf="isRoute" class="d-flex">
+      <div class="wrap-input100 mr-30 w-50">
+        <div class="label-input100">Route Role</div>
+        <p-dropdown
+          appendTo="body"
+          [style]="{ width: '100%' }"
+          [autoWidth]="false"
+          autoZIndex="true"
+          placeholder="Select Role"
+          (onChange)="onSelectRole()"
+          [options]="routeRoleOptions"
+          optionLabel="name"
+          formControlName="routeRole"
+        >
+        </p-dropdown>
+        <div
+          class="error-msg"
+          *ngIf="form.get('routeRole').touched && form.get('routeRole').invalid"
+        >
+          <div *ngIf="form.get('routeRole').errors.required">
+            Please select a role
+          </div>
+        </div>
+      </div>
+      <div class="wrap-input100 w-50">
+        <div class="label-input100">Route To</div>
+        <p-dropdown
+          appendTo="body"
+          [style]="{ width: '100%' }"
+          [autoWidth]="false"
+          placeholder="Select Name"
+          [disabled]="!roleSelected"
+          [options]="routeToOptions"
+          optionLabel="name"
+          formControlName="routeTo"
+        >
+        </p-dropdown>
+        <div
+          class="error-msg"
+          *ngIf="form.get('routeTo').touched && form.get('routeTo').invalid"
+        >
+          <div *ngIf="form.get('routeTo').errors.required">
+            Please select a name
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div *ngIf="isRoute" class="wrap-input100 mr-30 w-50">
+        <div class="label-input100">Route Reason</div>
+        <p-dropdown
+          appendTo="body"
+          [style]="{ width: '100%' }"
+          [autoWidth]="false"
+          placeholder="Select Route Reason"
+          [options]="routeReasonOptions"
+          optionLabel="name"
+          formControlName="routeReason"
+        >
+        </p-dropdown>
+        <div
+          class="error-msg"
+          *ngIf="
+            form.get('routeReason').touched && form.get('routeReason').invalid
+          "
+        >
+          <div *ngIf="form.get('routeReason').errors.required">
+            Please select a reason
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isPend" class="wrap-input100 mr-30 w-50">
+        <div class="label-input100">Pend Reason</div>
+        <p-dropdown
+          appendTo="body"
+          [style]="{ width: '100%' }"
+          [autoWidth]="false"
+          placeholder="Select Pend Reason"
+          [options]="pendReasonOptions"
+          optionLabel="name"
+          formControlName="pendReason"
+        >
+        </p-dropdown>
+        <div
+          class="error-msg"
+          *ngIf="
+            form.get('pendReason').touched && form.get('pendReason').invalid
+          "
+        >
+          <div *ngIf="form.get('pendReason').errors.required">
+            Please select a reason
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-block">
+      <div *ngIf="isRoute" class="wrap-input100">
+        <span class="label-input100">Comments</span>
+        <textarea
+          [rows]="3"
+          class="input100"
+          [maxlength]="256"
+          placeholder="Enter comments here.."
+          [cols]="30"
+          formControlName="routeComments"
+        ></textarea>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          *ngIf="
+            form.get('routeComments').touched &&
+            form.get('routeComments').invalid
+          "
+        >
+          <div *ngIf="form.get('routeComments').errors.required">
+            Comments are mandatory
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-block">
+      <div *ngIf="isPend" class="wrap-input100">
+        <span class="label-input100">Comments</span>
+        <textarea
+          [rows]="3"
+          [maxlength]="256"
+          class="input100"
+          placeholder="Enter comments here.."
+          [cols]="30"
+          formControlName="pendComments"
+        ></textarea>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          *ngIf="
+            form.get('pendComments').touched && form.get('pendComments').invalid
+          "
+        >
+          <div *ngIf="form.get('pendComments').errors.required">
+            Comments are mandatory
+          </div>
+        </div>
+      </div>
+    </div>
+    <p-footer>
+      <div class="d-flex flex-end">
+        <div
+          class="footer-cancel-btn mr-20"
+          (click)="form.reset(); display = false"
+        >
+          Cancel
+        </div>
+        <div
+          class="footer-ok-btn"
+          [class.disabled]="form.invalid"
+          (click)="form.valid ? triggerClaimCompletion(action) : ''"
+        >
+          Save
+        </div>
+      </div>
+    </p-footer>
+  </form>
+</p-dialog>
+<p-dialog
+  [modal]="true"
+  header="Complete & Route"
+  [transitionOptions]="'0ms'"
+  [(visible)]="isCompleteRoute"
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="10000"
+>
+  <form class="mt-30" [formGroup]="form">
+    <div class="d-flex">
+      <div class="wrap-input100 mr-30 w-50">
+        <div class="label-input100">Route Reason</div>
+        <select formControlName="routeReason" class="input100">
+          <option value="" disabled selected hidden data-default
+            >Select Route Reason</option
+          >
+          <option
+            *ngFor="let reason of routeReasonOptions"
+            [value]="reason.value"
+          >
+            {{ reason.name }}
+          </option>
+        </select>
+        <div class="focus-input100"></div>
+        <div
+          class="error-msg"
+          *ngIf="
+            form.get('routeReason').touched && form.get('routeReason').invalid
+          "
+        >
+          <div *ngIf="form.get('routeReason').errors.required">
+            Please select a reason
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-block">
+      <div class="wrap-input100">
+        <span class="label-input100">Remarks</span>
+        <textarea
+          [rows]="3"
+          [maxlength]="256"
+          class="input100"
+          placeholder="Enter remarks here.."
+          [cols]="30"
+          formControlName="remarks"
+        ></textarea>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          *ngIf="form.get('remarks').touched && form.get('remarks').invalid"
+        >
+          <div *ngIf="form.get('remarks').errors.required">
+            Remarks are mandatory
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <p-footer>
+    <div class="d-flex flex-end">
+      <div class="footer-cancel-btn mr-20" (click)="hideFinalizeDialog()">
+        Cancel
+      </div>
+      <div
+        class="footer-ok-btn"
+        [class.disabled]="form.invalid"
+        (click)="form.valid ? completeRoute() : ''"
+      >
+        Save
+      </div>
+    </div>
+  </p-footer>
+</p-dialog>
+<p-confirmDialog
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+  [style]="{ width: '50vw' }"
+></p-confirmDialog>

@@ -1,0 +1,162 @@
+<div class="d-flex">
+  <p class="horizontal-axis" style="padding-top:15px;">Claims Examiners</p>
+  <div style="overflow-y: scroll; max-height: 120px;  min-height: 120px;">
+    <google-chart
+      *ngIf="isStatusRendered"
+      #chart
+      [title]="titleStatus"
+      [type]="typeStatus"
+      [data]="dataStatus"
+      [options]="optionsStatus"
+      [columnNames]="columnNamesStatus"
+      [width]="widthStatus"
+      [height]="heightStatus"
+      (select)="selectBar($event)"
+    >
+    </google-chart>
+  </div>
+</div>
+<p class="vertical-axis" style="padding-left:50px;">Claim Count</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mb-2 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<form [formGroup]="countByStatusGroup" (ngSubmit)="onSubmitStatus()">
+  <div class="d-flex space-between mt-30 position-relative">
+    <div class="wrap-input100 w-100 mr-30 mb-12">
+      <div class="label-input100">User Groups</div>
+      <p-multiSelect
+        showTransitionOptions="225ms ease-out"
+        appendTo="body"
+        [options]="userGroupList"
+        #userGroupSelect
+        tooltip="User Groups"
+        tooltipPosition="bottom"
+        formControlName="userGroupName"
+        [virtualScroll]="true"
+        (onChange)="changeUserGroups()"
+        itemSize="30"
+        defaultLabel="Select User Group"
+      ></p-multiSelect>
+      <div class="error-msg" style="top: 49px" *ngIf="emptyGroup">
+        Please select a User Group
+      </div>
+    </div>
+  </div>
+  <div class="d-flex space-between mt-3 position-relative">
+    <div class="wrap-input100 w-100 mb-12">
+      <div class="label-input100">Claims Examiners</div>
+      <p-multiSelect
+        showTransitionOptions="225ms ease-out"
+        appendTo="body"
+        [options]="claimsExaminerList"
+        #claimsExaminerSelect
+        tooltip="Claims Examiners"
+        tooltipPosition="bottom"
+        (onChange)="changeExaminers()"
+        formControlName="examinerName"
+        [virtualScroll]="true"
+        itemSize="30"
+        defaultLabel="Select Claims Examiner"
+      >
+      </p-multiSelect>
+      <div class="error-msg" style="top: 49px" *ngIf="emptyExm">
+        Please select a Examiner
+      </div>
+      <div class="error-msg" style="top: 49px" *ngIf="examinersExceeded">
+        Cannot select more than 10 examiners
+      </div>
+    </div>
+  </div>
+  <div class="d-flex space-between mt-3 position-relative">
+    <div class="wrap-input100 w-100 mb-0">
+      <div class="label-input100">Processed Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onSelect)="validateDates()"
+        appendTo="body"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        pTooltip="Processed Date Range"
+        tooltipPosition="bottom"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        (onClose)="onSubmitStatus()"
+      >
+      </p-calendar>
+      <div class="error-msg" style="top: 49px" *ngIf="inValidDate">
+        Date range should not exceed six months
+      </div>
+    </div>
+  </div>
+</form>
+
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Audit Passed Vs Failed By Claims Examiner"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex">
+    <p class="horizontal-axis-enlarged" style="padding-top:150px;">
+      Claims Examiners
+    </p>
+    <div style="overflow-y: scroll; max-height: 400px;  min-height: 400px;">
+      <google-chart
+        *ngIf="isStatusRendered"
+        #chart
+        [title]="titleStatus"
+        [type]="typeStatus"
+        [data]="dataStatus"
+        [options]="optionsStatusEnlarged"
+        [width]="700"
+        [height]="400"
+        [columnNames]="columnNamesStatus"
+        (select)="selectBar($event)"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged" style="padding-left:60px;">Claim Count</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="detailsView"
+  [style]="{ width: '90vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="detailsView"
+  [contentStyle]="{ padding: 0, maxHeight: '100%' }"
+  [transitionOptions]="'0ms'"
+  header="{{ barDetails.type + ' Claims under ' + barDetails.examinerName }}"
+>
+  <div class="d-flex">
+    <app-report-table
+      class="w-100"
+      header="{{ barDetails.type }}"
+      [isChart]="true"
+      [data]="chartDetails"
+      [columns]="cols"
+      (exportExcel)="downloadExcel()"
+    ></app-report-table>
+  </div>
+</p-dialog>

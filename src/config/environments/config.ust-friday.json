@@ -1,0 +1,7 @@
+{
+  "SERVER_API_URL": "http://hps-promt-uat-public-771478256.us-east-2.elb.amazonaws.com:8081",
+  "AUDITOR_SERVER_URL": "http://hps-promt-uat-public-771478256.us-east-2.elb.amazonaws.com:8083",
+  "HEALTH_EDGEURL": "http://localhost:9090",
+  "LOGIN_OPTION": "local",
+  "ENTITY_ID": "http://idp.ustdev.com/adfs/services/trust"
+}

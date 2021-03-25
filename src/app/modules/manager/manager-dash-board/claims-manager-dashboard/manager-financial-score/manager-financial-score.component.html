@@ -1,0 +1,149 @@
+<div class="d-flex scroll-graph-x">
+  <p style="padding-top:5px;" class="horizontal-axis">Score Percentage</p>
+  <google-chart
+    *ngIf="isFinRendered"
+    #chart
+    [title]="titleFin"
+    [type]="typeFin"
+    [data]="dataFin"
+    [options]="myOptionsFin"
+    [columnNames]="columnNamesFin"
+    [width]="widthFin"
+    [height]="heightFin"
+  >
+  </google-chart>
+</div>
+<p class="vertical-axis text-center">Date (M`YY)</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mr-3 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<form [formGroup]="finGroup" (ngSubmit)="onSubmitFin()">
+  <div class="d-flex space-between mt-30 position-relative">
+    <div
+      class="wrap-input100"
+      [class.mr-20]="isManager"
+      [class.mb-0]="isManager"
+    >
+      <span class="label-input100">Claims Examiner</span>
+      <p-multiSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="claimsExaminerList"
+        #claimsExaminerSelect
+        tooltip="Claims Examiners"
+        tooltipPosition="bottom"
+        (onChange)="changeExaminers()"
+        appendTo="body"
+        formControlName="examinerName"
+        [virtualScroll]="true"
+        itemSize="30"
+        defaultLabel="Select Claims Examiner"
+      >
+      </p-multiSelect>
+      <div class="error-msg" *ngIf="getExaminerNames.hasError('required')">
+        Please select an examiner name
+      </div>
+      <div
+        class="error-msg"
+        *ngIf="getExaminerNames.hasError('examinersExceeded')"
+      >
+        Cannot select more than 25 examiners
+      </div>
+    </div>
+  </div>
+  <div class="d-flex space-between mt-1 position-relative">
+    <div class="wrap-input100 mb-0" *ngIf="isManager">
+      <span class="label-input100">Audit Date Range</span>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onClose)="validateDates()"
+        appendTo="body"
+        selectionMode="range"
+        rangeSeparator=" - "
+        pTooltip="Audit Date Range"
+        tooltipPosition="bottom"
+        [showIcon]="true"
+        formControlName="dateRange"
+        [readonlyInput]="true"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <div class="error-msg" *ngIf="getDateRange.hasError('inValidDate')">
+        Date range should not exceed six months
+      </div>
+      <div class="error-msg" *ngIf="getDateRange.hasError('invalidPeriod')">
+        Date range should be minimum 30 days
+      </div>
+    </div>
+  </div>
+  <div class="d-flex" *ngIf="!isManager">
+    <div class="wrap-input100 mb-0">
+      <span class="label-input100">Audit Date Range</span>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onClose)="validateDates()"
+        appendTo="body"
+        selectionMode="range"
+        rangeSeparator=" - "
+        pTooltip="Audit Date Range"
+        tooltipPosition="bottom"
+        [showIcon]="true"
+        formControlName="dateRange"
+        [readonlyInput]="true"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <div class="error-msg" *ngIf="getDateRange.hasError('inValidDate')">
+        Date range should not exceed six months
+      </div>
+      <div class="error-msg" *ngIf="getDateRange.hasError('invalidPeriod')">
+        Date range should be minimum 30 days
+      </div>
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="850"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Financial Score of Examiners"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex">
+    <p style="padding-top:120px;" class="horizontal-axis-enlarged">
+      Score Percentage
+    </p>
+    <google-chart
+      *ngIf="isFinRendered"
+      #chart
+      [title]="titleFin"
+      [type]="typeFin"
+      [data]="dataFin"
+      [options]="myOptionsFinEnlarged"
+      [width]="750"
+      [height]="400"
+      [columnNames]="columnNamesFin"
+    >
+    </google-chart>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-3 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <p class="vertical-axis-enlarged text-center">Date (M`YY)</p>
+</p-dialog>

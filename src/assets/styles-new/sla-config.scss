@@ -1,0 +1,75 @@
+.wrap-SLA-workflow{
+    background-color: white;
+    border-radius: 8px;
+    position: relative;
+    padding:30px;
+}
+  
+  /*Auditor Review Ends*/
+  
+  /*vertical timeline starts*/
+.claim-id-head{
+    color: #20558B;
+    font-size: 19px;
+    font-weight: 600;
+}
+.edit-SLA-hover{
+    display: none;
+}
+.SLA-bullet:hover .edit-SLA-hover{
+    display: flex;
+}
+ol.sla-config {
+    list-style-type: none;
+    .timeline-date{
+        position: absolute;
+        left:0px;
+        top:px;
+        text-align: right;
+        width:120px;
+        color:#323C47;
+        font-size: 14px;
+    }
+    .tl-SLA-count{
+        color:#323C47;
+        font-size: 14px;
+        font-weight: 400;
+        padding-left: 25px;
+    }
+  
+  li {
+    position: relative;
+    margin: 0;
+    padding-bottom: 60px;
+    padding-left: 160px;
+    padding-right: 30px;
+    font-size: 12px;
+    &::before {
+        content: '';
+        background-color: #252733;
+        position: absolute;
+        bottom: 0;
+        top: 2px;
+        left: 152px;
+        width: 1px;
+    }
+    &:last-child::before {
+        content: '';
+        background-color: transparent;
+    }
+    &:after {
+        content: '';
+        position: absolute;
+        left: 140px;
+        top: -3px;
+        height: 21px;
+        width: 21px;
+        background-color: white;
+        border: 1px solid #20558B;
+        border-radius: 15px;
+    }
+    &.SLA-bullet::after{
+        border: 2px solid #323C47;
+    }
+  }
+}

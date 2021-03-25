@@ -1,0 +1,9 @@
+{
+  "SERVER_API_URL": "http://localhost:8081",
+  "AUDITOR_SERVER_URL": "http://localhost:8083",
+  "ENROLLMENT_AUDITOR_SERVER_URL": "http://localhost:8087",
+  "HEALTH_EDGEURL": "http://localhost:9090",
+  "LOGIN_OPTION": "local",
+  "ENTITY_ID": "http://www.okta.com/exkqm6812s0I89ml50h7",
+  "ENROLLMENT_SERVER_URL": "http://localhost:8084"
+}

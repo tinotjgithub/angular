@@ -1,0 +1,2286 @@
+@function progressLessThan50($color, $percent) {
+  $deg: 90deg + (3.6deg * $percent);
+  @return linear-gradient(90deg, #e6e6e6 50%, transparent 50%, transparent),
+    linear-gradient($deg, $color 50%, #e6e6e6 50%, #e6e6e6);
+}
+
+@function progressMoreThan50($color, $percent) {
+  $val: $percent - 50;
+  $deg: $val * 3.6deg;
+  @return linear-gradient(
+      -90deg + $deg,
+      $color 50%,
+      transparent 50%,
+      transparent
+    ),
+    linear-gradient(270deg, $color 50%, #e6e6e6 50%, #e6e6e6);
+}
+@keyframes colorload {
+  0% {
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(360deg);
+  }
+}
+.profile_progress {
+  position: relative;
+  display: inline-block;
+  width: 59px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: white;
+  cursor: default;
+  -webkit-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+
+  /* &:hover {
+        -webkit-box-shadow: 0px 0px 16px 0px rgba(0,0,0,0.4);
+        -moz-box-shadow: 0px 0px 16px 0px rgba(0,0,0,0.4);
+        box-shadow: 0px 0px 16px 0px rgba(0,0,0,0.4);
+    } */
+
+  &:after {
+    content: "";
+    display: inline-block;
+    width: 101%;
+    height: 101%;
+    border-radius: 50%;
+    -webkit-animation: colorload 2s;
+    animation: colorload 2s;
+  }
+
+  span {
+    font-size: 11px;
+    position: absolute;
+    left: calc(50% - 20px);
+    top: calc(50% - 20px);
+    display: block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    background: #fff;
+    color: blue;
+    font-weight: 600;
+    z-index: 1;
+    font-family: Poppins-Bold, Arial, Verdana, Tahoma, sans-serif;
+
+    &:after {
+      content: "%";
+      font-weight: 600;
+      color: blue;
+    }
+  }
+}
+.card-total {
+  .profile_progress {
+    &.progress-100::after {
+      background-image: progressMoreThan50(#444d57, 100);
+    }
+    span {
+      color: #444d57;
+      &::after {
+        color: #444d57;
+      }
+    }
+  }
+}
+.card-to-do {
+  .profile_progress {
+    &.progress-0::after {
+      background-image: progressLessThan50(#20558b, 0);
+    }
+    &.progress-1::after {
+      background-image: progressLessThan50(#20558b, 1);
+    }
+    &.progress-2::after {
+      background-image: progressLessThan50(#20558b, 2);
+    }
+    &.progress-3::after {
+      background-image: progressLessThan50(#20558b, 3);
+    }
+    &.progress-4::after {
+      background-image: progressLessThan50(#20558b, 4);
+    }
+    &.progress-5::after {
+      background-image: progressLessThan50(#20558b, 5);
+    }
+    &.progress-6::after {
+      background-image: progressLessThan50(#20558b, 6);
+    }
+    &.progress-7::after {
+      background-image: progressLessThan50(#20558b, 7);
+    }
+    &.progress-8::after {
+      background-image: progressLessThan50(#20558b, 8);
+    }
+    &.progress-9::after {
+      background-image: progressLessThan50(#20558b, 9);
+    }
+    &.progress-10::after {
+      background-image: progressLessThan50(#20558b, 10);
+    }
+    &.progress-11::after {
+      background-image: progressLessThan50(#20558b, 11);
+    }
+    &.progress-12::after {
+      background-image: progressLessThan50(#20558b, 12);
+    }
+    &.progress-13::after {
+      background-image: progressLessThan50(#20558b, 13);
+    }
+    &.progress-14::after {
+      background-image: progressLessThan50(#20558b, 14);
+    }
+    &.progress-15::after {
+      background-image: progressLessThan50(#20558b, 15);
+    }
+    &.progress-16::after {
+      background-image: progressLessThan50(#20558b, 16);
+    }
+    &.progress-17::after {
+      background-image: progressLessThan50(#20558b, 17);
+    }
+    &.progress-18::after {
+      background-image: progressLessThan50(#20558b, 18);
+    }
+    &.progress-19::after {
+      background-image: progressLessThan50(#20558b, 19);
+    }
+    &.progress-20::after {
+      background-image: progressLessThan50(#20558b, 20);
+    }
+    &.progress-21::after {
+      background-image: progressLessThan50(#20558b, 21);
+    }
+    &.progress-22::after {
+      background-image: progressLessThan50(#20558b, 22);
+    }
+    &.progress-23::after {
+      background-image: progressLessThan50(#20558b, 23);
+    }
+    &.progress-24::after {
+      background-image: progressLessThan50(#20558b, 24);
+    }
+    &.progress-25::after {
+      background-image: progressLessThan50(#20558b, 25);
+    }
+    &.progress-26::after {
+      background-image: progressLessThan50(#20558b, 26);
+    }
+    &.progress-27::after {
+      background-image: progressLessThan50(#20558b, 27);
+    }
+    &.progress-28::after {
+      background-image: progressLessThan50(#20558b, 28);
+    }
+    &.progress-29::after {
+      background-image: progressLessThan50(#20558b, 29);
+    }
+    &.progress-30::after {
+      background-image: progressLessThan50(#20558b, 30);
+    }
+    &.progress-31::after {
+      background-image: progressLessThan50(#20558b, 31);
+    }
+    &.progress-32::after {
+      background-image: progressLessThan50(#20558b, 32);
+    }
+    &.progress-33::after {
+      background-image: progressLessThan50(#20558b, 33);
+    }
+    &.progress-34::after {
+      background-image: progressLessThan50(#20558b, 34);
+    }
+    &.progress-35::after {
+      background-image: progressLessThan50(#20558b, 35);
+    }
+    &.progress-36::after {
+      background-image: progressLessThan50(#20558b, 36);
+    }
+    &.progress-37::after {
+      background-image: progressLessThan50(#20558b, 37);
+    }
+    &.progress-38::after {
+      background-image: progressLessThan50(#20558b, 38);
+    }
+    &.progress-39::after {
+      background-image: progressLessThan50(#20558b, 39);
+    }
+    &.progress-40::after {
+      background-image: progressLessThan50(#20558b, 40);
+    }
+    &.progress-41::after {
+      background-image: progressLessThan50(#20558b, 41);
+    }
+    &.progress-42::after {
+      background-image: progressLessThan50(#20558b, 42);
+    }
+    &.progress-43::after {
+      background-image: progressLessThan50(#20558b, 43);
+    }
+    &.progress-44::after {
+      background-image: progressLessThan50(#20558b, 44);
+    }
+    &.progress-45::after {
+      background-image: progressLessThan50(#20558b, 45);
+    }
+    &.progress-46::after {
+      background-image: progressLessThan50(#20558b, 46);
+    }
+    &.progress-47::after {
+      background-image: progressLessThan50(#20558b, 47);
+    }
+    &.progress-48::after {
+      background-image: progressLessThan50(#20558b, 48);
+    }
+    &.progress-49::after {
+      background-image: progressLessThan50(#20558b, 49);
+    }
+    &.progress-50::after {
+      background-image: progressMoreThan50(#20558b, 50);
+    }
+    &.progress-51::after {
+      background-image: progressMoreThan50(#20558b, 51);
+    }
+    &.progress-52::after {
+      background-image: progressMoreThan50(#20558b, 52);
+    }
+    &.progress-53::after {
+      background-image: progressMoreThan50(#20558b, 53);
+    }
+    &.progress-54::after {
+      background-image: progressMoreThan50(#20558b, 54);
+    }
+    &.progress-55::after {
+      background-image: progressMoreThan50(#20558b, 55);
+    }
+    &.progress-56::after {
+      background-image: progressMoreThan50(#20558b, 56);
+    }
+    &.progress-57::after {
+      background-image: progressMoreThan50(#20558b, 57);
+    }
+    &.progress-58::after {
+      background-image: progressMoreThan50(#20558b, 58);
+    }
+    &.progress-59::after {
+      background-image: progressMoreThan50(#20558b, 59);
+    }
+    &.progress-60::after {
+      background-image: progressMoreThan50(#20558b, 60);
+    }
+    &.progress-61::after {
+      background-image: progressMoreThan50(#20558b, 61);
+    }
+    &.progress-62::after {
+      background-image: progressMoreThan50(#20558b, 62);
+    }
+    &.progress-63::after {
+      background-image: progressMoreThan50(#20558b, 63);
+    }
+    &.progress-64::after {
+      background-image: progressMoreThan50(#20558b, 64);
+    }
+    &.progress-65::after {
+      background-image: progressMoreThan50(#20558b, 65);
+    }
+    &.progress-66::after {
+      background-image: progressMoreThan50(#20558b, 66);
+    }
+    &.progress-67::after {
+      background-image: progressMoreThan50(#20558b, 67);
+    }
+    &.progress-68::after {
+      background-image: progressMoreThan50(#20558b, 68);
+    }
+    &.progress-69::after {
+      background-image: progressMoreThan50(#20558b, 69);
+    }
+    &.progress-70::after {
+      background-image: progressMoreThan50(#20558b, 70);
+    }
+    &.progress-71::after {
+      background-image: progressMoreThan50(#20558b, 71);
+    }
+    &.progress-72::after {
+      background-image: progressMoreThan50(#20558b, 72);
+    }
+    &.progress-73::after {
+      background-image: progressMoreThan50(#20558b, 73);
+    }
+    &.progress-74::after {
+      background-image: progressMoreThan50(#20558b, 74);
+    }
+    &.progress-75::after {
+      background-image: progressMoreThan50(#20558b, 75);
+    }
+    &.progress-76::after {
+      background-image: progressMoreThan50(#20558b, 76);
+    }
+    &.progress-77::after {
+      background-image: progressMoreThan50(#20558b, 77);
+    }
+    &.progress-78::after {
+      background-image: progressMoreThan50(#20558b, 78);
+    }
+    &.progress-79::after {
+      background-image: progressMoreThan50(#20558b, 79);
+    }
+    &.progress-80::after {
+      background-image: progressMoreThan50(#20558b, 80);
+    }
+    &.progress-81::after {
+      background-image: progressMoreThan50(#20558b, 81);
+    }
+    &.progress-82::after {
+      background-image: progressMoreThan50(#20558b, 82);
+    }
+    &.progress-83::after {
+      background-image: progressMoreThan50(#20558b, 83);
+    }
+    &.progress-84::after {
+      background-image: progressMoreThan50(#20558b, 84);
+    }
+    &.progress-85::after {
+      background-image: progressMoreThan50(#20558b, 85);
+    }
+    &.progress-86::after {
+      background-image: progressMoreThan50(#20558b, 86);
+    }
+    &.progress-87::after {
+      background-image: progressMoreThan50(#20558b, 87);
+    }
+    &.progress-88::after {
+      background-image: progressMoreThan50(#20558b, 88);
+    }
+    &.progress-89::after {
+      background-image: progressMoreThan50(#20558b, 89);
+    }
+    &.progress-90::after {
+      background-image: progressMoreThan50(#20558b, 80);
+    }
+    &.progress-91::after {
+      background-image: progressMoreThan50(#20558b, 91);
+    }
+    &.progress-92::after {
+      background-image: progressMoreThan50(#20558b, 92);
+    }
+    &.progress-93::after {
+      background-image: progressMoreThan50(#20558b, 93);
+    }
+    &.progress-94::after {
+      background-image: progressMoreThan50(#20558b, 94);
+    }
+    &.progress-95::after {
+      background-image: progressMoreThan50(#20558b, 95);
+    }
+    &.progress-96::after {
+      background-image: progressMoreThan50(#20558b, 96);
+    }
+    &.progress-97::after {
+      background-image: progressMoreThan50(#20558b, 97);
+    }
+    &.progress-98::after {
+      background-image: progressMoreThan50(#20558b, 98);
+    }
+    &.progress-99::after {
+      background-image: progressMoreThan50(#20558b, 99);
+    }
+    &.progress-100::after {
+      background-image: progressMoreThan50(#20558b, 100);
+    }
+    span {
+      color: #20558b;
+      &::after {
+        color: #20558b;
+      }
+    }
+  }
+}
+.card-pended {
+  .profile_progress {
+    &.progress-0::after {
+      background-image: progressLessThan50(#ff5c5d, 0);
+    }
+    &.progress-1::after {
+      background-image: progressLessThan50(#ff5c5d, 1);
+    }
+    &.progress-2::after {
+      background-image: progressLessThan50(#ff5c5d, 2);
+    }
+    &.progress-3::after {
+      background-image: progressLessThan50(#ff5c5d, 3);
+    }
+    &.progress-4::after {
+      background-image: progressLessThan50(#ff5c5d, 4);
+    }
+    &.progress-5::after {
+      background-image: progressLessThan50(#ff5c5d, 5);
+    }
+    &.progress-6::after {
+      background-image: progressLessThan50(#ff5c5d, 6);
+    }
+    &.progress-7::after {
+      background-image: progressLessThan50(#ff5c5d, 7);
+    }
+    &.progress-8::after {
+      background-image: progressLessThan50(#ff5c5d, 8);
+    }
+    &.progress-9::after {
+      background-image: progressLessThan50(#ff5c5d, 9);
+    }
+    &.progress-10::after {
+      background-image: progressLessThan50(#ff5c5d, 10);
+    }
+    &.progress-11::after {
+      background-image: progressLessThan50(#ff5c5d, 11);
+    }
+    &.progress-12::after {
+      background-image: progressLessThan50(#ff5c5d, 12);
+    }
+    &.progress-13::after {
+      background-image: progressLessThan50(#ff5c5d, 13);
+    }
+    &.progress-14::after {
+      background-image: progressLessThan50(#ff5c5d, 14);
+    }
+    &.progress-15::after {
+      background-image: progressLessThan50(#ff5c5d, 15);
+    }
+    &.progress-16::after {
+      background-image: progressLessThan50(#ff5c5d, 16);
+    }
+    &.progress-17::after {
+      background-image: progressLessThan50(#ff5c5d, 17);
+    }
+    &.progress-18::after {
+      background-image: progressLessThan50(#ff5c5d, 18);
+    }
+    &.progress-19::after {
+      background-image: progressLessThan50(#ff5c5d, 19);
+    }
+    &.progress-20::after {
+      background-image: progressLessThan50(#ff5c5d, 20);
+    }
+    &.progress-21::after {
+      background-image: progressLessThan50(#ff5c5d, 21);
+    }
+    &.progress-22::after {
+      background-image: progressLessThan50(#ff5c5d, 22);
+    }
+    &.progress-23::after {
+      background-image: progressLessThan50(#ff5c5d, 23);
+    }
+    &.progress-24::after {
+      background-image: progressLessThan50(#ff5c5d, 24);
+    }
+    &.progress-25::after {
+      background-image: progressLessThan50(#ff5c5d, 25);
+    }
+    &.progress-26::after {
+      background-image: progressLessThan50(#ff5c5d, 26);
+    }
+    &.progress-27::after {
+      background-image: progressLessThan50(#ff5c5d, 27);
+    }
+    &.progress-28::after {
+      background-image: progressLessThan50(#ff5c5d, 28);
+    }
+    &.progress-29::after {
+      background-image: progressLessThan50(#ff5c5d, 29);
+    }
+    &.progress-30::after {
+      background-image: progressLessThan50(#ff5c5d, 30);
+    }
+    &.progress-31::after {
+      background-image: progressLessThan50(#ff5c5d, 31);
+    }
+    &.progress-32::after {
+      background-image: progressLessThan50(#ff5c5d, 32);
+    }
+    &.progress-33::after {
+      background-image: progressLessThan50(#ff5c5d, 33);
+    }
+    &.progress-34::after {
+      background-image: progressLessThan50(#ff5c5d, 34);
+    }
+    &.progress-35::after {
+      background-image: progressLessThan50(#ff5c5d, 35);
+    }
+    &.progress-36::after {
+      background-image: progressLessThan50(#ff5c5d, 36);
+    }
+    &.progress-37::after {
+      background-image: progressLessThan50(#ff5c5d, 37);
+    }
+    &.progress-38::after {
+      background-image: progressLessThan50(#ff5c5d, 38);
+    }
+    &.progress-39::after {
+      background-image: progressLessThan50(#ff5c5d, 39);
+    }
+    &.progress-40::after {
+      background-image: progressLessThan50(#ff5c5d, 40);
+    }
+    &.progress-41::after {
+      background-image: progressLessThan50(#ff5c5d, 41);
+    }
+    &.progress-42::after {
+      background-image: progressLessThan50(#ff5c5d, 42);
+    }
+    &.progress-43::after {
+      background-image: progressLessThan50(#ff5c5d, 43);
+    }
+    &.progress-44::after {
+      background-image: progressLessThan50(#ff5c5d, 44);
+    }
+    &.progress-45::after {
+      background-image: progressLessThan50(#ff5c5d, 45);
+    }
+    &.progress-46::after {
+      background-image: progressLessThan50(#ff5c5d, 46);
+    }
+    &.progress-47::after {
+      background-image: progressLessThan50(#ff5c5d, 47);
+    }
+    &.progress-48::after {
+      background-image: progressLessThan50(#ff5c5d, 48);
+    }
+    &.progress-49::after {
+      background-image: progressLessThan50(#ff5c5d, 49);
+    }
+    &.progress-50::after {
+      background-image: progressMoreThan50(#ff5c5d, 50);
+    }
+    &.progress-51::after {
+      background-image: progressMoreThan50(#ff5c5d, 51);
+    }
+    &.progress-52::after {
+      background-image: progressMoreThan50(#ff5c5d, 52);
+    }
+    &.progress-53::after {
+      background-image: progressMoreThan50(#ff5c5d, 53);
+    }
+    &.progress-54::after {
+      background-image: progressMoreThan50(#ff5c5d, 54);
+    }
+    &.progress-55::after {
+      background-image: progressMoreThan50(#ff5c5d, 55);
+    }
+    &.progress-56::after {
+      background-image: progressMoreThan50(#ff5c5d, 56);
+    }
+    &.progress-57::after {
+      background-image: progressMoreThan50(#ff5c5d, 57);
+    }
+    &.progress-58::after {
+      background-image: progressMoreThan50(#ff5c5d, 58);
+    }
+    &.progress-59::after {
+      background-image: progressMoreThan50(#ff5c5d, 59);
+    }
+    &.progress-60::after {
+      background-image: progressMoreThan50(#ff5c5d, 60);
+    }
+    &.progress-61::after {
+      background-image: progressMoreThan50(#ff5c5d, 61);
+    }
+    &.progress-62::after {
+      background-image: progressMoreThan50(#ff5c5d, 62);
+    }
+    &.progress-63::after {
+      background-image: progressMoreThan50(#ff5c5d, 63);
+    }
+    &.progress-64::after {
+      background-image: progressMoreThan50(#ff5c5d, 64);
+    }
+    &.progress-65::after {
+      background-image: progressMoreThan50(#ff5c5d, 65);
+    }
+    &.progress-66::after {
+      background-image: progressMoreThan50(#ff5c5d, 66);
+    }
+    &.progress-67::after {
+      background-image: progressMoreThan50(#ff5c5d, 67);
+    }
+    &.progress-68::after {
+      background-image: progressMoreThan50(#ff5c5d, 68);
+    }
+    &.progress-69::after {
+      background-image: progressMoreThan50(#ff5c5d, 69);
+    }
+    &.progress-70::after {
+      background-image: progressMoreThan50(#ff5c5d, 70);
+    }
+    &.progress-71::after {
+      background-image: progressMoreThan50(#ff5c5d, 71);
+    }
+    &.progress-72::after {
+      background-image: progressMoreThan50(#ff5c5d, 72);
+    }
+    &.progress-73::after {
+      background-image: progressMoreThan50(#ff5c5d, 73);
+    }
+    &.progress-74::after {
+      background-image: progressMoreThan50(#ff5c5d, 74);
+    }
+    &.progress-75::after {
+      background-image: progressMoreThan50(#ff5c5d, 75);
+    }
+    &.progress-76::after {
+      background-image: progressMoreThan50(#ff5c5d, 76);
+    }
+    &.progress-77::after {
+      background-image: progressMoreThan50(#ff5c5d, 77);
+    }
+    &.progress-78::after {
+      background-image: progressMoreThan50(#ff5c5d, 78);
+    }
+    &.progress-79::after {
+      background-image: progressMoreThan50(#ff5c5d, 79);
+    }
+    &.progress-80::after {
+      background-image: progressMoreThan50(#ff5c5d, 80);
+    }
+    &.progress-81::after {
+      background-image: progressMoreThan50(#ff5c5d, 81);
+    }
+    &.progress-82::after {
+      background-image: progressMoreThan50(#ff5c5d, 82);
+    }
+    &.progress-83::after {
+      background-image: progressMoreThan50(#ff5c5d, 83);
+    }
+    &.progress-84::after {
+      background-image: progressMoreThan50(#ff5c5d, 84);
+    }
+    &.progress-85::after {
+      background-image: progressMoreThan50(#ff5c5d, 85);
+    }
+    &.progress-86::after {
+      background-image: progressMoreThan50(#ff5c5d, 86);
+    }
+    &.progress-87::after {
+      background-image: progressMoreThan50(#ff5c5d, 87);
+    }
+    &.progress-88::after {
+      background-image: progressMoreThan50(#ff5c5d, 88);
+    }
+    &.progress-89::after {
+      background-image: progressMoreThan50(#ff5c5d, 89);
+    }
+    &.progress-90::after {
+      background-image: progressMoreThan50(#ff5c5d, 80);
+    }
+    &.progress-91::after {
+      background-image: progressMoreThan50(#ff5c5d, 91);
+    }
+    &.progress-92::after {
+      background-image: progressMoreThan50(#ff5c5d, 92);
+    }
+    &.progress-93::after {
+      background-image: progressMoreThan50(#ff5c5d, 93);
+    }
+    &.progress-94::after {
+      background-image: progressMoreThan50(#ff5c5d, 94);
+    }
+    &.progress-95::after {
+      background-image: progressMoreThan50(#ff5c5d, 95);
+    }
+    &.progress-96::after {
+      background-image: progressMoreThan50(#ff5c5d, 96);
+    }
+    &.progress-97::after {
+      background-image: progressMoreThan50(#ff5c5d, 97);
+    }
+    &.progress-98::after {
+      background-image: progressMoreThan50(#ff5c5d, 98);
+    }
+    &.progress-99::after {
+      background-image: progressMoreThan50(#ff5c5d, 99);
+    }
+    &.progress-100::after {
+      background-image: progressMoreThan50(#ff5c5d, 100);
+    }
+    span {
+      color: #ff5c5d;
+      &::after {
+        color: #ff5c5d;
+      }
+    }
+  }
+}
+.card-unassigned {
+  .profile_progress {
+    &.progress-0::after {
+      background-image: progressLessThan50(#686868, 0);
+    }
+    &.progress-1::after {
+      background-image: progressLessThan50(#686868, 1);
+    }
+    &.progress-2::after {
+      background-image: progressLessThan50(#686868, 2);
+    }
+    &.progress-3::after {
+      background-image: progressLessThan50(#686868, 3);
+    }
+    &.progress-4::after {
+      background-image: progressLessThan50(#686868, 4);
+    }
+    &.progress-5::after {
+      background-image: progressLessThan50(#686868, 5);
+    }
+    &.progress-6::after {
+      background-image: progressLessThan50(#686868, 6);
+    }
+    &.progress-7::after {
+      background-image: progressLessThan50(#686868, 7);
+    }
+    &.progress-8::after {
+      background-image: progressLessThan50(#686868, 8);
+    }
+    &.progress-9::after {
+      background-image: progressLessThan50(#686868, 9);
+    }
+    &.progress-10::after {
+      background-image: progressLessThan50(#686868, 10);
+    }
+    &.progress-11::after {
+      background-image: progressLessThan50(#686868, 11);
+    }
+    &.progress-12::after {
+      background-image: progressLessThan50(#686868, 12);
+    }
+    &.progress-13::after {
+      background-image: progressLessThan50(#686868, 13);
+    }
+    &.progress-14::after {
+      background-image: progressLessThan50(#686868, 14);
+    }
+    &.progress-15::after {
+      background-image: progressLessThan50(#686868, 15);
+    }
+    &.progress-16::after {
+      background-image: progressLessThan50(#686868, 16);
+    }
+    &.progress-17::after {
+      background-image: progressLessThan50(#686868, 17);
+    }
+    &.progress-18::after {
+      background-image: progressLessThan50(#686868, 18);
+    }
+    &.progress-19::after {
+      background-image: progressLessThan50(#686868, 19);
+    }
+    &.progress-20::after {
+      background-image: progressLessThan50(#686868, 20);
+    }
+    &.progress-21::after {
+      background-image: progressLessThan50(#686868, 21);
+    }
+    &.progress-22::after {
+      background-image: progressLessThan50(#686868, 22);
+    }
+    &.progress-23::after {
+      background-image: progressLessThan50(#686868, 23);
+    }
+    &.progress-24::after {
+      background-image: progressLessThan50(#686868, 24);
+    }
+    &.progress-25::after {
+      background-image: progressLessThan50(#686868, 25);
+    }
+    &.progress-26::after {
+      background-image: progressLessThan50(#686868, 26);
+    }
+    &.progress-27::after {
+      background-image: progressLessThan50(#686868, 27);
+    }
+    &.progress-28::after {
+      background-image: progressLessThan50(#686868, 28);
+    }
+    &.progress-29::after {
+      background-image: progressLessThan50(#686868, 29);
+    }
+    &.progress-30::after {
+      background-image: progressLessThan50(#686868, 30);
+    }
+    &.progress-31::after {
+      background-image: progressLessThan50(#686868, 31);
+    }
+    &.progress-32::after {
+      background-image: progressLessThan50(#686868, 32);
+    }
+    &.progress-33::after {
+      background-image: progressLessThan50(#686868, 33);
+    }
+    &.progress-34::after {
+      background-image: progressLessThan50(#686868, 34);
+    }
+    &.progress-35::after {
+      background-image: progressLessThan50(#686868, 35);
+    }
+    &.progress-36::after {
+      background-image: progressLessThan50(#686868, 36);
+    }
+    &.progress-37::after {
+      background-image: progressLessThan50(#686868, 37);
+    }
+    &.progress-38::after {
+      background-image: progressLessThan50(#686868, 38);
+    }
+    &.progress-39::after {
+      background-image: progressLessThan50(#686868, 39);
+    }
+    &.progress-40::after {
+      background-image: progressLessThan50(#686868, 40);
+    }
+    &.progress-41::after {
+      background-image: progressLessThan50(#686868, 41);
+    }
+    &.progress-42::after {
+      background-image: progressLessThan50(#686868, 42);
+    }
+    &.progress-43::after {
+      background-image: progressLessThan50(#686868, 43);
+    }
+    &.progress-44::after {
+      background-image: progressLessThan50(#686868, 44);
+    }
+    &.progress-45::after {
+      background-image: progressLessThan50(#686868, 45);
+    }
+    &.progress-46::after {
+      background-image: progressLessThan50(#686868, 46);
+    }
+    &.progress-47::after {
+      background-image: progressLessThan50(#686868, 47);
+    }
+    &.progress-48::after {
+      background-image: progressLessThan50(#686868, 48);
+    }
+    &.progress-49::after {
+      background-image: progressLessThan50(#686868, 49);
+    }
+    &.progress-50::after {
+      background-image: progressMoreThan50(#686868, 50);
+    }
+    &.progress-51::after {
+      background-image: progressMoreThan50(#686868, 51);
+    }
+    &.progress-52::after {
+      background-image: progressMoreThan50(#686868, 52);
+    }
+    &.progress-53::after {
+      background-image: progressMoreThan50(#686868, 53);
+    }
+    &.progress-54::after {
+      background-image: progressMoreThan50(#686868, 54);
+    }
+    &.progress-55::after {
+      background-image: progressMoreThan50(#686868, 55);
+    }
+    &.progress-56::after {
+      background-image: progressMoreThan50(#686868, 56);
+    }
+    &.progress-57::after {
+      background-image: progressMoreThan50(#686868, 57);
+    }
+    &.progress-58::after {
+      background-image: progressMoreThan50(#686868, 58);
+    }
+    &.progress-59::after {
+      background-image: progressMoreThan50(#686868, 59);
+    }
+    &.progress-60::after {
+      background-image: progressMoreThan50(#686868, 60);
+    }
+    &.progress-61::after {
+      background-image: progressMoreThan50(#686868, 61);
+    }
+    &.progress-62::after {
+      background-image: progressMoreThan50(#686868, 62);
+    }
+    &.progress-63::after {
+      background-image: progressMoreThan50(#686868, 63);
+    }
+    &.progress-64::after {
+      background-image: progressMoreThan50(#686868, 64);
+    }
+    &.progress-65::after {
+      background-image: progressMoreThan50(#686868, 65);
+    }
+    &.progress-66::after {
+      background-image: progressMoreThan50(#686868, 66);
+    }
+    &.progress-67::after {
+      background-image: progressMoreThan50(#686868, 67);
+    }
+    &.progress-68::after {
+      background-image: progressMoreThan50(#686868, 68);
+    }
+    &.progress-69::after {
+      background-image: progressMoreThan50(#686868, 69);
+    }
+    &.progress-70::after {
+      background-image: progressMoreThan50(#686868, 70);
+    }
+    &.progress-71::after {
+      background-image: progressMoreThan50(#686868, 71);
+    }
+    &.progress-72::after {
+      background-image: progressMoreThan50(#686868, 72);
+    }
+    &.progress-73::after {
+      background-image: progressMoreThan50(#686868, 73);
+    }
+    &.progress-74::after {
+      background-image: progressMoreThan50(#686868, 74);
+    }
+    &.progress-75::after {
+      background-image: progressMoreThan50(#686868, 75);
+    }
+    &.progress-76::after {
+      background-image: progressMoreThan50(#686868, 76);
+    }
+    &.progress-77::after {
+      background-image: progressMoreThan50(#686868, 77);
+    }
+    &.progress-78::after {
+      background-image: progressMoreThan50(#686868, 78);
+    }
+    &.progress-79::after {
+      background-image: progressMoreThan50(#686868, 79);
+    }
+    &.progress-80::after {
+      background-image: progressMoreThan50(#686868, 80);
+    }
+    &.progress-81::after {
+      background-image: progressMoreThan50(#686868, 81);
+    }
+    &.progress-82::after {
+      background-image: progressMoreThan50(#686868, 82);
+    }
+    &.progress-83::after {
+      background-image: progressMoreThan50(#686868, 83);
+    }
+    &.progress-84::after {
+      background-image: progressMoreThan50(#686868, 84);
+    }
+    &.progress-85::after {
+      background-image: progressMoreThan50(#686868, 85);
+    }
+    &.progress-86::after {
+      background-image: progressMoreThan50(#686868, 86);
+    }
+    &.progress-87::after {
+      background-image: progressMoreThan50(#686868, 87);
+    }
+    &.progress-88::after {
+      background-image: progressMoreThan50(#686868, 88);
+    }
+    &.progress-89::after {
+      background-image: progressMoreThan50(#686868, 89);
+    }
+    &.progress-90::after {
+      background-image: progressMoreThan50(#686868, 80);
+    }
+    &.progress-91::after {
+      background-image: progressMoreThan50(#686868, 91);
+    }
+    &.progress-92::after {
+      background-image: progressMoreThan50(#686868, 92);
+    }
+    &.progress-93::after {
+      background-image: progressMoreThan50(#686868, 93);
+    }
+    &.progress-94::after {
+      background-image: progressMoreThan50(#686868, 94);
+    }
+    &.progress-95::after {
+      background-image: progressMoreThan50(#686868, 95);
+    }
+    &.progress-96::after {
+      background-image: progressMoreThan50(#686868, 96);
+    }
+    &.progress-97::after {
+      background-image: progressMoreThan50(#686868, 97);
+    }
+    &.progress-98::after {
+      background-image: progressMoreThan50(#686868, 98);
+    }
+    &.progress-99::after {
+      background-image: progressMoreThan50(#686868, 99);
+    }
+    &.progress-100::after {
+      background-image: progressMoreThan50(#686868, 100);
+    }
+    span {
+      color: #686868;
+      &::after {
+        color: #686868;
+      }
+    }
+  }
+}
+.card-assigned {
+  .profile_progress {
+    &.progress-0::after {
+      background-image: progressLessThan50(#ff9226, 0);
+    }
+    &.progress-1::after {
+      background-image: progressLessThan50(#ff9226, 1);
+    }
+    &.progress-2::after {
+      background-image: progressLessThan50(#ff9226, 2);
+    }
+    &.progress-3::after {
+      background-image: progressLessThan50(#ff9226, 3);
+    }
+    &.progress-4::after {
+      background-image: progressLessThan50(#ff9226, 4);
+    }
+    &.progress-5::after {
+      background-image: progressLessThan50(#ff9226, 5);
+    }
+    &.progress-6::after {
+      background-image: progressLessThan50(#ff9226, 6);
+    }
+    &.progress-7::after {
+      background-image: progressLessThan50(#ff9226, 7);
+    }
+    &.progress-8::after {
+      background-image: progressLessThan50(#ff9226, 8);
+    }
+    &.progress-9::after {
+      background-image: progressLessThan50(#ff9226, 9);
+    }
+    &.progress-10::after {
+      background-image: progressLessThan50(#ff9226, 10);
+    }
+    &.progress-11::after {
+      background-image: progressLessThan50(#ff9226, 11);
+    }
+    &.progress-12::after {
+      background-image: progressLessThan50(#ff9226, 12);
+    }
+    &.progress-13::after {
+      background-image: progressLessThan50(#ff9226, 13);
+    }
+    &.progress-14::after {
+      background-image: progressLessThan50(#ff9226, 14);
+    }
+    &.progress-15::after {
+      background-image: progressLessThan50(#ff9226, 15);
+    }
+    &.progress-16::after {
+      background-image: progressLessThan50(#ff9226, 16);
+    }
+    &.progress-17::after {
+      background-image: progressLessThan50(#ff9226, 17);
+    }
+    &.progress-18::after {
+      background-image: progressLessThan50(#ff9226, 18);
+    }
+    &.progress-19::after {
+      background-image: progressLessThan50(#ff9226, 19);
+    }
+    &.progress-20::after {
+      background-image: progressLessThan50(#ff9226, 20);
+    }
+    &.progress-21::after {
+      background-image: progressLessThan50(#ff9226, 21);
+    }
+    &.progress-22::after {
+      background-image: progressLessThan50(#ff9226, 22);
+    }
+    &.progress-23::after {
+      background-image: progressLessThan50(#ff9226, 23);
+    }
+    &.progress-24::after {
+      background-image: progressLessThan50(#ff9226, 24);
+    }
+    &.progress-25::after {
+      background-image: progressLessThan50(#ff9226, 25);
+    }
+    &.progress-26::after {
+      background-image: progressLessThan50(#ff9226, 26);
+    }
+    &.progress-27::after {
+      background-image: progressLessThan50(#ff9226, 27);
+    }
+    &.progress-28::after {
+      background-image: progressLessThan50(#ff9226, 28);
+    }
+    &.progress-29::after {
+      background-image: progressLessThan50(#ff9226, 29);
+    }
+    &.progress-30::after {
+      background-image: progressLessThan50(#ff9226, 30);
+    }
+    &.progress-31::after {
+      background-image: progressLessThan50(#ff9226, 31);
+    }
+    &.progress-32::after {
+      background-image: progressLessThan50(#ff9226, 32);
+    }
+    &.progress-33::after {
+      background-image: progressLessThan50(#ff9226, 33);
+    }
+    &.progress-34::after {
+      background-image: progressLessThan50(#ff9226, 34);
+    }
+    &.progress-35::after {
+      background-image: progressLessThan50(#ff9226, 35);
+    }
+    &.progress-36::after {
+      background-image: progressLessThan50(#ff9226, 36);
+    }
+    &.progress-37::after {
+      background-image: progressLessThan50(#ff9226, 37);
+    }
+    &.progress-38::after {
+      background-image: progressLessThan50(#ff9226, 38);
+    }
+    &.progress-39::after {
+      background-image: progressLessThan50(#ff9226, 39);
+    }
+    &.progress-40::after {
+      background-image: progressLessThan50(#ff9226, 40);
+    }
+    &.progress-41::after {
+      background-image: progressLessThan50(#ff9226, 41);
+    }
+    &.progress-42::after {
+      background-image: progressLessThan50(#ff9226, 42);
+    }
+    &.progress-43::after {
+      background-image: progressLessThan50(#ff9226, 43);
+    }
+    &.progress-44::after {
+      background-image: progressLessThan50(#ff9226, 44);
+    }
+    &.progress-45::after {
+      background-image: progressLessThan50(#ff9226, 45);
+    }
+    &.progress-46::after {
+      background-image: progressLessThan50(#ff9226, 46);
+    }
+    &.progress-47::after {
+      background-image: progressLessThan50(#ff9226, 47);
+    }
+    &.progress-48::after {
+      background-image: progressLessThan50(#ff9226, 48);
+    }
+    &.progress-49::after {
+      background-image: progressLessThan50(#ff9226, 49);
+    }
+    &.progress-50::after {
+      background-image: progressMoreThan50(#ff9226, 50);
+    }
+    &.progress-51::after {
+      background-image: progressMoreThan50(#ff9226, 51);
+    }
+    &.progress-52::after {
+      background-image: progressMoreThan50(#ff9226, 52);
+    }
+    &.progress-53::after {
+      background-image: progressMoreThan50(#ff9226, 53);
+    }
+    &.progress-54::after {
+      background-image: progressMoreThan50(#ff9226, 54);
+    }
+    &.progress-55::after {
+      background-image: progressMoreThan50(#ff9226, 55);
+    }
+    &.progress-56::after {
+      background-image: progressMoreThan50(#ff9226, 56);
+    }
+    &.progress-57::after {
+      background-image: progressMoreThan50(#ff9226, 57);
+    }
+    &.progress-58::after {
+      background-image: progressMoreThan50(#ff9226, 58);
+    }
+    &.progress-59::after {
+      background-image: progressMoreThan50(#ff9226, 59);
+    }
+    &.progress-60::after {
+      background-image: progressMoreThan50(#ff9226, 60);
+    }
+    &.progress-61::after {
+      background-image: progressMoreThan50(#ff9226, 61);
+    }
+    &.progress-62::after {
+      background-image: progressMoreThan50(#ff9226, 62);
+    }
+    &.progress-63::after {
+      background-image: progressMoreThan50(#ff9226, 63);
+    }
+    &.progress-64::after {
+      background-image: progressMoreThan50(#ff9226, 64);
+    }
+    &.progress-65::after {
+      background-image: progressMoreThan50(#ff9226, 65);
+    }
+    &.progress-66::after {
+      background-image: progressMoreThan50(#ff9226, 66);
+    }
+    &.progress-67::after {
+      background-image: progressMoreThan50(#ff9226, 67);
+    }
+    &.progress-68::after {
+      background-image: progressMoreThan50(#ff9226, 68);
+    }
+    &.progress-69::after {
+      background-image: progressMoreThan50(#ff9226, 69);
+    }
+    &.progress-70::after {
+      background-image: progressMoreThan50(#ff9226, 70);
+    }
+    &.progress-71::after {
+      background-image: progressMoreThan50(#ff9226, 71);
+    }
+    &.progress-72::after {
+      background-image: progressMoreThan50(#ff9226, 72);
+    }
+    &.progress-73::after {
+      background-image: progressMoreThan50(#ff9226, 73);
+    }
+    &.progress-74::after {
+      background-image: progressMoreThan50(#ff9226, 74);
+    }
+    &.progress-75::after {
+      background-image: progressMoreThan50(#ff9226, 75);
+    }
+    &.progress-76::after {
+      background-image: progressMoreThan50(#ff9226, 76);
+    }
+    &.progress-77::after {
+      background-image: progressMoreThan50(#ff9226, 77);
+    }
+    &.progress-78::after {
+      background-image: progressMoreThan50(#ff9226, 78);
+    }
+    &.progress-79::after {
+      background-image: progressMoreThan50(#ff9226, 79);
+    }
+    &.progress-80::after {
+      background-image: progressMoreThan50(#ff9226, 80);
+    }
+    &.progress-81::after {
+      background-image: progressMoreThan50(#ff9226, 81);
+    }
+    &.progress-82::after {
+      background-image: progressMoreThan50(#ff9226, 82);
+    }
+    &.progress-83::after {
+      background-image: progressMoreThan50(#ff9226, 83);
+    }
+    &.progress-84::after {
+      background-image: progressMoreThan50(#ff9226, 84);
+    }
+    &.progress-85::after {
+      background-image: progressMoreThan50(#ff9226, 85);
+    }
+    &.progress-86::after {
+      background-image: progressMoreThan50(#ff9226, 86);
+    }
+    &.progress-87::after {
+      background-image: progressMoreThan50(#ff9226, 87);
+    }
+    &.progress-88::after {
+      background-image: progressMoreThan50(#ff9226, 88);
+    }
+    &.progress-89::after {
+      background-image: progressMoreThan50(#ff9226, 89);
+    }
+    &.progress-90::after {
+      background-image: progressMoreThan50(#ff9226, 80);
+    }
+    &.progress-91::after {
+      background-image: progressMoreThan50(#ff9226, 91);
+    }
+    &.progress-92::after {
+      background-image: progressMoreThan50(#ff9226, 92);
+    }
+    &.progress-93::after {
+      background-image: progressMoreThan50(#ff9226, 93);
+    }
+    &.progress-94::after {
+      background-image: progressMoreThan50(#ff9226, 94);
+    }
+    &.progress-95::after {
+      background-image: progressMoreThan50(#ff9226, 95);
+    }
+    &.progress-96::after {
+      background-image: progressMoreThan50(#ff9226, 96);
+    }
+    &.progress-97::after {
+      background-image: progressMoreThan50(#ff9226, 97);
+    }
+    &.progress-98::after {
+      background-image: progressMoreThan50(#ff9226, 98);
+    }
+    &.progress-99::after {
+      background-image: progressMoreThan50(#ff9226, 99);
+    }
+    &.progress-100::after {
+      background-image: progressMoreThan50(#ff9226, 100);
+    }
+    span {
+      color: #ff9226;
+      &::after {
+        color: #ff9226;
+      }
+    }
+  }
+}
+
+.card-completed {
+  .profile_progress {
+    &.progress-0::after {
+      background-image: progressLessThan50(#00b33d, 0);
+    }
+    &.progress-1::after {
+      background-image: progressLessThan50(#00b33d, 1);
+    }
+    &.progress-2::after {
+      background-image: progressLessThan50(#00b33d, 2);
+    }
+    &.progress-3::after {
+      background-image: progressLessThan50(#00b33d, 3);
+    }
+    &.progress-4::after {
+      background-image: progressLessThan50(#00b33d, 4);
+    }
+    &.progress-5::after {
+      background-image: progressLessThan50(#00b33d, 5);
+    }
+    &.progress-6::after {
+      background-image: progressLessThan50(#00b33d, 6);
+    }
+    &.progress-7::after {
+      background-image: progressLessThan50(#00b33d, 7);
+    }
+    &.progress-8::after {
+      background-image: progressLessThan50(#00b33d, 8);
+    }
+    &.progress-9::after {
+      background-image: progressLessThan50(#00b33d, 9);
+    }
+    &.progress-10::after {
+      background-image: progressLessThan50(#00b33d, 10);
+    }
+    &.progress-11::after {
+      background-image: progressLessThan50(#00b33d, 11);
+    }
+    &.progress-12::after {
+      background-image: progressLessThan50(#00b33d, 12);
+    }
+    &.progress-13::after {
+      background-image: progressLessThan50(#00b33d, 13);
+    }
+    &.progress-14::after {
+      background-image: progressLessThan50(#00b33d, 14);
+    }
+    &.progress-15::after {
+      background-image: progressLessThan50(#00b33d, 15);
+    }
+    &.progress-16::after {
+      background-image: progressLessThan50(#00b33d, 16);
+    }
+    &.progress-17::after {
+      background-image: progressLessThan50(#00b33d, 17);
+    }
+    &.progress-18::after {
+      background-image: progressLessThan50(#00b33d, 18);
+    }
+    &.progress-19::after {
+      background-image: progressLessThan50(#00b33d, 19);
+    }
+    &.progress-20::after {
+      background-image: progressLessThan50(#00b33d, 20);
+    }
+    &.progress-21::after {
+      background-image: progressLessThan50(#00b33d, 21);
+    }
+    &.progress-22::after {
+      background-image: progressLessThan50(#00b33d, 22);
+    }
+    &.progress-23::after {
+      background-image: progressLessThan50(#00b33d, 23);
+    }
+    &.progress-24::after {
+      background-image: progressLessThan50(#00b33d, 24);
+    }
+    &.progress-25::after {
+      background-image: progressLessThan50(#00b33d, 25);
+    }
+    &.progress-26::after {
+      background-image: progressLessThan50(#00b33d, 26);
+    }
+    &.progress-27::after {
+      background-image: progressLessThan50(#00b33d, 27);
+    }
+    &.progress-28::after {
+      background-image: progressLessThan50(#00b33d, 28);
+    }
+    &.progress-29::after {
+      background-image: progressLessThan50(#00b33d, 29);
+    }
+    &.progress-30::after {
+      background-image: progressLessThan50(#00b33d, 30);
+    }
+    &.progress-31::after {
+      background-image: progressLessThan50(#00b33d, 31);
+    }
+    &.progress-32::after {
+      background-image: progressLessThan50(#00b33d, 32);
+    }
+    &.progress-33::after {
+      background-image: progressLessThan50(#00b33d, 33);
+    }
+    &.progress-34::after {
+      background-image: progressLessThan50(#00b33d, 34);
+    }
+    &.progress-35::after {
+      background-image: progressLessThan50(#00b33d, 35);
+    }
+    &.progress-36::after {
+      background-image: progressLessThan50(#00b33d, 36);
+    }
+    &.progress-37::after {
+      background-image: progressLessThan50(#00b33d, 37);
+    }
+    &.progress-38::after {
+      background-image: progressLessThan50(#00b33d, 38);
+    }
+    &.progress-39::after {
+      background-image: progressLessThan50(#00b33d, 39);
+    }
+    &.progress-40::after {
+      background-image: progressLessThan50(#00b33d, 40);
+    }
+    &.progress-41::after {
+      background-image: progressLessThan50(#00b33d, 41);
+    }
+    &.progress-42::after {
+      background-image: progressLessThan50(#00b33d, 42);
+    }
+    &.progress-43::after {
+      background-image: progressLessThan50(#00b33d, 43);
+    }
+    &.progress-44::after {
+      background-image: progressLessThan50(#00b33d, 44);
+    }
+    &.progress-45::after {
+      background-image: progressLessThan50(#00b33d, 45);
+    }
+    &.progress-46::after {
+      background-image: progressLessThan50(#00b33d, 46);
+    }
+    &.progress-47::after {
+      background-image: progressLessThan50(#00b33d, 47);
+    }
+    &.progress-48::after {
+      background-image: progressLessThan50(#00b33d, 48);
+    }
+    &.progress-49::after {
+      background-image: progressLessThan50(#00b33d, 49);
+    }
+    &.progress-50::after {
+      background-image: progressMoreThan50(#00b33d, 50);
+    }
+    &.progress-51::after {
+      background-image: progressMoreThan50(#00b33d, 51);
+    }
+    &.progress-52::after {
+      background-image: progressMoreThan50(#00b33d, 52);
+    }
+    &.progress-53::after {
+      background-image: progressMoreThan50(#00b33d, 53);
+    }
+    &.progress-54::after {
+      background-image: progressMoreThan50(#00b33d, 54);
+    }
+    &.progress-55::after {
+      background-image: progressMoreThan50(#00b33d, 55);
+    }
+    &.progress-56::after {
+      background-image: progressMoreThan50(#00b33d, 56);
+    }
+    &.progress-57::after {
+      background-image: progressMoreThan50(#00b33d, 57);
+    }
+    &.progress-58::after {
+      background-image: progressMoreThan50(#00b33d, 58);
+    }
+    &.progress-59::after {
+      background-image: progressMoreThan50(#00b33d, 59);
+    }
+    &.progress-60::after {
+      background-image: progressMoreThan50(#00b33d, 60);
+    }
+    &.progress-61::after {
+      background-image: progressMoreThan50(#00b33d, 61);
+    }
+    &.progress-62::after {
+      background-image: progressMoreThan50(#00b33d, 62);
+    }
+    &.progress-63::after {
+      background-image: progressMoreThan50(#00b33d, 63);
+    }
+    &.progress-64::after {
+      background-image: progressMoreThan50(#00b33d, 64);
+    }
+    &.progress-65::after {
+      background-image: progressMoreThan50(#00b33d, 65);
+    }
+    &.progress-66::after {
+      background-image: progressMoreThan50(#00b33d, 66);
+    }
+    &.progress-67::after {
+      background-image: progressMoreThan50(#00b33d, 67);
+    }
+    &.progress-68::after {
+      background-image: progressMoreThan50(#00b33d, 68);
+    }
+    &.progress-69::after {
+      background-image: progressMoreThan50(#00b33d, 69);
+    }
+    &.progress-70::after {
+      background-image: progressMoreThan50(#00b33d, 70);
+    }
+    &.progress-71::after {
+      background-image: progressMoreThan50(#00b33d, 71);
+    }
+    &.progress-72::after {
+      background-image: progressMoreThan50(#00b33d, 72);
+    }
+    &.progress-73::after {
+      background-image: progressMoreThan50(#00b33d, 73);
+    }
+    &.progress-74::after {
+      background-image: progressMoreThan50(#00b33d, 74);
+    }
+    &.progress-75::after {
+      background-image: progressMoreThan50(#00b33d, 75);
+    }
+    &.progress-76::after {
+      background-image: progressMoreThan50(#00b33d, 76);
+    }
+    &.progress-77::after {
+      background-image: progressMoreThan50(#00b33d, 77);
+    }
+    &.progress-78::after {
+      background-image: progressMoreThan50(#00b33d, 78);
+    }
+    &.progress-79::after {
+      background-image: progressMoreThan50(#00b33d, 79);
+    }
+    &.progress-80::after {
+      background-image: progressMoreThan50(#00b33d, 80);
+    }
+    &.progress-81::after {
+      background-image: progressMoreThan50(#00b33d, 81);
+    }
+    &.progress-82::after {
+      background-image: progressMoreThan50(#00b33d, 82);
+    }
+    &.progress-83::after {
+      background-image: progressMoreThan50(#00b33d, 83);
+    }
+    &.progress-84::after {
+      background-image: progressMoreThan50(#00b33d, 84);
+    }
+    &.progress-85::after {
+      background-image: progressMoreThan50(#00b33d, 85);
+    }
+    &.progress-86::after {
+      background-image: progressMoreThan50(#00b33d, 86);
+    }
+    &.progress-87::after {
+      background-image: progressMoreThan50(#00b33d, 87);
+    }
+    &.progress-88::after {
+      background-image: progressMoreThan50(#00b33d, 88);
+    }
+    &.progress-89::after {
+      background-image: progressMoreThan50(#00b33d, 89);
+    }
+    &.progress-90::after {
+      background-image: progressMoreThan50(#00b33d, 80);
+    }
+    &.progress-91::after {
+      background-image: progressMoreThan50(#00b33d, 91);
+    }
+    &.progress-92::after {
+      background-image: progressMoreThan50(#00b33d, 92);
+    }
+    &.progress-93::after {
+      background-image: progressMoreThan50(#00b33d, 93);
+    }
+    &.progress-94::after {
+      background-image: progressMoreThan50(#00b33d, 94);
+    }
+    &.progress-95::after {
+      background-image: progressMoreThan50(#00b33d, 95);
+    }
+    &.progress-96::after {
+      background-image: progressMoreThan50(#00b33d, 96);
+    }
+    &.progress-97::after {
+      background-image: progressMoreThan50(#00b33d, 97);
+    }
+    &.progress-98::after {
+      background-image: progressMoreThan50(#00b33d, 98);
+    }
+    &.progress-99::after {
+      background-image: progressMoreThan50(#00b33d, 99);
+    }
+    &.progress-100::after {
+      background-image: progressMoreThan50(#00b33d, 100);
+    }
+    span {
+      color: #00b33d;
+      &::after {
+        color: #00b33d;
+      }
+    }
+  }
+}
+
+.card-routed {
+  .profile_progress {
+    &.progress-0::after {
+      background-image: progressLessThan50(#c5b200, 0);
+    }
+    &.progress-1::after {
+      background-image: progressLessThan50(#c5b200, 1);
+    }
+    &.progress-2::after {
+      background-image: progressLessThan50(#c5b200, 2);
+    }
+    &.progress-3::after {
+      background-image: progressLessThan50(#c5b200, 3);
+    }
+    &.progress-4::after {
+      background-image: progressLessThan50(#c5b200, 4);
+    }
+    &.progress-5::after {
+      background-image: progressLessThan50(#c5b200, 5);
+    }
+    &.progress-6::after {
+      background-image: progressLessThan50(#c5b200, 6);
+    }
+    &.progress-7::after {
+      background-image: progressLessThan50(#c5b200, 7);
+    }
+    &.progress-8::after {
+      background-image: progressLessThan50(#c5b200, 8);
+    }
+    &.progress-9::after {
+      background-image: progressLessThan50(#c5b200, 9);
+    }
+    &.progress-10::after {
+      background-image: progressLessThan50(#c5b200, 10);
+    }
+    &.progress-11::after {
+      background-image: progressLessThan50(#c5b200, 11);
+    }
+    &.progress-12::after {
+      background-image: progressLessThan50(#c5b200, 12);
+    }
+    &.progress-13::after {
+      background-image: progressLessThan50(#c5b200, 13);
+    }
+    &.progress-14::after {
+      background-image: progressLessThan50(#c5b200, 14);
+    }
+    &.progress-15::after {
+      background-image: progressLessThan50(#c5b200, 15);
+    }
+    &.progress-16::after {
+      background-image: progressLessThan50(#c5b200, 16);
+    }
+    &.progress-17::after {
+      background-image: progressLessThan50(#c5b200, 17);
+    }
+    &.progress-18::after {
+      background-image: progressLessThan50(#c5b200, 18);
+    }
+    &.progress-19::after {
+      background-image: progressLessThan50(#c5b200, 19);
+    }
+    &.progress-20::after {
+      background-image: progressLessThan50(#c5b200, 20);
+    }
+    &.progress-21::after {
+      background-image: progressLessThan50(#c5b200, 21);
+    }
+    &.progress-22::after {
+      background-image: progressLessThan50(#c5b200, 22);
+    }
+    &.progress-23::after {
+      background-image: progressLessThan50(#c5b200, 23);
+    }
+    &.progress-24::after {
+      background-image: progressLessThan50(#c5b200, 24);
+    }
+    &.progress-25::after {
+      background-image: progressLessThan50(#c5b200, 25);
+    }
+    &.progress-26::after {
+      background-image: progressLessThan50(#c5b200, 26);
+    }
+    &.progress-27::after {
+      background-image: progressLessThan50(#c5b200, 27);
+    }
+    &.progress-28::after {
+      background-image: progressLessThan50(#c5b200, 28);
+    }
+    &.progress-29::after {
+      background-image: progressLessThan50(#c5b200, 29);
+    }
+    &.progress-30::after {
+      background-image: progressLessThan50(#c5b200, 30);
+    }
+    &.progress-31::after {
+      background-image: progressLessThan50(#c5b200, 31);
+    }
+    &.progress-32::after {
+      background-image: progressLessThan50(#c5b200, 32);
+    }
+    &.progress-33::after {
+      background-image: progressLessThan50(#c5b200, 33);
+    }
+    &.progress-34::after {
+      background-image: progressLessThan50(#c5b200, 34);
+    }
+    &.progress-35::after {
+      background-image: progressLessThan50(#c5b200, 35);
+    }
+    &.progress-36::after {
+      background-image: progressLessThan50(#c5b200, 36);
+    }
+    &.progress-37::after {
+      background-image: progressLessThan50(#c5b200, 37);
+    }
+    &.progress-38::after {
+      background-image: progressLessThan50(#c5b200, 38);
+    }
+    &.progress-39::after {
+      background-image: progressLessThan50(#c5b200, 39);
+    }
+    &.progress-40::after {
+      background-image: progressLessThan50(#c5b200, 40);
+    }
+    &.progress-41::after {
+      background-image: progressLessThan50(#c5b200, 41);
+    }
+    &.progress-42::after {
+      background-image: progressLessThan50(#c5b200, 42);
+    }
+    &.progress-43::after {
+      background-image: progressLessThan50(#c5b200, 43);
+    }
+    &.progress-44::after {
+      background-image: progressLessThan50(#c5b200, 44);
+    }
+    &.progress-45::after {
+      background-image: progressLessThan50(#c5b200, 45);
+    }
+    &.progress-46::after {
+      background-image: progressLessThan50(#c5b200, 46);
+    }
+    &.progress-47::after {
+      background-image: progressLessThan50(#c5b200, 47);
+    }
+    &.progress-48::after {
+      background-image: progressLessThan50(#c5b200, 48);
+    }
+    &.progress-49::after {
+      background-image: progressLessThan50(#c5b200, 49);
+    }
+    &.progress-50::after {
+      background-image: progressMoreThan50(#c5b200, 50);
+    }
+    &.progress-51::after {
+      background-image: progressMoreThan50(#c5b200, 51);
+    }
+    &.progress-52::after {
+      background-image: progressMoreThan50(#c5b200, 52);
+    }
+    &.progress-53::after {
+      background-image: progressMoreThan50(#c5b200, 53);
+    }
+    &.progress-54::after {
+      background-image: progressMoreThan50(#c5b200, 54);
+    }
+    &.progress-55::after {
+      background-image: progressMoreThan50(#c5b200, 55);
+    }
+    &.progress-56::after {
+      background-image: progressMoreThan50(#c5b200, 56);
+    }
+    &.progress-57::after {
+      background-image: progressMoreThan50(#c5b200, 57);
+    }
+    &.progress-58::after {
+      background-image: progressMoreThan50(#c5b200, 58);
+    }
+    &.progress-59::after {
+      background-image: progressMoreThan50(#c5b200, 59);
+    }
+    &.progress-60::after {
+      background-image: progressMoreThan50(#c5b200, 60);
+    }
+    &.progress-61::after {
+      background-image: progressMoreThan50(#c5b200, 61);
+    }
+    &.progress-62::after {
+      background-image: progressMoreThan50(#c5b200, 62);
+    }
+    &.progress-63::after {
+      background-image: progressMoreThan50(#c5b200, 63);
+    }
+    &.progress-64::after {
+      background-image: progressMoreThan50(#c5b200, 64);
+    }
+    &.progress-65::after {
+      background-image: progressMoreThan50(#c5b200, 65);
+    }
+    &.progress-66::after {
+      background-image: progressMoreThan50(#c5b200, 66);
+    }
+    &.progress-67::after {
+      background-image: progressMoreThan50(#c5b200, 67);
+    }
+    &.progress-68::after {
+      background-image: progressMoreThan50(#c5b200, 68);
+    }
+    &.progress-69::after {
+      background-image: progressMoreThan50(#c5b200, 69);
+    }
+    &.progress-70::after {
+      background-image: progressMoreThan50(#c5b200, 70);
+    }
+    &.progress-71::after {
+      background-image: progressMoreThan50(#c5b200, 71);
+    }
+    &.progress-72::after {
+      background-image: progressMoreThan50(#c5b200, 72);
+    }
+    &.progress-73::after {
+      background-image: progressMoreThan50(#c5b200, 73);
+    }
+    &.progress-74::after {
+      background-image: progressMoreThan50(#c5b200, 74);
+    }
+    &.progress-75::after {
+      background-image: progressMoreThan50(#c5b200, 75);
+    }
+    &.progress-76::after {
+      background-image: progressMoreThan50(#c5b200, 76);
+    }
+    &.progress-77::after {
+      background-image: progressMoreThan50(#c5b200, 77);
+    }
+    &.progress-78::after {
+      background-image: progressMoreThan50(#c5b200, 78);
+    }
+    &.progress-79::after {
+      background-image: progressMoreThan50(#c5b200, 79);
+    }
+    &.progress-80::after {
+      background-image: progressMoreThan50(#c5b200, 80);
+    }
+    &.progress-81::after {
+      background-image: progressMoreThan50(#c5b200, 81);
+    }
+    &.progress-82::after {
+      background-image: progressMoreThan50(#c5b200, 82);
+    }
+    &.progress-83::after {
+      background-image: progressMoreThan50(#c5b200, 83);
+    }
+    &.progress-84::after {
+      background-image: progressMoreThan50(#c5b200, 84);
+    }
+    &.progress-85::after {
+      background-image: progressMoreThan50(#c5b200, 85);
+    }
+    &.progress-86::after {
+      background-image: progressMoreThan50(#c5b200, 86);
+    }
+    &.progress-87::after {
+      background-image: progressMoreThan50(#c5b200, 87);
+    }
+    &.progress-88::after {
+      background-image: progressMoreThan50(#c5b200, 88);
+    }
+    &.progress-89::after {
+      background-image: progressMoreThan50(#c5b200, 89);
+    }
+    &.progress-90::after {
+      background-image: progressMoreThan50(#c5b200, 80);
+    }
+    &.progress-91::after {
+      background-image: progressMoreThan50(#c5b200, 91);
+    }
+    &.progress-92::after {
+      background-image: progressMoreThan50(#c5b200, 92);
+    }
+    &.progress-93::after {
+      background-image: progressMoreThan50(#c5b200, 93);
+    }
+    &.progress-94::after {
+      background-image: progressMoreThan50(#c5b200, 94);
+    }
+    &.progress-95::after {
+      background-image: progressMoreThan50(#c5b200, 95);
+    }
+    &.progress-96::after {
+      background-image: progressMoreThan50(#c5b200, 96);
+    }
+    &.progress-97::after {
+      background-image: progressMoreThan50(#c5b200, 97);
+    }
+    &.progress-98::after {
+      background-image: progressMoreThan50(#c5b200, 98);
+    }
+    &.progress-99::after {
+      background-image: progressMoreThan50(#c5b200, 99);
+    }
+    &.progress-100::after {
+      background-image: progressMoreThan50(#c5b200, 100);
+    }
+    span {
+      color: #c5b200;
+      &::after {
+        color: #c5b200;
+      }
+    }
+  }
+}
+
+.card-audit-failed {
+  .profile_progress {
+    &.progress-0::after {
+      background-image: progressLessThan50(#a1285d, 0);
+    }
+    &.progress-1::after {
+      background-image: progressLessThan50(#a1285d, 1);
+    }
+    &.progress-2::after {
+      background-image: progressLessThan50(#a1285d, 2);
+    }
+    &.progress-3::after {
+      background-image: progressLessThan50(#a1285d, 3);
+    }
+    &.progress-4::after {
+      background-image: progressLessThan50(#a1285d, 4);
+    }
+    &.progress-5::after {
+      background-image: progressLessThan50(#a1285d, 5);
+    }
+    &.progress-6::after {
+      background-image: progressLessThan50(#a1285d, 6);
+    }
+    &.progress-7::after {
+      background-image: progressLessThan50(#a1285d, 7);
+    }
+    &.progress-8::after {
+      background-image: progressLessThan50(#a1285d, 8);
+    }
+    &.progress-9::after {
+      background-image: progressLessThan50(#a1285d, 9);
+    }
+    &.progress-10::after {
+      background-image: progressLessThan50(#a1285d, 10);
+    }
+    &.progress-11::after {
+      background-image: progressLessThan50(#a1285d, 11);
+    }
+    &.progress-12::after {
+      background-image: progressLessThan50(#a1285d, 12);
+    }
+    &.progress-13::after {
+      background-image: progressLessThan50(#a1285d, 13);
+    }
+    &.progress-14::after {
+      background-image: progressLessThan50(#a1285d, 14);
+    }
+    &.progress-15::after {
+      background-image: progressLessThan50(#a1285d, 15);
+    }
+    &.progress-16::after {
+      background-image: progressLessThan50(#a1285d, 16);
+    }
+    &.progress-17::after {
+      background-image: progressLessThan50(#a1285d, 17);
+    }
+    &.progress-18::after {
+      background-image: progressLessThan50(#a1285d, 18);
+    }
+    &.progress-19::after {
+      background-image: progressLessThan50(#a1285d, 19);
+    }
+    &.progress-20::after {
+      background-image: progressLessThan50(#a1285d, 20);
+    }
+    &.progress-21::after {
+      background-image: progressLessThan50(#a1285d, 21);
+    }
+    &.progress-22::after {
+      background-image: progressLessThan50(#a1285d, 22);
+    }
+    &.progress-23::after {
+      background-image: progressLessThan50(#a1285d, 23);
+    }
+    &.progress-24::after {
+      background-image: progressLessThan50(#a1285d, 24);
+    }
+    &.progress-25::after {
+      background-image: progressLessThan50(#a1285d, 25);
+    }
+    &.progress-26::after {
+      background-image: progressLessThan50(#a1285d, 26);
+    }
+    &.progress-27::after {
+      background-image: progressLessThan50(#a1285d, 27);
+    }
+    &.progress-28::after {
+      background-image: progressLessThan50(#a1285d, 28);
+    }
+    &.progress-29::after {
+      background-image: progressLessThan50(#a1285d, 29);
+    }
+    &.progress-30::after {
+      background-image: progressLessThan50(#a1285d, 30);
+    }
+    &.progress-31::after {
+      background-image: progressLessThan50(#a1285d, 31);
+    }
+    &.progress-32::after {
+      background-image: progressLessThan50(#a1285d, 32);
+    }
+    &.progress-33::after {
+      background-image: progressLessThan50(#a1285d, 33);
+    }
+    &.progress-34::after {
+      background-image: progressLessThan50(#a1285d, 34);
+    }
+    &.progress-35::after {
+      background-image: progressLessThan50(#a1285d, 35);
+    }
+    &.progress-36::after {
+      background-image: progressLessThan50(#a1285d, 36);
+    }
+    &.progress-37::after {
+      background-image: progressLessThan50(#a1285d, 37);
+    }
+    &.progress-38::after {
+      background-image: progressLessThan50(#a1285d, 38);
+    }
+    &.progress-39::after {
+      background-image: progressLessThan50(#a1285d, 39);
+    }
+    &.progress-40::after {
+      background-image: progressLessThan50(#a1285d, 40);
+    }
+    &.progress-41::after {
+      background-image: progressLessThan50(#a1285d, 41);
+    }
+    &.progress-42::after {
+      background-image: progressLessThan50(#a1285d, 42);
+    }
+    &.progress-43::after {
+      background-image: progressLessThan50(#a1285d, 43);
+    }
+    &.progress-44::after {
+      background-image: progressLessThan50(#a1285d, 44);
+    }
+    &.progress-45::after {
+      background-image: progressLessThan50(#a1285d, 45);
+    }
+    &.progress-46::after {
+      background-image: progressLessThan50(#a1285d, 46);
+    }
+    &.progress-47::after {
+      background-image: progressLessThan50(#a1285d, 47);
+    }
+    &.progress-48::after {
+      background-image: progressLessThan50(#a1285d, 48);
+    }
+    &.progress-49::after {
+      background-image: progressLessThan50(#a1285d, 49);
+    }
+    &.progress-50::after {
+      background-image: progressMoreThan50(#a1285d, 50);
+    }
+    &.progress-51::after {
+      background-image: progressMoreThan50(#a1285d, 51);
+    }
+    &.progress-52::after {
+      background-image: progressMoreThan50(#a1285d, 52);
+    }
+    &.progress-53::after {
+      background-image: progressMoreThan50(#a1285d, 53);
+    }
+    &.progress-54::after {
+      background-image: progressMoreThan50(#a1285d, 54);
+    }
+    &.progress-55::after {
+      background-image: progressMoreThan50(#a1285d, 55);
+    }
+    &.progress-56::after {
+      background-image: progressMoreThan50(#a1285d, 56);
+    }
+    &.progress-57::after {
+      background-image: progressMoreThan50(#a1285d, 57);
+    }
+    &.progress-58::after {
+      background-image: progressMoreThan50(#a1285d, 58);
+    }
+    &.progress-59::after {
+      background-image: progressMoreThan50(#a1285d, 59);
+    }
+    &.progress-60::after {
+      background-image: progressMoreThan50(#a1285d, 60);
+    }
+    &.progress-61::after {
+      background-image: progressMoreThan50(#a1285d, 61);
+    }
+    &.progress-62::after {
+      background-image: progressMoreThan50(#a1285d, 62);
+    }
+    &.progress-63::after {
+      background-image: progressMoreThan50(#a1285d, 63);
+    }
+    &.progress-64::after {
+      background-image: progressMoreThan50(#a1285d, 64);
+    }
+    &.progress-65::after {
+      background-image: progressMoreThan50(#a1285d, 65);
+    }
+    &.progress-66::after {
+      background-image: progressMoreThan50(#a1285d, 66);
+    }
+    &.progress-67::after {
+      background-image: progressMoreThan50(#a1285d, 67);
+    }
+    &.progress-68::after {
+      background-image: progressMoreThan50(#a1285d, 68);
+    }
+    &.progress-69::after {
+      background-image: progressMoreThan50(#a1285d, 69);
+    }
+    &.progress-70::after {
+      background-image: progressMoreThan50(#a1285d, 70);
+    }
+    &.progress-71::after {
+      background-image: progressMoreThan50(#a1285d, 71);
+    }
+    &.progress-72::after {
+      background-image: progressMoreThan50(#a1285d, 72);
+    }
+    &.progress-73::after {
+      background-image: progressMoreThan50(#a1285d, 73);
+    }
+    &.progress-74::after {
+      background-image: progressMoreThan50(#a1285d, 74);
+    }
+    &.progress-75::after {
+      background-image: progressMoreThan50(#a1285d, 75);
+    }
+    &.progress-76::after {
+      background-image: progressMoreThan50(#a1285d, 76);
+    }
+    &.progress-77::after {
+      background-image: progressMoreThan50(#a1285d, 77);
+    }
+    &.progress-78::after {
+      background-image: progressMoreThan50(#a1285d, 78);
+    }
+    &.progress-79::after {
+      background-image: progressMoreThan50(#a1285d, 79);
+    }
+    &.progress-80::after {
+      background-image: progressMoreThan50(#a1285d, 80);
+    }
+    &.progress-81::after {
+      background-image: progressMoreThan50(#a1285d, 81);
+    }
+    &.progress-82::after {
+      background-image: progressMoreThan50(#a1285d, 82);
+    }
+    &.progress-83::after {
+      background-image: progressMoreThan50(#a1285d, 83);
+    }
+    &.progress-84::after {
+      background-image: progressMoreThan50(#a1285d, 84);
+    }
+    &.progress-85::after {
+      background-image: progressMoreThan50(#a1285d, 85);
+    }
+    &.progress-86::after {
+      background-image: progressMoreThan50(#a1285d, 86);
+    }
+    &.progress-87::after {
+      background-image: progressMoreThan50(#a1285d, 87);
+    }
+    &.progress-88::after {
+      background-image: progressMoreThan50(#a1285d, 88);
+    }
+    &.progress-89::after {
+      background-image: progressMoreThan50(#a1285d, 89);
+    }
+    &.progress-90::after {
+      background-image: progressMoreThan50(#a1285d, 80);
+    }
+    &.progress-91::after {
+      background-image: progressMoreThan50(#a1285d, 91);
+    }
+    &.progress-92::after {
+      background-image: progressMoreThan50(#a1285d, 92);
+    }
+    &.progress-93::after {
+      background-image: progressMoreThan50(#a1285d, 93);
+    }
+    &.progress-94::after {
+      background-image: progressMoreThan50(#a1285d, 94);
+    }
+    &.progress-95::after {
+      background-image: progressMoreThan50(#a1285d, 95);
+    }
+    &.progress-96::after {
+      background-image: progressMoreThan50(#a1285d, 96);
+    }
+    &.progress-97::after {
+      background-image: progressMoreThan50(#a1285d, 97);
+    }
+    &.progress-98::after {
+      background-image: progressMoreThan50(#a1285d, 98);
+    }
+    &.progress-99::after {
+      background-image: progressMoreThan50(#a1285d, 99);
+    }
+    &.progress-100::after {
+      background-image: progressMoreThan50(#a1285d, 100);
+    }
+    span {
+      color: #a1285d;
+      &::after {
+        color: #a1285d;
+      }
+    }
+  }
+}

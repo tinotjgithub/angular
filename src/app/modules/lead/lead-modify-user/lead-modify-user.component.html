@@ -1,0 +1,225 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+  <div [routerLink]="'/actions'">
+    <img alt = " " src="./../../../../assets/images-new/left.png" style="margin-right: 15px; cursor: pointer;">
+  </div>
+  <div>Back To Configuration</div>
+</div>
+<div class="wrap-manage-user mt-30">
+  <div class="d-flex space-between pr-30 mb-30">
+    <div>
+      <span class="section-title">Modify User Target</span>
+    </div>
+    <div class="d-flex">
+      <div class="d-flex search-bar-with-dropdown">
+        <div>
+          <select [(ngModel)]="filterType" (change)="filterChange()">
+            <option value="user-name">User Name</option>
+            <option value="first-name">First Name</option>
+          </select>
+        </div>
+        <div class="">
+          <input type="text" id="search" [(ngModel)]="filterValue" (keyup.enter)="filterValue ? search() : ''"
+            name="search" placeholder="Search User">
+        </div>
+        <div>
+          <em class="pi pi-search icon" (click)="filterValue ? search() : ''"></em>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mt-30" *ngIf="!searchDone || !filterValue">
+    <p-table [tableStyle]="{ 'table-layout': 'auto' }" [responsive]="true" #userTable
+      selectionMode="single" [columns]="col" [value]="allUserList" [paginator]="false" [styleClass]="'right_select'"
+      [rows]="rows" [resizableColumns]="true" dataKey="userName" [scrollable]="false" editMode="row">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" id="{{ col.field }}">
+            {{ col.header }}
+          </th>
+          <th id="edit1" class="select_row right">Edit</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user let-columns="columns" let-rowIndex="rowIndex" let-rowData
+        let-editing="editing" let-ri="rowIndex">
+        <tr class="text-left" [pEditableRow]="rowData">
+          <td *ngFor="let col of columns" style="cursor: pointer" [ngSwitch]="col.field">
+            <ng-container *ngSwitchCase="'ldapOrLocal'">
+              {{ user[col.field] ? "LDAP" : "Local user" }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'fullName'">
+              {{ user['firstName'] }} {{ user['lastName'] }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'dateOfBirth'">
+              <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'activeDate'">
+              <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'deactivateDate'">
+              <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'target'">
+          <td>
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <div class="wrap-input100 mb-0">
+                  <input min="minTarget" max="maxTarget"
+                    class="input100" numbersOnly type="text" [(ngModel)]="rowData.target" required />
+                    <span class="focus-input100"></span>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.target }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          </ng-container>
+          <ng-container *ngSwitchCase="'userGroups'">
+            <ng-container *ngIf="user?.userGroups && user?.userGroups.length > 0">
+              <span *ngFor="let userGroupName of user[col.field]; index as i">
+                {{userGroupName.groupName + ((user.userGroups.length === (i + 1)) ? '' : ',')}}
+              </span>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            {{ user[col.field] }}
+          </ng-container>
+          <ng-template #dateParse>
+            {{ user[col.field] | date: "MM/dd/yyyy" }}
+          </ng-template>
+          </td>
+          <td class="select_row right">
+            <em *ngIf="editing" pSaveEditableRow class="pi pi-check" pTooltip="Save" (click)="onRowEditSave(rowData, ri, true)"
+                  style="cursor: pointer; font-size: 30px; color:#20bc55;"></em>
+            <em *ngIf="editing" pSaveEditableRow class="pi pi-times" pTooltip="Cancel" (click)="onRowEditCancel(rowData, ri, true)"
+                  style="cursor: pointer; margin-left: 20px;"></em>
+            <img alt = " " src="./../../../../../assets/images-new/edit-form.png" *ngIf="!editing" pTooltip="Edit" pInitEditableRow
+            title="Edit" (click)="onRowEditInit(rowData, ri, true)" style="cursor: pointer;">
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr *ngIf="searchDone">
+          <td class="text-center" [attr.colspan]="col.length + 1">
+            No users available.
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-paginator [rows]="rows" [totalRecords]="totalRecords" pageLinkSize="3" (onPageChange)="paginate($event)"
+      [templateRight]="templateRight" [templateLeft]="templateLeft" #pagi></p-paginator>
+    <ng-template #templateLeft>
+      <div class="result-no">
+        {{allUserList?.length > 0 ? ('Showing ' + ((currentPage * rows) - (rows - 1)) +' - ' + (((currentPage * rows) > totalRecords) ? totalRecords : (currentPage * rows)) + ' of '+ totalRecords) : 'Showing 0 - 0 of 0'}}
+      </div>
+    </ng-template>
+    <ng-template #templateRight>
+      <div class="result-no d-flex">
+        <div>Rows per page &nbsp; &nbsp;</div>
+        <select class="input100 result-no" style="width: 50px;" [(ngModel)]="rows" (change)="getAllusers(1, rows)" [ngModelOptions]="{standalone: true}">
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+        </select>
+      </div>
+    </ng-template>
+  </div>
+
+  <div *ngIf="searchDone && filterValue">
+    <p-table *ngIf="searchDone" [tableStyle]="{ 'table-layout': 'auto' }" [responsive]="true" #userTable
+      selectionMode="single" [columns]="col" [value]="userList" [paginator]="searchDone" [styleClass]="'right_select'"
+      [rows]="10" [resizableColumns]="true" dataKey="userName" [scrollable]="false" editMode="row">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" id="{{ col.field }}">
+            {{ col.header }}
+          </th>
+          <th id="edit2" class="select_row right">Edit</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user let-columns="columns" let-rowIndex="rowIndex" let-rowData
+        let-editing="editing" let-ri="rowIndex">
+        <tr class="text-left" *ngIf="searchDone" [pEditableRow]="rowData">
+          <td *ngFor="let col of columns" style="cursor: pointer" [ngSwitch]="col.field">
+            <ng-container *ngSwitchCase="'ldapOrLocal'">
+              {{ user[col.field] ? "LDAP" : "Local user" }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'fullName'">
+              {{ user['firstName'] }} {{ user['lastName'] }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'dateOfBirth'">
+              <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'activeDate'">
+              <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'deactivateDate'">
+              <ng-container [ngTemplateOutlet]="dateParse"></ng-container>
+            </ng-container>
+            <ng-container *ngSwitchCase="'target'">
+          <td>
+            <p-cellEditor>
+              <ng-template pTemplate="input">
+                <div class="wrap-input100 mb-0">
+                  <input min="minTarget" max="maxTarget"
+                    class="input100" numbersOnly type="text" [(ngModel)]="rowData.target" required />
+                    <span class="focus-input100"></span>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="output">
+                {{ rowData.target }}
+              </ng-template>
+            </p-cellEditor>
+          </td>
+          </ng-container>
+          <ng-container *ngSwitchCase="'userGroups'">
+            <ng-container *ngIf="user?.userGroups && user?.userGroups.length > 0">
+              <span *ngFor="let userGroupName of user[col.field]; index as i">
+                {{userGroupName.groupName + ((user.userGroups.length === (i + 1)) ? '' : ',')}}
+              </span>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngSwitchDefault>
+            {{ user[col.field] }}
+          </ng-container>
+          <ng-template #dateParse>
+            {{ user[col.field] | date: "MM/dd/yyyy" }}
+          </ng-template>
+          </td>
+          <td class="select_row right">
+            <em *ngIf="editing" pSaveEditableRow class="pi pi-check" pTooltip="Save" (click)="onRowEditSave(rowData, ri)"
+                  style="cursor: pointer; font-size: 30px; color:#20bc55;"></em>
+            <em *ngIf="editing" pSaveEditableRow class="pi pi-times" pTooltip="Cancel" (click)="onRowEditCancel(rowData, ri)"
+                  style="cursor: pointer; margin-left: 20px;"></em>
+            <img alt = " " src="./../../../../../assets/images-new/edit-form.png" *ngIf="!editing" pTooltip="Edit" pInitEditableRow
+            title="Edit" (click)="onRowEditInit(rowData, ri)" style="cursor: pointer;">
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr *ngIf="searchDone">
+          <td class="text-center" [attr.colspan]="col.length + 1">
+            No users available.
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{userList?.length > 0 ? ('Showing ' + (state.first + 1) +' - ' + (((state.first + state.rows) > state.totalRecords ? (state.totalRecords) : (state.first + state.rows) ) | number) + ' of '+ state.totalRecords) : 'Showing 0 - 0 of 0'}}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <div class="result-no d-flex">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select class="input100 result-no" style="width: 50px;" [(ngModel)]="userTable.rows" [ngModelOptions]="{standalone: true}">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

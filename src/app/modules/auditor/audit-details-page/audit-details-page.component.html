@@ -1,0 +1,87 @@
+<div class="mt-60">
+    <div class="wrap-pend-reason">
+        <div class="d-flex space-between">
+            <div>
+                <span class="section-title">Audit {{claimsType | titlecase}}</span>
+                <span *ngIf="tableData?.length > 0" class="section-title-count">{{tableData?.length}}</span>
+            </div>
+            <div class="d-flex mr-30">
+                <div class="search-bar d-flex space-between">
+                    <input type="text" class="search-input"
+                        (input)="dt ? dt.filterGlobal($event.target.value, 'contains') : ''"
+                        placeholder="Search Claims">
+                    <img alt = " " src="./../../../assets/images-new/search.png"
+                        style="width: 20px; height: 20px; margin-top: 10px;">
+                </div>
+            </div>
+        </div>
+        <div class="mt-30">
+            <p-table #dt [columns]="cols" [value]="tableData" [tableStyle]="{ 'table-layout': 'auto' }"
+                dataKey="taskId" [responsive]="true" [paginator]="true" [rows]="10" [resizableColumns]="true">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" id="col">
+                            {{col.header}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th *ngFor="let col of columns" [ngSwitch]="col.filter" id="col">
+                            <div class="wrap-input100 my-auto" *ngSwitchCase="'text'">
+                                <input type="text" class="input100" style="min-width: 160px;"
+                                    (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                    <span class="focus-input100"></span>
+                            </div>
+                            <div class="wrap-input100 my-auto" *ngSwitchCase="'dropdown'">
+                                <select class="input100" style="min-width: 200px;" (change)="dt.filter($event.target.value, col.field, 'equals')">
+                                    <option value="" selected>All</option>
+                                    <option *ngFor="let val of getOptions(col)" [value]="val">{{val}}</option>
+                                </select>
+                                <span class="focus-input100"></span>
+                            </div>
+                            <div class="wrap-input100 my-auto" style="visibility: hidden;" *ngSwitchDefault>
+                                <input type="text" class="input100" style="min-width: 160px;"
+                                    (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                    <span class="focus-input100"></span>
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td *ngFor="let col of columns">
+                            {{rowData[col.field]}}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="paginatorleft" let-state>
+                    <div class="result-no">
+                      {{tableData?.length > 0 ?
+                        ('Showing ' + (dt?.filteredValue ? (dt?.filteredValue?.length > 0 ? (state.first + 1) : 0) : (state.first + 1)) +' - ' +
+                        (
+                          (
+                          (state.first + state.rows) > (dt?.filteredValue || tableData)?.length ? ((dt?.filteredValue || tableData).length) : (state.first + state.rows)
+                          )| number
+                        ) + ' of '+ (dt?.filteredValue || tableData)?.length) : 'Showing 0 - 0 of 0'}}
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="paginatorright">
+                    <div class="result-no d-flex">
+                      <div>Rows per page &nbsp; &nbsp;</div>
+                      <select class="input100 result-no" style="width: 50px;" (click)="dt.reset()" [(ngModel)]="dt.rows" [ngModelOptions]="{standalone: true}">
+                        <option>10</option>
+                        <option>25</option>
+                        <option>50</option>
+                      </select>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                      <td [attr.colspan]="columns.length" style="text-align: left">
+                        No records found
+                      </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+<div class="d-flex">
+  <p class="horizontal-axis" style="padding-top:50px;">Billed Amount</p>
+  <div
+    class="scroll-graph-y w-100"
+    style="max-height: 200px;  min-height: 200px;"
+  >
+    <google-chart
+      *ngIf="isAuditRendered"
+      #chart
+      [title]="titleAudit"
+      [type]="typeAudit"
+      [data]="dataAudit"
+      [options]="optionsAudit"
+      [width]="widthAudit"
+      [columnNames]="columnNamesAudit"
+      [height]="heightAudit"
+      style="width: 100%;"
+    >
+    </google-chart>
+  </div>
+</div>
+<p class="vertical-axis">Claim Count</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mr-3 mb-3 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Billed Amount By Claim Type"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex">
+    <p class="horizontal-axis-enlarged" style="padding-top:150px;">
+      Billed Amount
+    </p>
+    <div class="scroll-graph-y" style="max-height: 400px;  min-height: 400px;">
+      <google-chart
+        *ngIf="isAuditRendered"
+        #chart
+        [title]="titleAudit"
+        [type]="typeAudit"
+        [data]="dataAudit"
+        [options]="optionsAuditEnlarged"
+        [width]="750"
+        [height]="400"
+        [columnNames]="columnNamesAudit"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged">Claim Count</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-3 mb-3 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>

@@ -1,0 +1,335 @@
+<form [formGroup]="notificationForm">
+  <div
+    class="d-flex pl-30 pr-30 mt-15"
+    [ngClass]="{ disabledDiv: disableControl }"
+  >
+    <div class="wrap-input100 mr-30 w-50">
+      <span class="label-input100">Email Subject</span>
+      <input
+        class="input100"
+        type="text"
+        name="name"
+        formControlName="emailSub"
+        placeholder="Email Subject"
+        autocomplete="new-name"
+      />
+      <span class="focus-input100"></span>
+      <div class="error-msg" *ngIf="getEmailSub.touched && getEmailSub.invalid">
+        <span *ngIf="getEmailSub.hasError('required')">
+          Email Subject is required.
+        </span>
+        <span *ngIf="getEmailSub.hasError('minlength')">
+          Email Subject should contain min 5 characters.
+        </span>
+        <span *ngIf="getEmailSub.hasError('maxlength')">
+          Email Subject should not exceed 32 characters.
+        </span>
+      </div>
+    </div>
+
+    <div class="wrap-input100 w-50">
+      <span class="label-input100">Email Trigger Date</span>
+      <p-calendar
+        formControlName="emailTriggerDate"
+        appendTo="body"
+        [showIcon]="true"
+        [styleClass]="e.focus ? 'focus-calendar' : ''"
+        dateFormat="mm/dd/yy"
+        yearRange="1970:2099"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        [showTime]="true"
+        hourFormat="12"
+        [minDate]="tomorrow"
+        (onFocus)="e.focus = true"
+        [placeholder]="'Email Trigger Date'"
+        #e
+      >
+      </p-calendar>
+      <div
+        class="error-msg"
+        *ngIf="getEmailTriggerDate.touched && getEmailTriggerDate.invalid"
+      >
+        <span *ngIf="getEmailTriggerDate.hasError('required')">
+          Email trigger date is required.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex pl-30 pr-30" [ngClass]="{ disabledDiv: disableControl }">
+    <div class="wrap-input100">
+      <span class="label-input100">Message</span>
+      <textarea
+        class="input100"
+        formControlName="message"
+        placeholder="Message"
+      ></textarea>
+      <span class="focus-input100"></span>
+      <div class="error-msg" *ngIf="getMessage.touched && getMessage.invalid">
+        <span *ngIf="getMessage.hasError('required')"
+          >Message is required.</span
+        >
+        <span *ngIf="getMessage.hasError('minlength')">
+          Minimum 15 characters should be entered.
+        </span>
+        <span *ngIf="getMessage.hasError('maxlength')">
+          Maximum of 256 characters are allowed.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex pl-30 pr-30" [ngClass]="{ disabledDiv: disableControl }">
+    <div class="wrap-input100 mr-30 w-50">
+      <span class="label-input100">Schedule From</span>
+      <p-calendar
+        formControlName="scheduledDate"
+        appendTo="body"
+        [showIcon]="true"
+        [styleClass]="d.focus ? 'focus-calendar' : ''"
+        dateFormat="mm/dd/yy"
+        yearRange="1970:2099"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        [minDate]="tomorrow"
+        [showTime]="true"
+        hourFormat="12"
+        (onFocus)="d.focus = true"
+        [placeholder]="'Schedule From'"
+        #d
+      >
+      </p-calendar>
+      <div
+        class="error-msg"
+        *ngIf="
+          getScheduledDate.touched &&
+          notificationForm.errors &&
+          notificationForm.errors.invalidTriggerDate
+        "
+      >
+        <span>
+          Please select a date greater than e-mail trigger date date.
+        </span>
+      </div>
+    </div>
+
+    <div class="wrap-input100 w-50">
+      <span class="label-input100">Schedule To</span>
+      <p-calendar
+        formControlName="scheduledDateTo"
+        appendTo="body"
+        [showIcon]="true"
+        [styleClass]="e.focus ? 'focus-calendar' : ''"
+        dateFormat="mm/dd/yy"
+        yearRange="1970:2099"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        [showTime]="true"
+        hourFormat="12"
+        [minDate]="tomorrow"
+        (onFocus)="f.focus = true"
+        [placeholder]="'Schedule To'"
+        #f
+      >
+      </p-calendar>
+      <div
+        class="error-msg"
+        *ngIf="
+          (getScheduledDateTo.touched || getScheduledDate.touched) &&
+          notificationForm.errors &&
+          notificationForm.errors.invalidScheduledDate
+        "
+      >
+        <span *ngIf="notificationForm.errors.invalidScheduledDate">
+          Please select a date & time greater than scheduled from date & time
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="d-block pl-30 pr-30 disabledDiv"
+    *ngIf="mode === 'cancel' || (mode === 'edit' && emailTriggered)"
+  >
+    <div class="wrap-input100">
+      <span class="label-input100">Already Added Custom Recepients</span>
+      <input
+        class="input100"
+        formControlName="customAdded"
+        type="email"
+        name="custom-email"
+        autocomplete="new-name"
+        placeholder="Enter Custom Email ID"
+      />
+      <span class="focus-input100"></span>
+    </div>
+  </div>
+
+  <div class="pl-30 pr-30" [ngClass]="{ disabledDiv: mode === 'delete' }">
+    <div class="label-input100 mb-12">User Type</div>
+    <div formArrayName="users">
+      <ng-container *ngFor="let user of users; let i = index">
+        <ng-container *ngIf="!mode">
+          <input
+            formControlName="{{ i }}"
+            type="checkbox"
+            id="check-{{ i }}"
+            class="chk-btn"
+          />
+        </ng-container>
+        <ng-container *ngIf="mode && mode === 'edit'">
+          <ng-container *ngIf="emailTriggered">
+            <input
+              formControlName="{{ i }}"
+              type="checkbox"
+              id="check-{{ i }}"
+              class="chk-btn"
+              *ngIf="initialArray && this.initialArray[i]"
+              disabled
+              readonly
+            />
+            <input
+              *ngIf="initialArray && !this.initialArray[i]"
+              formControlName="{{ i }}"
+              type="checkbox"
+              id="check-{{ i }}"
+              class="chk-btn"
+            />
+          </ng-container>
+          <ng-container *ngIf="!emailTriggered">
+            <input
+              formControlName="{{ i }}"
+              type="checkbox"
+              id="check-{{ i }}"
+              class="chk-btn"
+            />
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="mode && mode == 'delete'">
+          <input
+            formControlName="{{ i }}"
+            type="checkbox"
+            id="check-{{ i }}"
+            class="chk-btn"
+            disabled
+            readonly
+          />
+        </ng-container>
+        <ng-container *ngIf="mode && mode === 'cancel'">
+          <input
+            formControlName="{{ i }}"
+            type="checkbox"
+            id="check-{{ i }}"
+            class="chk-btn"
+            *ngIf="initialArray && this.initialArray[i]"
+            disabled
+            readonly
+          />
+          <input
+            *ngIf="initialArray && !this.initialArray[i]"
+            formControlName="{{ i }}"
+            type="checkbox"
+            id="check-{{ i }}"
+            class="chk-btn"
+          />
+        </ng-container>
+        <label
+          for="check-{{ i }}"
+          [pTooltip]="
+            initialArray && this.initialArray[i] && emailTriggered
+              ? 'You can not unselect already added user type while cancelling or email already sent'
+              : ''
+          "
+          tooltipPosition="bottom"
+        >
+          {{ user === "ALL" ? "All Users" : (user | titlecase) }}
+        </label>
+      </ng-container>
+    </div>
+  </div>
+
+  <div
+    class="d-block mt-30 pl-30 pr-30"
+    [ngClass]="{ disabledDiv: mode === 'delete' }"
+  >
+    <div class="wrap-input100">
+      <span class="label-input100">Custom</span>
+      <input
+        class="input100"
+        formControlName="custom"
+        type="email"
+        name="custom-email"
+        autocomplete="new-name"
+        placeholder="Enter Custom Email ID"
+      />
+      <span class="focus-input100"></span>
+      <div class="error-msg" *ngIf="getCustom.touched && getCustom.invalid">
+        <span *ngIf="getCustom.hasError('emailPattern')">
+          Please Enter Valid Email ID.
+        </span>
+      </div>
+    </div>
+    <span class="m-0" style="font-size: 12px;">
+      For more than one email, separate by semi-colon(;)
+    </span>
+  </div>
+
+  <div class="d-flex flex-end mt-15 pr-30">
+    <div
+      class="position-relative pl-30 mr-10"
+      *ngIf="
+        (getCustom.touched || getUsers.touched) &&
+        notificationForm.errors &&
+        notificationForm.errors.atleastOne
+      "
+    >
+      <span class="error-msg" class="invalid-feedback d-block">
+        Please select any one recipient option or enter a recipient mail.
+      </span>
+    </div>
+    <div class="cancel-btn mr-30" (click)="cancel()">Cancel</div>
+    <div
+      *ngIf="!disableControl"
+      class="outline-btn-blue mr-30"
+      [class.disabled]="notificationForm.invalid"
+      (click)="notificationForm.invalid ? '' : sendNow()"
+    >
+      Send Now
+    </div>
+    <div
+      *ngIf="!disableControl"
+      class="solid-btn"
+      [class.disabled]="
+        notificationForm.invalid ||
+        getEmailTriggerDate.value === '' ||
+        getEmailTriggerDate.value === null ||
+        getEmailTriggerDate.value === undefined
+      "
+      (click)="
+        notificationForm.invalid ||
+        getEmailTriggerDate.value === '' ||
+        getEmailTriggerDate.value === null ||
+        getEmailTriggerDate.value === undefined
+          ? ''
+          : sendNotification()
+      "
+    >
+      Schedule
+    </div>
+    <div
+      *ngIf="mode === 'delete'"
+      class="solid-btn"
+      (click)="deleteNotification()"
+    >
+      Delete
+    </div>
+    <div
+      *ngIf="mode === 'cancel'"
+      class="solid-btn"
+      (click)="cancelNotification()"
+    >
+      Cancel & Send Now
+    </div>
+  </div>
+</form>

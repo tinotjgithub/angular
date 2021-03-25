@@ -1,0 +1,71 @@
+<div id="small_donut" class="mt-30">
+  <div id="donutchart-small" style="display: flex; justify-content: center;">
+    <google-chart
+      #chart
+      [title]="titleStatus"
+      *ngIf="isStatusRendered"
+      [type]="typeStatus"
+      [data]="dataStatus"
+      [options]="optionsStatus"
+      [height]="heightStatus"
+      [width]="widthStatus"
+      (select)="isDataPresent ? openPopUp($event) : null"
+    >
+    </google-chart>
+  </div>
+</div>
+<div *ngIf="!isDataPresent" class="d-flex space-between justify-content-center">
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="820"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Audit Sampling By Audit Method"
+>
+  <div id="donutchart" class="w-100 h-100 d-flex justify-content-center">
+    <google-chart
+      #chart
+      [title]="titleStatus"
+      *ngIf="isStatusRendered"
+      [type]="typeStatus"
+      [data]="dataStatus"
+      [options]="optionsStatusEnlarged"
+      [width]="680"
+      [height]="380"
+      (select)="isDataPresent ? openPopUp($event) : null"
+    >
+    </google-chart>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  [style]="{ marginbottom: '20px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Audit Sampling By Audit Status ({{ status }})"
+  (onHide)="closePopUp()"
+>
+  <app-enrollment-auditor-dashboard-pop-up
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-enrollment-auditor-dashboard-pop-up>
+</p-dialog>

@@ -1,0 +1,57 @@
+.section-label {
+  color: #20558b;
+  font-size: 18px;
+  font-weight: 600;
+}
+.wrap-claim-count {
+  background-color: white;
+  border-radius: 8px;
+  position: relative;
+  padding: 30px;
+  width: 50%;
+  overflow: hidden;
+}
+.w-40 {
+  width: 40% !important;
+}
+.legend {
+  width: 14px;
+  height: 14px;
+  background-color: #4cc14f;
+  border-radius: 3px;
+}
+.completed {
+  background-color: #4cc14f;
+}
+.pended {
+  background-color: #ff5c5d;
+}
+.routed-out {
+  background-color: #c5b200;
+}
+.legend-label {
+  line-height: 14px;
+}
+
+.delete {
+  background-color: red;
+}
+.outline-btn {
+  background-color: transparent;
+  font-size: 14px;
+  color: #00b33d;
+  min-width: 150px;
+  padding: 0 30px;
+  height: 35px;
+  text-align: center;
+  line-height: 35px;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #00b33d;
+  cursor: pointer;
+}
+.outline-btn:hover {
+  background-color: #00b33d;
+  color: white;
+}

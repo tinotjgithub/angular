@@ -1,0 +1,230 @@
+<div class="tab-wrapper bottom-border mt-60">
+  <div class="tab-container">
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab1"
+      class="tab-menu-radio"
+      checked
+      #tab1
+    />
+    <label for="tab1" class="tab-menu px-4">Audited Claims</label>
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab2"
+      class="tab-menu-radio"
+      #tab2
+    />
+    <label for="tab2" class="tab-menu px-4">Team Scorecard</label>
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab3"
+      class="tab-menu-radio"
+      #tab3
+    />
+    <label for="tab3" class="tab-menu px-4">My Scorecard</label>
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab4"
+      class="tab-menu-radio"
+      #tab4
+    />
+    <label for="tab4" class="tab-menu px-4">Audit Dashboard</label>
+  </div>
+</div>
+<div class="d-flex mt-30 space-between" *ngIf="tab1.checked">
+  <div class="section-title ml-0">Audited Claims</div>
+</div>
+<div class="d-flex pr-30" *ngIf="tab1.checked">
+  <div class="w-30 p-0 mr-30">
+    <div class="wrap-claim-count w-100 h-100">
+      <div class="d-flex space-between ">
+        <div class="section-label">Claims Audited Summary</div>
+        <div>
+          <img alt = " "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="claimsSum.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-30">
+        <app-claims-audit-summary #claimsSum></app-claims-audit-summary>
+      </div>
+    </div>
+  </div>
+  <div class="w-70 wrap-claim-count pl-0" style="padding: 30px;">
+    <div class="d-flex">
+      <div class="h-100 w-50">
+        <div class="d-flex space-between pl-30">
+          <div class="section-label">Claims Audited By Queue</div>
+          <div class="pr-30">
+            <img alt = " "
+              src="./../../../../../assets/images-new/max.png"
+              (click)="audQueue.enlargedDisplay = true"
+              style="cursor: pointer;"
+            />
+          </div>
+        </div>
+        <div class="mt-15 pl-30 pr-2">
+          <app-claims-audited-queue
+            #audQueue
+            [resetFormSubject]="resetFormSubject"
+          ></app-claims-audited-queue>
+        </div>
+      </div>
+
+      <div class=" h-100 w-50">
+        <div class="d-flex space-between ">
+          <div class="section-label">Claims Audited By Type & Status</div>
+          <div>
+            <img alt = " "
+              src="./../../../../../assets/images-new/max.png"
+              (click)="typStat.enlargedDisplay = true"
+              style="cursor: pointer;"
+            />
+          </div>
+        </div>
+        <div class="mt-15">
+          <app-claims-audited-type-status
+            [resetFormSubject]="resetFormSubject"
+            #typStat
+          >
+          </app-claims-audited-type-status>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center mt-15">
+      <form [formGroup]="auditDates" style="display: contents;">
+        <div class="wrap-input100 mb-0 mr-30" style="width: 250px;">
+          <div class="label-input100">Processed Date Range</div>
+          <p-calendar
+            [maxDate]="maxDate"
+            (onClose)="validateDates()"
+            pTooltip="Processed Date Range"
+            tooltipPosition="bottom"
+            appendTo="body"
+            selectionMode="range"
+            rangeSeparator=" - "
+            [readonlyInput]="true"
+            [showIcon]="true"
+            formControlName="dateRange"
+            dateFormat="mm/dd/yy"
+            [monthNavigator]="true"
+            [yearNavigator]="true"
+            yearRange="1970:2099"
+          >
+          </p-calendar>
+          <div
+            style="color: red; font-size: 11px; position: absolute; top:55px;"
+            *ngIf="getDateRange.touched"
+          >
+            <span class="mr-2" *ngIf="getDateRange.hasError('required')"
+              >Date range is required.</span
+            >
+            <span class="mr-2" *ngIf="getDateRange.hasError('inValidDate')"
+              >Date range should not exceed six months.</span
+            >
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="section-title ml-0 mt-30" *ngIf="tab3.checked">My Scorecard</div>
+<div class="d-flex" *ngIf="tab3.checked">
+  <div class="wrap-claim-count w-70 mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">My Productivity</div>
+      <div>
+        <img alt = " "
+          src="./../../../../../assets/images-new/max.png"
+          (click)="prod.enlargedDisplay = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-30">
+      <app-claims-audit-productivity #prod></app-claims-audit-productivity>
+    </div>
+  </div>
+  <div class="wrap-claim-count w-40 mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">My Quality Score</div>
+      <div>
+        <img alt = " "
+          src="./../../../../../assets/images-new/max.png"
+          (click)="qul.displayEnlarged = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-20 scroll-graph-x">
+      <app-auditor-quality-score #qul></app-auditor-quality-score>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex space-between mt-30" *ngIf="tab2.checked">
+  <div class="section-title ml-0">Team Scorecard</div>
+</div>
+
+<div class="mb-30 d-flex" *ngIf="tab2.checked">
+  <div class="wrap-claim-count mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Financial Score Of Examiners</div>
+      <div>
+        <img alt = " "
+          src="./../../../../../assets/images-new/max.png"
+          (click)="finScore.enlargedDisplay = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-30">
+      <app-manager-financial-score #finScore></app-manager-financial-score>
+    </div>
+  </div>
+
+  <div class="wrap-claim-count">
+    <div class="d-flex space-between ">
+      <div class="section-label">Procedural Score Of Examiner</div>
+      <div>
+        <img
+          src="./../../../../../assets/images-new/max.png"
+          (click)="procScore.enlargedDisplay = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-30">
+      <app-manager-procedural-score #procScore></app-manager-procedural-score>
+    </div>
+  </div>
+</div>
+<div class="d-flex" *ngIf="tab2.checked">
+  <div class="wrap-claim-count mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Low Productivity Instances</div>
+      <div>
+        <img alt = " "
+          src="./../../../../../assets/images-new/max.png"
+          (click)="lowPer.enlargedDisplay = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-30">
+      <app-low-performing-examiners #lowPer></app-low-performing-examiners>
+    </div>
+  </div>
+</div>
+<div class="mt-30" *ngIf="tab4.checked">
+  <app-audit-report-dashboard></app-audit-report-dashboard>
+</div>

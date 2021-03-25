@@ -1,0 +1,35 @@
+<form id="userList">
+    <div>
+      <div class="wrap-report">
+        <div class="popup-body">
+          <div class="d-flex pl-30 pr-30 mt-15">
+            <div class="wrap-input100 mr-30 w-30">
+              <span class="label-input100">Processed From</span>
+              <p-calendar dateFormat="mm/dd/yy" appendTo="body" [showIcon]="true"
+              dateFormat="mm/dd/yy" yearRange="1970:2099" [monthNavigator]="true" [yearNavigator]="true"></p-calendar>
+              <span class="focus-input100"></span>
+            </div>
+  
+            <div class="wrap-input100 mr-30 w-30">
+              <span class="label-input100">Processed To</span>
+              <p-calendar dateFormat="mm/dd/yy" appendTo="body"
+                [showIcon]="true" dateFormat="mm/dd/yy" yearRange="1970:2099"
+                [monthNavigator]="true" [yearNavigator]="true"></p-calendar>
+              <span class="focus-input100"></span>
+            </div>
+            <div class="solid-btn mt-30 ml-auto" pTooltip="Generate Report"
+              tooltipPosition="bottom">
+              Generate
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="wrap-report d-flex flex-start mt-30 pb-0">
+        <div class="w-100">
+          <app-report-table [columns]="columns" [header]="'Member Count by Status & Transaction'" [data]="reportData">
+          </app-report-table>
+        </div>
+      </div>
+    </div>
+  </form>

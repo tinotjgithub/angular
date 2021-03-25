@@ -1,0 +1,229 @@
+<div class="mt-60">
+  <div class="">
+    <div class="w-100">
+      <div class="block-title">My Team Status</div>
+      <div class="d-flex">
+        <div
+          class="card w-25 card-blue mr-20"
+          pTooltip="Total number of Claims Examiner"
+        >
+          <div class="card-title-examiner">Claims Examiner</div>
+          <div class="card-value-examiner">
+            {{ todaysCount?.examinerCount || 0 }}
+          </div>
+        </div>
+        <div
+          class="card w-25 card-green mr-20"
+          pTooltip="Total number of Completed Claims"
+        >
+          <div class="card-title-examiner">Completed Claims</div>
+          <div class="card-value-examiner">
+            {{ todaysCount?.completedCount || 0 }}
+          </div>
+        </div>
+        <div
+          class="card w-25 card-red mr-20"
+          pTooltip="Total number of Pended Calims"
+        >
+          <div class="card-title-examiner">Pended Claims</div>
+          <div class="card-value-examiner">
+            {{ todaysCount?.pendedCount || 0 }}
+          </div>
+        </div>
+        <div
+          class="card w-25 card-grey"
+          pTooltip="Total number of Routed In Claims"
+        >
+          <div class="card-title-examiner">Routed In</div>
+          <div class="card-value-examiner">
+            {{ todaysCount?.routedCount || 0 }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-100 mt-15">
+      <div class="block-title w-50 mt-10">My Tasks</div>
+      <div class="d-flex">
+        <div
+          class="card w-20 card-grey hover mr-15"
+          [routerLink]="todaysCount?.routedInCount ? ['/ClaimRouting'] : null"
+        >
+          <div class="card-title-examiner">Claims Routed In</div>
+          <div class="card-value-examiner">
+            {{ todaysCount?.routedInCount || 0 }}
+          </div>
+        </div>
+        <div
+          class="card card-purple hover mr-15 w-20"
+          [routerLink]="
+            auditStatus?.reviewRebuttalCount ? ['/rebut-review-list'] : null
+          "
+        >
+          <div class="card-title-examiner">Review / Rebuttal Queue</div>
+          <div class="card-value-examiner">
+            {{ auditStatus?.reviewRebuttalCount || 0 }}
+          </div>
+          <div class="card-hover">
+            View Review / Rebuttal Queue
+          </div>
+        </div>
+        <div
+          class="card card-yellow hover w-20 mr-15"
+          [routerLink]="
+            auditStatus?.routedInCount ? ['/audit-routed-in-detail/list'] : null
+          "
+        >
+          <div class="card-title-examiner">Auditor Routed In</div>
+          <div class="card-value-examiner">
+            {{ auditStatus?.routedInCount || 0 }}
+          </div>
+          <div class="card-hover">
+            View Routed In Queue
+          </div>
+        </div>
+        <div
+          class="card card-yellow hover w-20 mr-15"
+          [routerLink]="
+            todaysCount?.clientVendorQueueCount ? ['/client-queue'] : null
+          "
+        >
+          <div class="card-title-examiner">Client/Vendor Queue</div>
+          <div class="card-value-examiner">
+            {{ todaysCount?.clientVendorQueueCount || 0 }}
+          </div>
+          <div class="card-hover">
+            View Client/Vendor Queue
+          </div>
+        </div>
+        <div
+          [ngClass]="
+            daysCrossed
+              ? 'card card-amber hover w-20  pulse'
+              : 'card card-amber hover w-20'
+          "
+          [routerLink]="pendingCount ? ['/pending-assignment-detail'] : null"
+        >
+          <div class="card-title-examiner">Pending Reassignment</div>
+          <div class="card-value-examiner">{{ pendingCount || 0 }}</div>
+          <div class="card-hover">
+            View Pending Assignment
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block-title mt-30 mb-0">Quick Links</div>
+  <div class="btn-group justify-content-start d-flex mt-10">
+    <div class="big-btn position-relative mr-30" id="ql-dropdown">
+      <div class="user-element-1"></div>
+      <div class="btn-label">Actions</div>
+      <div class="ql-hover-dropdown">
+        <div
+          class="ql-link"
+          *ngFor="let action of actionLinks"
+          [routerLink]="action.routerLink"
+          [queryParams]="action.queryParams || null"
+        >
+          {{ action.label }}
+        </div>
+      </div>
+    </div>
+
+    <div class="big-btn" [routerLink]="'/claims-audit'">
+      <div class="user-element-4"></div>
+      <div class="btn-label">Claims Audit</div>
+    </div>
+  </div>
+
+  <div class="block-title mt-30">Claims Open Inventory By Status</div>
+  <div class="d-flex w-100">
+    <div class="card-with-icon w-25 card-total d-flex mr-20">
+      <div class="my-auto">
+        <div
+          class="mt-1 ml-1 profile_progress"
+          [class.progress-100]="total"
+          [class.progress-0]="!total"
+        >
+          <span>{{ total ? "100" : "0" }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">Total Claims</div>
+        <div class="card-value-examiner">
+          {{
+            (piechartCount?.assignedCount || 0) +
+              (piechartCount?.pendedCount || 0) +
+              (piechartCount?.toDoCount || 0)
+          }}
+        </div>
+      </div>
+    </div>
+    <div class="card-with-icon w-25 card-to-do d-flex mr-20">
+      <div>
+        <div
+          class="mt-1 ml-1 profile_progress progress-{{
+            getPercentage(piechartCount?.toDoCount)
+          }}"
+        >
+          <span>{{ getPercentage(piechartCount?.toDoCount) }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">Claims To Do</div>
+        <div class="card-value-examiner">{{ piechartCount?.toDoCount }}</div>
+      </div>
+    </div>
+    <div class="card-with-icon w-25 card-pended d-flex mr-20">
+      <div>
+        <div
+          class="mt-1 ml-1 profile_progress progress-{{
+            getPercentage(piechartCount?.pendedCount)
+          }}"
+        >
+          <span>{{ getPercentage(piechartCount?.pendedCount) }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">Claims Pended</div>
+        <div class="card-value-examiner">{{ piechartCount?.pendedCount }}</div>
+      </div>
+    </div>
+    <div class="card-with-icon w-25 card-assigned d-flex">
+      <div>
+        <div
+          class="mt-1 ml-1 profile_progress progress-{{
+            getPercentage(piechartCount?.assignedCount)
+          }}"
+        >
+          <span>{{ getPercentage(piechartCount?.assignedCount) }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">Claims Assigned</div>
+        <div class="card-value-examiner">
+          {{ piechartCount?.assignedCount }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex w-100 justify-content-center">
+    <div class="wrap-claim-volume w-50 mr-30 mt-30">
+      <div class="d-flex space-between ">
+        <div class="section-label">Claims Nearing Threshold SLA</div>
+        <div>
+          <img
+            src="./../../../../../assets/images-new/max.png"
+            (click)="threshold.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="d-flex justify-content-center mt-29">
+        <app-claims-nearing-threashold-sla class="w-100" #threshold>
+        </app-claims-nearing-threashold-sla>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,124 @@
+<div *ngIf="!isSLAArray" class="d-flex flex-end mt-4">
+  <span class="label-input50">SLA Days:&nbsp;&nbsp;{{ slaDays }}</span>
+</div>
+
+<div class="d-flex flex-end mt-6" *ngIf="isSLAArray">
+  <span class="label-input50">SLA Days&nbsp;&nbsp;</span>
+</div>
+<div class="d-flex flex-end mt-1" *ngIf="isSLAArray">
+  <div *ngFor="let sla of slaDaysArray">
+    <span class="label-input50">{{ sla }}&nbsp; &nbsp;</span>
+  </div>
+</div>
+
+<div class="d-flex scroll-graph-x">
+  <p class="horizontal-axis" style="padding-top:60px;">Claim Count</p>
+  <google-chart
+    *ngIf="isExaminerCountRendered"
+    #barchart
+    (select)="openPopUp($event)"
+    [title]="titleExaminerCount"
+    [type]="typeExaminerCount"
+    [data]="dataInventory"
+    [options]="optionsOpenInv"
+    [columnNames]="columnNamesExaminerCount"
+    [width]="widthAge"
+    [height]="heightAge"
+  >
+  </google-chart>
+</div>
+<p class="vertical-axis text-center">Days Nearing SLA</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mb-2 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<form [formGroup]="invGroup" (ngSubmit)="onSubmitOpenInv()">
+  <div
+    class="row justify-content-right"
+    style="margin-left:5px; margin-right:5px;"
+  >
+    <div class="wrap-input100 mb-0 mr-30">
+      <div class="label-input100">Days Nearing SLA</div>
+      <p-dropdown
+        appendTo="body"
+        [options]="daysList"
+        formControlName="days"
+        [style]="{ width: '100%' }"
+        placeholder="Select day(s)"
+        tooltip="Days Nearing SLA"
+        (onChange)="onSubmitOpenInv()"
+        tooltipPosition="bottom"
+      ></p-dropdown>
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Claims Nearing SLA"
+>
+  <div *ngIf="!isSLAArray" class="d-flex flex-end mt-6">
+    <span class="label-input50">SLA Days:&nbsp;&nbsp;{{ slaDays }}</span>
+  </div>
+
+  <div class="d-flex flex-end mt-6" *ngIf="isSLAArray">
+    <span class="label-input50">SLA Days&nbsp;&nbsp;</span>
+  </div>
+  <div class="d-flex flex-end mt-1" *ngIf="isSLAArray">
+    <div *ngFor="let sla of slaDaysArray">
+      <span class="label-input50">{{ sla }}&nbsp; &nbsp;</span>
+    </div>
+  </div>
+  <div class="d-flex scroll-graph-x">
+    <p class="horizontal-axis" style="padding-top:160px;">Claim Count</p>
+    <google-chart
+      *ngIf="isExaminerCountRendered"
+      #chart
+      (select)="openPopUp($event)"
+      [title]="titleExaminerCount"
+      [type]="typeExaminerCount"
+      [data]="dataInventory"
+      [options]="optionsOpenInvEnlarged"
+      [width]="enlargedWidth"
+      [height]="360"
+      [columnNames]="columnNamesExaminerCount"
+    >
+    </google-chart>
+  </div>
+  <p class="vertical-axis-enlarged text-center">Days Nearing SLA</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [contentStyle]="{ padding: 0, maxHeight: '100%', overflowY: 'auto' }"
+  [transitionOptions]="'0ms'"
+  header="Claims Nearing SLA ({{ this.editUser.age }} Days)"
+  (onHide)="closePopUp()"
+>
+  <div class="d-flex">
+    <app-claims-open-inventory-view
+      class="w-100"
+      header="Claims List"
+      [editUser]="editUser"
+      (cancelProcess)="this.editMode = false"
+    ></app-claims-open-inventory-view>
+  </div>
+</p-dialog>

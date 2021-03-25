@@ -1,0 +1,138 @@
+<div class="d-flex mt-30">
+  <form [formGroup]="auditDates" style="display: flex; width: 100%;" (ngSubmit)="onSubmitAudit()">
+    <div class="wrap-input100 w-30 mr-auto">
+      <div class="label-input100">Processed Date Range</div>
+      <p-calendar [maxDate]="maxDate" (onSelect)="validateDates()" appendTo="body" selectionMode="range"
+        rangeSeparator=" - " [readonlyInput]="true" [showIcon]="true" formControlName="dateRange" dateFormat="mm/dd/yy"
+        [monthNavigator]="true" [yearNavigator]="true" yearRange="1970:2099" (onClose)="isValid ? onSubmitAudit() : ''">
+      </p-calendar>
+      <div class="error-msg" *ngIf="!isValid && rangeError">
+        Date range should not exceed six months
+      </div>
+      <div class="error-msg" *ngIf="!isValid && invalidDateError">
+        Start date is greater than End date
+      </div>
+    </div>
+    <div>
+      <div class="outline-btn mr-30 mt-10" (click)="exportExcel()">
+        Export to Excel
+      </div>
+    </div>
+  </form>
+</div>
+<div class="wrap-claim-volume mr-30">
+  <div class="d-flex space-between ">
+    <div class="section-label">Audit Sampling By Category</div>
+    <div>
+      <img alt = " " src="./../../../../../assets/images-new/max.png" (click)="auditSamCat.enlargedDisplay = true;"
+        style="cursor: pointer;">
+    </div>
+  </div>
+  <div class="mt-30">
+    <app-audit-sampling-by-category [resetFormSubject]="resetFormSubject.asObservable()" #auditSamCat>
+    </app-audit-sampling-by-category>
+  </div>
+</div>
+
+<div class="d-flex mt-30">
+  <div class="wrap-claim-count mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Audit Sampling By Method</div>
+      <div>
+        <img alt = " " src="./../../../../../assets/images-new/max.png" (click)="auditSamMeth.displayEnlarged = true;"
+          style="cursor: pointer;">
+      </div>
+    </div>
+    <div class="mt-30 d-flex justify-content-center">
+      <app-audit-sampling-by-method #auditSamMeth [resetFormSubject]="resetFormSubject.asObservable()">
+      </app-audit-sampling-by-method>
+    </div>
+  </div>
+
+  <div class="wrap-claim-count">
+    <div class="d-flex space-between ">
+      <div class="section-label">Audit Sampling By Adjudication Type</div>
+      <div>
+        <img alt = " " src="./../../../../../assets/images-new/max.png" (click)="auditSamAdj.displayEnlarged = true;"
+          style="cursor: pointer;">
+      </div>
+    </div>
+    <div class="mt-30 d-flex justify-content-center">
+      <app-audit-sampling-by-adjudication #auditSamAdj [resetFormSubject]="resetFormSubject.asObservable()">
+      </app-audit-sampling-by-adjudication>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex mt-30">
+  <div class="wrap-claim-count mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Audit Status</div>
+      <div>
+        <img alt = " " src="./../../../../../assets/images-new/max.png" (click)="auditStatus.displayEnlarged = true;"
+          style="cursor: pointer;">
+      </div>
+    </div>
+    <div class="mt-30 d-flex justify-content-center">
+      <app-audit-status #auditStatus [resetFormSubject]="resetFormSubject.asObservable()"></app-audit-status>
+    </div>
+  </div>
+
+  <div class="wrap-claim-count mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Audit Status By Error Type</div>
+      <div>
+        <img alt = " " src="./../../../../../assets/images-new/max.png" (click)="auditSatErr.displayEnlarged = true;"
+          style="cursor: pointer;">
+      </div>
+    </div>
+    <div class="mt-30 d-flex justify-content-center">
+      <app-audit-status-by-error-type #auditSatErr [resetFormSubject]="resetFormSubject.asObservable()">
+      </app-audit-status-by-error-type>
+    </div>
+  </div>
+
+  <div class="wrap-claim-count">
+    <div class="d-flex space-between ">
+      <div class="section-label">Audit Status By Amount</div>
+      <div>
+        <img alt = " " src="./../../../../../assets/images-new/max.png" (click)="auditSatAmt.displayEnlarged = true;"
+          style="cursor: pointer;">
+      </div>
+    </div>
+    <div class="mt-30 d-flex justify-content-center">
+      <app-audit-status-by-amount #auditSatAmt [resetFormSubject]="resetFormSubject.asObservable()">
+      </app-audit-status-by-amount>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex mt-30">
+  <div class="wrap-claim-count mr-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Audit Sampling By Billed Amount</div>
+      <div>
+        <img alt = " " src="./../../../../../assets/images-new/max.png" (click)="auditSamBilled.enlargedDisplay = true;"
+          style="cursor: pointer;">
+      </div>
+    </div>
+    <div class="mt-30">
+      <app-audit-sampling-by-billed-amount #auditSamBilled [resetFormSubject]="resetFormSubject.asObservable()">
+      </app-audit-sampling-by-billed-amount>
+    </div>
+  </div>
+
+  <div class="wrap-claim-count">
+    <div class="d-flex space-between ">
+      <div class="section-label">Billed Amount By Claim Type</div>
+      <div>
+        <img alt = " " src="./../../../../../assets/images-new/max.png" (click)="auditBilled.enlargedDisplay = true;"
+          style="cursor: pointer;">
+      </div>
+    </div>
+    <div class="mt-30">
+      <app-audit-billed-amount-by-claim-type #auditBilled [resetFormSubject]="resetFormSubject.asObservable()">
+      </app-audit-billed-amount-by-claim-type>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,386 @@
+<div class="mt-60">
+  <div class="wrap-pend-reason">
+    <div class="d-flex space-between">
+      <div>
+        <span class="section-title"
+          >{{
+            FilterBy === "AuditFailed" ? "Audit Failed" : FilterBy === "ReviewRebut"? "Review/Rebut": FilterBy
+          }}
+          Claims</span
+        >
+        <ng-container *ngIf="FilterBy === 'AuditFailed'; else notAuditFailed">
+          <span
+            *ngIf="auditFailedData?.length > 0"
+            class="section-title-count"
+            >{{
+              claimsTable?.filteredValue
+                ? claimsTable?.filteredValue.length
+                : auditFailedData.length
+            }}</span
+          >
+        </ng-container>
+        <ng-template #notAuditFailed>
+          <span *ngIf="claimList?.length > 0" class="section-title-count">{{
+            claimsTable?.filteredValue
+              ? claimsTable?.filteredValue.length
+              : claimList.length
+          }}</span>
+        </ng-template>
+      </div>
+      <div class="d-flex">
+        <div class="search-bar d-flex space-between mr-30">
+          <input
+            type="text"
+            class="search-input"
+            (input)="
+              claimsTable
+                ? claimsTable.filterGlobal($event.target.value, 'contains')
+                : ''
+            "
+            placeholder="Search Claims"
+          />
+          <img
+            alt=" "
+            src="./../../../assets/images-new/search.png"
+            style="width: 20px; height: 20px; margin-top: 10px;"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="mt-30">
+      <p-table
+        *ngIf="FilterBy !== 'AuditFailed' && claimList"
+        (onFilter)="getFilteredUsers($event)"
+        [tableStyle]="{ 'table-layout': 'auto' }"
+        [responsive]="true"
+        #claimsTable
+        selectionMode="single"
+        [columns]="cols"
+        [value]="claimList"
+        [paginator]="true"
+        [rows]="10"
+        [resizableColumns]="true"
+        dataKey="ClaimId"
+        [scrollable]="false"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th
+              id="col"
+              *ngFor="let col of columns"
+              style="min-width: 115px"
+              [pSortableColumn]="col.field"
+              [pSortableColumnDisabled]="
+                col.field === 'status' ||
+                col.field === 'pendReason' ||
+                col.field === 'routeReason' ||
+                col.field === 'comments' ||
+                col.field === 'queueName'
+                  ? true
+                  : false
+              "
+            >
+              {{ col.header }}
+              <p-sortIcon
+                *ngIf="
+                  col.field !== 'status' &&
+                  col.field !== 'pendReason' &&
+                  col.field !== 'routeReason' &&
+                  col.field !== 'comments' &&
+                  col.field !== 'queueName'
+                "
+                [field]="col.field"
+              >
+              </p-sortIcon>
+            </th>
+          </tr>
+          <tr>
+            <th
+              id="col"
+              style="padding-top: 9px;"
+              *ngFor="let col of columns"
+              [ngSwitch]="col.field"
+            >
+              <div class="wrap-input100 my-auto" *ngSwitchCase="'claimId'">
+                <input
+                  class="input100"
+                  pInputText
+                  type="text"
+                  (input)="
+                    claimsTable.filter(
+                      $event.target.value,
+                      col.field,
+                      col.filterMatchMode
+                    )
+                  "
+                />
+                <span class="focus-input100"></span>
+              </div>
+              <div class="wrap-input100 my-auto" *ngSwitchCase="'queueName'">
+                <input
+                  class="input100"
+                  pInputText
+                  type="text"
+                  (input)="
+                    claimsTable.filter(
+                      $event.target.value,
+                      col.field,
+                      col.filterMatchMode
+                    )
+                  "
+                />
+                <span class="focus-input100"></span>
+              </div>
+              <div class="wrap-input100 my-auto" *ngSwitchCase="'pendReason'">
+                <p-dropdown
+                  appendTo="body"
+                  [options]="pendReason"
+                  [autoWidth]="false"
+                  [style]="{
+                    minWidth: '225px',
+                    width: '225px',
+                    overflow: 'visible'
+                  }"
+                  (onChange)="
+                    claimsTable.filter($event.value, col.field, 'equals')
+                  "
+                ></p-dropdown>
+              </div>
+              <div class="wrap-input100 my-auto" *ngSwitchCase="'routeReason'">
+                <p-dropdown
+                  appendTo="body"
+                  [options]="routeReason"
+                  [autoWidth]="false"
+                  [style]="{
+                    minWidth: '225px',
+                    width: '225px',
+                    overflow: 'visible'
+                  }"
+                  (onChange)="
+                    claimsTable.filter($event.value, col.field, 'equals')
+                  "
+                >
+                </p-dropdown>
+              </div>
+              <div
+                class="wrap-input100 my-auto"
+                *ngSwitchCase="'pendOrRouteReason'"
+              >
+                <p-dropdown
+                  appendTo="body"
+                  [options]="pendOrRouteReason"
+                  [autoWidth]="false"
+                  [style]="{
+                    minWidth: '225px',
+                    width: '225px',
+                    overflow: 'visible'
+                  }"
+                  (onChange)="
+                    claimsTable.filter($event.value, col.field, 'equals')
+                  "
+                ></p-dropdown>
+              </div>
+              <div class="wrap-input100 my-auto" *ngSwitchCase="'status'">
+                <select
+                  class="input100"
+                  *ngIf="FilterBy === 'Routed In'"
+                  [value]="
+                    claimsTable.filters[col.field]
+                      ? claimsTable.filters[col.field].value
+                      : ''
+                  "
+                  (change)="
+                    claimsTable.filter($event.target.value, col.field, 'equals')
+                  "
+                >
+                  <option value="" selected>All</option>
+                  <option *ngFor="let val of getOptions(col)" [value]="val">{{
+                    val
+                  }}</option>
+                </select>
+                <span
+                  class="focus-input100"
+                  *ngIf="FilterBy === 'Routed In'"
+                ></span>
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template
+          pTemplate="body"
+          let-claim
+          let-columns="columns"
+          let-rowIndex="rowIndex"
+        >
+          <tr style="text-align:left; align-items: left; align-content: left;">
+            <td
+              *ngFor="let col of columns"
+              [class.link]="checkForNavigation(col.field, claim['status'])"
+              (click)="selectedCol(col, claim[col.field], claim)"
+              style="cursor: pointer"
+            >
+              {{ claim[col.field] }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          <div class="result-no">
+            {{
+              claimList?.length > 0
+                ? "Showing " +
+                  (claimsTable?.filteredValue
+                    ? claimsTable?.filteredValue?.length > 0
+                      ? state.first + 1
+                      : 0
+                    : state.first + 1) +
+                  " - " +
+                  ((state.first + state.rows >
+                  (claimsTable?.filteredValue || claimList)?.length
+                    ? (claimsTable?.filteredValue || claimList).length
+                    : state.first + state.rows
+                  ) | number) +
+                  " of " +
+                  (claimsTable?.filteredValue || claimList)?.length
+                : "Showing 0 - 0 of 0"
+            }}
+          </div>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+          <div class="result-no d-flex">
+            <div>Rows per page &nbsp; &nbsp;</div>
+            <select
+              class="input100 result-no"
+              style="width: 50px;"
+              (change)="claimsTable.reset()"
+              [(ngModel)]="claimsTable.rows"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <option>10</option>
+              <option>25</option>
+              <option>50</option>
+            </select>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="columns.length" style="text-align: center">
+              No records found
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-table
+        #claimsTable
+        *ngIf="FilterBy === 'AuditFailed' || FilterBy === 'ReviewRebut'"
+        [columns]="FilterBy === 'AuditFailed' ? auditFailedCols : reviewRebuttalCols"
+        [columnResizeMode]="'fit'"
+        [autoLayout]="true"
+        [value]="
+          FilterBy === 'AuditFailed' ? auditFailedData : reviewRebuttalData
+        "
+        [metaKeySelection]="true"
+        [paginator]="true"
+        [rows]="10"
+        dataKey="claimId"
+        (onFilter)="getFilteredUsers($event)"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th
+              style="min-width: 115px"
+              *ngFor="let col of columns"
+              id="{{ col.field }}"
+            >
+              {{ col.header }}
+            </th>
+          </tr>
+          <tr>
+            <th
+              id="col"
+              style="padding-top: 9px;"
+              *ngFor="let col of columns"
+              [ngSwitch]="col.field"
+            >
+              <div class="wrap-input100 my-auto" *ngSwitchCase="'auditStatus'">
+                <p-dropdown
+                  appendTo="body"
+                  [options]="auditStatus"
+                  [autoWidth]="false"
+                  [style]="{
+                    minWidth: '125px',
+                    width: '125px',
+                    overflow: 'visible'
+                  }"
+                  (onChange)="
+                    claimsTable.filter($event.value, col.field, 'equals')
+                  "
+                ></p-dropdown>
+              </div>
+            </th> 
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr>
+            <td
+              *ngFor="let col of columns"
+              (click)="selectedAuditFailedCol(col, rowData[col.field], rowData)"
+              [ngClass]="{ link: col.field === 'claimId' }"
+            >
+              {{ rowData[col.field] }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr>
+            <td [attr.colspan]="columns.length" style="text-align: center">
+              No records found
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          <div class="result-no">
+            {{
+              auditFailedData?.length > 0
+                ? "Showing " +
+                  (claimsTable?.filteredValue
+                    ? claimsTable?.filteredValue?.length > 0
+                      ? state.first + 1
+                      : 0
+                    : state.first + 1) +
+                  " - " +
+                  ((state.first + state.rows >
+                  (claimsTable?.filteredValue || auditFailedData)?.length
+                    ? (claimsTable?.filteredValue || auditFailedData).length
+                    : state.first + state.rows
+                  ) | number) +
+                  " of " +
+                  (claimsTable?.filteredValue || auditFailedData)?.length
+                : "Showing 0 - 0 of 0"
+            }}
+          </div>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+          <div class="result-no d-flex">
+            <div>Rows per page &nbsp; &nbsp;</div>
+            <select
+              class="input100 result-no"
+              style="width: 50px;"
+              [(ngModel)]="claimsTable.rows"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <option>10</option>
+              <option>25</option>
+              <option>50</option>
+            </select>
+          </div>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+<p-confirmDialog
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+  [style]="{ width: '50vw' }"
+></p-confirmDialog>

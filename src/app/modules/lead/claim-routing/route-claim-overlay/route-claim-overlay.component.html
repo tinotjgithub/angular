@@ -1,0 +1,107 @@
+<div class="">
+  <form [formGroup]="claimRouteForm">
+    <div class="d-flex mt-30 space-between">
+      <div class="wrap-input100 w-30 no-border">
+        <div class="label-input100">Claim ID</div>
+        <input class="input100 claim-value" formControlName="claimID" readonly disabled type="text" />
+        <span class="focus-input100"></span>
+        <div class="error-msg" style="top: 50px;" *ngIf="this.getFormControl('claimID').touched">
+          <span *ngIf="this.getFormControl('claimID').hasError('required')">Claim ID is required.</span>
+        </div>
+      </div>
+      <div class="wrap-input100 w-30  no-border">
+        <div class="label-input100">Claim Age</div>
+        <input class="input100 claim-value" formControlName="claimAge" readonly disabled type="text" />
+        <span class="focus-input100"></span>
+        <div class="error-msg" style="top: 50px;" *ngIf="this.getFormControl('claimAge').touched">
+          <span *ngIf="this.getFormControl('claimAge').hasError('required')">Claim Age is required.</span>
+        </div>
+      </div>
+      <div class="wrap-input100 w-30 no-border">
+        <div class="label-input100">Queue Name</div>
+        <input class="input100 claim-value" formControlName="queueName" readonly disabled type="text" />
+        <span class="focus-input100"></span>
+        <div class="error-msg" style="top: 50px;" *ngIf="this.getFormControl('queueName').touched">
+          <span *ngIf="this.getFormControl('queueName').hasError('required')">Queue Name is required.</span>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex space-between">
+      <div class="wrap-input100 w-30 no-border">
+        <div class="label-input100">Route From</div>
+        <input class="input100 claim-value" formControlName="routeFrom" readonly disabled type="text" />
+        <span class="focus-input100"></span>
+        <div class="error-msg" style="top: 50px;" *ngIf="this.getFormControl('routeFrom').touched">
+          <span *ngIf="this.getFormControl('routeFrom').hasError('required')">Route From is required.</span>
+        </div>
+      </div>
+      <div class="wrap-input100 w-30 no-border">
+        <div class="label-input100">Route Date</div>
+        <input class="input100 claim-value" formControlName="routeDate" readonly disabled type="text" />
+        <span class="focus-input100"></span>
+        <div class="error-msg" style="top: 50px;" *ngIf="this.getFormControl('routeDate').touched">
+          <span *ngIf="this.getFormControl('routeDate').hasError('required')">Route Date is required.</span>
+        </div>
+      </div>
+      <div class="wrap-input100 w-30 no-border">
+        <div class="label-input100">Route Reason</div>
+        <input class="input100 claim-value" formControlName="routedReason" readonly disabled type="text" />
+        <span class="focus-input100"></span>
+        <div class="error-msg" style="top: 50px;" *ngIf="this.getFormControl('routedReason').touched">
+          <span *ngIf="this.getFormControl('routedReason').hasError('required')">Route Reason is required.</span>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex space-between">
+      <div class="wrap-input100 no-border">
+        <div class="label-input100">Route Comments</div>
+        <input class="input100 claim-value" formControlName="previousComments" readonly disabled type="text" />
+        <span class="focus-input100"></span>
+      </div>
+    </div>
+    <div class="d-flex space-between" *ngIf="!isClient">
+      <div class="wrap-input100 w-30">
+        <div class="label-input100">Role</div>
+        <p-dropdown placeholder="Select Role" [options]="routeRoles" formControlName="routeRole" (onChange)="setRoleSelected($event.value)">
+        </p-dropdown>
+        <div class="error-msg" style="top: 50px;" *ngIf="this.getFormControl('routeRole').touched">
+          <span *ngIf="this.getFormControl('routeRole').hasError('required')">Route Role is required.</span>
+        </div>
+      </div>
+      <div class="wrap-input100 w-30">
+        <div class="label-input100">Route To</div>
+        <p-dropdown placeholder="Select Name" [disabled]="!roleSelected" [options]="routeToList" formControlName="routeTo">
+        </p-dropdown>
+        <div class="error-msg" style="top: 50px;" *ngIf="this.getFormControl('routeTo').touched">
+          <span *ngIf="this.getFormControl('routeTo').hasError('required')">Route to Name is required.</span>
+        </div>
+      </div>
+      <div class="wrap-input100 w-30 no-border"></div>
+    </div>
+    <div class="d-flex space-between">
+      <div class="wrap-input100">
+        <div class="label-input100">Route Reason</div>
+        <p-dropdown placeholder="Select Reason" [style]="{width: '100%'}" [options]="routeReasons" formControlName="routeReason">
+          </p-dropdown>
+        <div class="error-msg" style="top: 50px;" *ngIf="this.getFormControl('routeReason').touched">
+          <span *ngIf="this.getFormControl('routeReason').hasError('required')">Route Reason is required.</span>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex space-between">
+      <div class="wrap-input100">
+        <div class="label-input100">Comments</div>
+        <textarea class="input100" formControlName="routeComments" type="text"></textarea>
+        <span class="focus-input100"></span>
+        <div class="error-msg" style="top: 50px;" *ngIf="this.getFormControl('routeComments').touched">
+          <span *ngIf="this.getFormControl('routeComments').hasError('required')">Comments is required.</span>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-end">
+      <div class="cancel-btn mr-30" [class.disabled]="!claimRouteForm.dirty" (click)="!claimRouteForm.dirty ? '' : confirmCancel()">Cancel</div>
+      <div class="solid-btn" [class.disabled]="claimRouteForm.invalid" (click)="claimRouteForm.disabled ? '' : submit()">Route</div>
+    </div>
+  </form>
+</div>
+<p-confirmDialog [acceptButtonStyleClass]="'accept-button'" [rejectButtonStyleClass]="'reject-button'" header="Confirmation"></p-confirmDialog>

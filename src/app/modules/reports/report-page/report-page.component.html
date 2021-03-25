@@ -1,0 +1,147 @@
+<div class="jumbotron d-flex justify-content-between">
+  <div class="row" *ngIf="registerForm">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="row">
+
+        <div class="col">
+          <div class="col">
+            <label>Claim Type </label>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <p-multiSelect [options]="claimds" formControlName="selectedClaimids"
+                [ngClass]="{ 'is-invalid': submitted && f.selectedClaimids.errors }"></p-multiSelect>
+              <div *ngIf="submitted && f.selectedClaimids.errors" class="invalid-feedback">
+                <div *ngIf="f.selectedClaimids.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <label>Billed Amount Between</label>
+          <div class="col">
+            <div class="row">
+              <div class="form-group row">
+                <input type="number" formControlName="billedAmountFrom" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.billedAmountFrom.errors }" />
+                <div *ngIf="submitted && f.billedAmountFrom.errors" class="invalid-feedback">
+                  <div *ngIf="f.billedAmountFrom.errors.required">required</div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <input type="number" formControlName="billedAmountTo" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.billedAmountTo.errors }" />
+                <div *ngIf="submitted && f.billedAmountTo.errors" class="invalid-feedback">
+                  <div *ngIf="f.billedAmountTo.errors.required">required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col">
+          <label>Allowed Amount Between</label>
+          <div class="col">
+            <div class="row">
+              <div class="form-group row">
+                <input type="number" formControlName="allowedAmountFrom" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.allowedAmountFrom.errors }" />
+                <div *ngIf="submitted && f.allowedAmountFrom.errors" class="invalid-feedback">
+                  <div *ngIf="f.allowedAmountFrom.errors.required">required</div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <input type="number" formControlName="allowedAmountTo" class="form-control"
+                  [ngClass]="{ 'is-invalid': submitted && f.allowedAmountTo.errors }" />
+                <div *ngIf="submitted && f.allowedAmountTo.errors" class="invalid-feedback">
+                  <div *ngIf="f.allowedAmountTo.errors.required">required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <div class="col">
+          <div class="col">
+            <label>WB Name </label>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <p-multiSelect [options]="wbids" formControlName="selectedWbids"
+                [ngClass]="{ 'is-invalid': submitted && f.selectedWbids.errors }"></p-multiSelect>
+              <div *ngIf="submitted && f.selectedWbids.errors" class="invalid-feedback">
+                <div *ngIf="f.selectedWbids.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="col">
+            <label>Claim Source </label>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <p-multiSelect [options]="claimsources" formControlName="selectedClaimsources"
+                [ngClass]="{ 'is-invalid': submitted && f.selectedClaimsources.errors }"></p-multiSelect>
+              <div *ngIf="submitted && f.selectedClaimsources.errors" class="invalid-feedback">
+                <div *ngIf="f.selectedClaimsources.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <label>Age (Days)</label>
+          <div class="col">
+            <div class="form-group row">
+              <input type="number" formControlName="age" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.allowedAmountFrom.errors }" />
+              <div *ngIf="submitted && f.allowedAmountFrom.errors" class="invalid-feedback">
+                <div *ngIf="f.allowedAmountFrom.errors.required">required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col">
+          <div class="col">
+            <label>Supplier Name </label>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <p-multiSelect [options]="supplierNames" formControlName="selectedSupplierName"
+                [ngClass]="{ 'is-invalid': submitted && f.selectedSupplierName.errors }"></p-multiSelect>
+              <div *ngIf="submitted && f.selectedSupplierName.errors" class="invalid-feedback">
+                <div *ngIf="f.selectedSupplierName.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <label>Last Touched </label>
+          <div class="col">
+            <div class="form-group row">
+              <input type="number" formControlName="last" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.allowedAmountFrom.errors }" />
+              <div *ngIf="submitted && f.allowedAmountFrom.errors" class="invalid-feedback">
+                <div *ngIf="f.allowedAmountFrom.errors.required">required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="form-group d-flex flex-row " style="width: 125px; float: right">
+        <button class="btn btn-primary form-control">Apply Filters</button>
+      </div>
+    </form>
+  </div>
+</div>

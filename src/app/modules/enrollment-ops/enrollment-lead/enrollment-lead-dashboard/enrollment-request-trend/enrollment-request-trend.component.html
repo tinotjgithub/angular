@@ -1,0 +1,104 @@
+<form [formGroup]="myProductivityDates" (ngSubmit)="onSubmitMyProductivity()">
+  <div class="d-flex space-between ">
+    <div class="section-label">Completed Request Trend (Monthly)</div>
+    <div>
+      <img
+        alt=" "
+        src="./../../../assets/images-new/max.png"
+        style="cursor: pointer;"
+        (click)="showDialog()"
+      />
+    </div>
+  </div>
+  <div class="mt-30">
+    <div style="display: flex; justify-content: center;">
+      <p class="horizontal-axis" style="padding-top:50px;">
+        Request Count
+      </p>
+      <google-chart
+        #chart
+        [title]="myTitleProductivity"
+        *ngIf="isProductivityRendered"
+        [type]="myTypeProductivity"
+        [data]="myDataProductivity"
+        [options]="myOptionsProductivity"
+        [columnNames]="myColumnNamesProductivity"
+        [height]="myHeightProductivity"
+        [width]="myWidthProductivity"
+      >
+      </google-chart>
+    </div>
+    <div
+      *ngIf="!isDataPresent"
+      class="d-flex space-between justify-content-center"
+    >
+      <p-message severity="warn" text="No Data Present!"></p-message>
+    </div>
+    <p class="vertical-axis">Month (mm-yyyy)</p>
+  </div>
+  <div class="row d-flex pl-30 pr-30 space-between mt-20 position-relative">
+    <div class="wrap-input100">
+      <div class="label-input100">Completion Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onSelect)="validateDates()"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        pTooltip="Completion Date Range"
+        tooltipPosition="bottom"
+        [showIcon]="true"
+        formControlName="dateRange"
+        view="month"
+        dateFormat="mm/yy"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        appendTo="body"
+        (onClose)="isValid ? onSubmitMyProductivity() : ''"
+      >
+      </p-calendar>
+    </div>
+    <div class="error-msg" style="top:55px" *ngIf="getDateRange.touched">
+      <span class="mr-2" *ngIf="!isValid"
+        >Date Range should not exceed six months.</span
+      >
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Completed Request Trend (Monthly)"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex">
+    <p class="horizontal-axis-enlarged" style="padding-top:150px;">
+      Request Count
+    </p>
+    <google-chart
+      #chart
+      [title]="myTitleProductivity"
+      *ngIf="isProductivityRendered"
+      [type]="myTypeProductivity"
+      [data]="myDataProductivity"
+      [options]="myOptionsProductivity"
+      [width]="700"
+      [columnNames]="myColumnNamesProductivity"
+      [height]="400"
+    >
+    </google-chart>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <p class="vertical-axis-enlarged">Month (mm-yyyy)</p>
+</p-dialog>

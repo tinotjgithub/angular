@@ -1,0 +1,172 @@
+<div class="d-flex space-between mt-60" href="#">
+  <div class="d-flex">
+    <div [routerLink]="'/configuration-menu'">
+      <img
+        alt=" "
+        src="./../../../../assets/images-new/left.png"
+        style="margin-right: 15px; cursor: pointer;"
+      />
+    </div>
+    <div>Back To Configuration</div>
+  </div>
+  <div *ngIf="!claimsData || claimsData.length === 0" class="text-danger mt-60">
+    * No Check Points Has Been Added.
+  </div>
+  <div class="solid-btn mr-30" (click)="addChecklist = true">
+    Add New Checklist
+  </div>
+</div>
+<div class="grid-container" style="background: none">
+  <div
+    class="mt-30 grid-item"
+    *ngFor="let workCategory of claimsData"
+    class="m-2"
+    style="background: white; border-radius: 8px"
+  >
+    <div
+      class="p-0 h-100 mr-30 pb-0 "
+      [class.disabled]="
+        workCategoryStatus && !workCategoryStatus[workCategory.workCategory]
+      "
+    >
+      <div class="d-flex pl-30 mt-15 space-between ">
+        <div class="section-label">
+          {{ workCategory.workCategory }}
+          {{
+            workCategoryStatus && !workCategoryStatus[workCategory.workCategory]
+              ? " - Disabled"
+              : ""
+          }}
+        </div>
+        <div
+          class="outline-btn delete mr-30"
+          (click)="
+            !selectedClaims[workCategory.workCategory] ||
+            selectedClaims[workCategory.workCategory].length < 1
+              ? ''
+              : deleteChecklist(workCategory.workCategory)
+          "
+          [class.disabled]="
+            !selectedClaims[workCategory.workCategory] ||
+            selectedClaims[workCategory.workCategory].length < 1
+          "
+        >
+          Delete
+        </div>
+      </div>
+      <div>
+        <div class="d-flex pl-30 mt-30 space-between table-header ">
+          <div class="mu-name w-75">Checkpoint</div>
+          <div class="mu-username text-center">Select</div>
+          <div class="mu-username text-center">Edit</div>
+        </div>
+        <div class="scroll-graph-y mb-30" style="height: 125px;">
+          <div
+            class="d-flex pl-30 space-between wrap-row"
+            *ngFor="let row of workCategory.checkList"
+          >
+            <div class="mu-name link w-75">{{ row }}</div>
+            <div class="mu-username text-center">
+              <p-checkbox
+                name="workCategory.workCategory"
+                value="{{ row }}"
+                [(ngModel)]="selectedClaims[workCategory.workCategory]"
+              ></p-checkbox>
+            </div>
+            <div class="mu-username text-center">
+              <img
+                alt=" "
+                src="./../../../../assets/images-new/edit-form.png"
+                pTooltip="Edit"
+                title="Edit"
+                (click)="editCheckList(row, workCategory.workCategory)"
+                style="cursor: pointer;"
+              />
+            </div>
+          </div>
+          <div
+            class="text-center mt-30"
+            *ngIf="
+              !workCategory.checkList || workCategory.checkList?.length < 1
+            "
+          >
+            No Checkpoint available
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-dialog
+  [(visible)]="addChecklist"
+  modal="true"
+  [header]="'Add New Checklist'"
+  [width]="400"
+  (onHide)="checklistForm.reset(); edit = false"
+>
+  <form style="display: contents;" [formGroup]="checklistForm">
+    <div class="d-flex mt-30">
+      <div class="wrap-input100">
+        <div class="label-input100">Work Category</div>
+        <p-dropdown
+          appendTo="body"
+          [styleClass]="'w-100'"
+          [autoWidth]="false"
+          tooltipPosition="bottom"
+          pTooltip="Frequency"
+          [options]="workCategoryList"
+          formControlName="type"
+          placeholder="Select a work category"
+          [optionLabel]="'name'"
+          [disabled]="edit"
+        >
+        </p-dropdown>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          style="top:45px"
+          *ngIf="
+            checklistForm.get('type').touched &&
+            checklistForm.get('type').hasError('required')
+          "
+        >
+          Work Item Type is required.
+        </div>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="wrap-input100">
+        <div class="label-input100">Checkpoint</div>
+        <input
+          maxlength="100"
+          class="input100"
+          type="textarea"
+          formControlName="checkpoint"
+        />
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          style="top:45px"
+          *ngIf="
+            checklistForm.get('checkpoint').touched &&
+            checklistForm.get('checkpoint').hasError('required')
+          "
+        >
+          Checkpoint is required.
+        </div>
+      </div>
+    </div>
+    <div class="d-flex mt-10 flex-end">
+      <div class="cancel-btn mr-30" (click)="addChecklist = false">Cancel</div>
+      <div
+        class="solid-btn"
+        [class.disabled]="checklistForm.invalid"
+        (click)="
+          checklistForm.invalid ? '' : edit ? editCheckPoint() : addCheckPoint()
+        "
+      >
+        {{ edit ? "Edit" : "Add" }}
+      </div>
+    </div>
+  </form>
+</p-dialog>

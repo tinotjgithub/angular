@@ -1,0 +1,128 @@
+<div id="small_donut" class="">
+  <div id="donutchart-small" style="display: flex; justify-content: center;">
+    <google-chart
+      *ngIf="isAuditRendered"
+      #chart
+      [title]="titleAudit"
+      [type]="typeAudit"
+      [data]="dataAudit"
+      [options]="optionsAudit"
+      [columnNames]="columnNamesAudit"
+      [height]="heightAudit"
+      [width]="widthAudit"
+    >
+    </google-chart>
+    <div
+      *ngIf="hasData"
+      class="d-flex labelOverlay-small"
+      [ngStyle]="{
+        left:
+          total.length > 3
+            ? '46.5%'
+            : total.length > 2
+            ? '47.5%'
+            : total.length > 1
+            ? '48.5%'
+            : '49.5%'
+      }"
+      pTooltip="Claims Audited"
+      tooltipPosition="bottom"
+    >
+      <div class="graph-total-small" #textSmal>
+        <span *ngFor="let item of total">{{ item }}</span>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-3 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</div>
+<form [formGroup]="auditDates" (ngSubmit)="onSubmitAudit()">
+  <div class="d-flex space-between mt-20">
+    <div class="wrap-input100 mb-0 mr-30">
+      <div class="label-input100">Processed Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onClose)="isValid ? onSubmitAudit() : ''"
+        appendTo="body"
+        (onSelect)="validateDates()"
+        selectionMode="range"
+        pTooltip="Processed Date Range"
+        tooltipPosition="bottom"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <span class="focus-input100"></span>
+      <div class="error-msg" *ngIf="!isValid">
+        <span class="m-1 invalid-feedback d-inline-block"
+          >Date range should not exceed six months</span
+        >
+      </div>
+    </div>
+    <div class="excel-icon">
+      <img
+        alt=" "
+        src="./../../../../assets/images-new/download-excel.png"
+        (click)="!isValid ? '' : downloadExcel()"
+        pTooltip="Export to Excel"
+        alt="Export"
+      />
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="displayEnlarged"
+  width="810"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="displayEnlarged"
+  [transitionOptions]="'0ms'"
+  header="My Quality Score"
+>
+  <div id="donutchart" class="w-100 h-100 d-flex justify-content-center">
+    <google-chart
+      *ngIf="isAuditRendered"
+      #chart
+      [title]="titleAudit"
+      [type]="typeAudit"
+      [data]="dataAudit"
+      [options]="optionsAuditEnlarged"
+      [width]="750"
+      [columnNames]="columnNamesAudit"
+      [height]="400"
+    >
+    </google-chart>
+    <div
+      *ngIf="hasData"
+      class="arrange-horizontally labelOverlay"
+      [ngStyle]="{
+        left: 'calc(51% - ' + text.clientWidth / 2 + 'px)',
+        top: 'calc(50% - 21.5px)'
+      }"
+      pTooltip="Claims Audited"
+      tooltipPosition="bottom"
+    >
+      <div class="graph-total" #text>
+        <span *ngFor="let item of total">{{ item }}</span>
+      </div>
+    </div>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-3 ml-5 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>

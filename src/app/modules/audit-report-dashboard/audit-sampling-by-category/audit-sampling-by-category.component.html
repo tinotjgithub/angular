@@ -1,0 +1,169 @@
+<div class="d-flex justify-content-center">
+  <p class="horizontal-axis" style="padding-top:50px;">Claim Count</p>
+  <div class="scroll-graph-x">
+    <google-chart
+      *ngIf="isAuditRendered"
+      #chart
+      [title]="titleAudit"
+      [type]="typeAudit"
+      [data]="dataAudit"
+      [options]="optionsAudit"
+      [width]="widthAudit"
+      [columnNames]="columnNamesAudit"
+      [height]="heightAudit"
+    >
+    </google-chart>
+  </div>
+</div>
+<p class="vertical-axis-sampling-chart text-center">Claim Type</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mr-3 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+
+<form [formGroup]="samplingGroup" (ngSubmit)="onSubmitCategory()">
+  <div class="d-flex">
+    <div class="wrap-input100 mt-10 mb-0 w-30 mr-30">
+      <div class="label-input100">Sampling Method</div>
+      <p-multiSelect
+        itemSize="30"
+        [maxSelectedLabels]="0"
+        #samplingMethodSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="samplingList"
+        [selectedItemsLabel]="'{0} Selected'"
+        [virtualScroll]="true"
+        formControlName="samplingMethod"
+        appendTo="body"
+      ></p-multiSelect>
+      <div
+        class="error-msg"
+        *ngIf="samplingGroup.get('samplingMethod').hasError('required')"
+      >
+        Please select a sampling method
+      </div>
+    </div>
+    <div class="wrap-input100 mt-10 mb-0 w-30 mr-30">
+      <div class="label-input100">Claim Source</div>
+      <p-multiSelect
+        itemSize="30"
+        appendTo="body"
+        [maxSelectedLabels]="0"
+        #claimSourceSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="claimSourceList"
+        [selectedItemsLabel]="'{0} Selected'"
+        formControlName="claimSource"
+        [virtualScroll]="true"
+      ></p-multiSelect>
+      <div
+        class="error-msg"
+        *ngIf="samplingGroup.get('claimSource').hasError('required')"
+      >
+        Please select a claim source
+      </div>
+    </div>
+    <div class="wrap-input100 mt-10 mb-0 w-30 mr-30">
+      <div class="label-input100">Line of Business</div>
+      <p-multiSelect
+        [maxSelectedLabels]="0"
+        itemSize="30"
+        #businessListSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="businessList"
+        [selectedItemsLabel]="'{0} Selected'"
+        formControlName="ListOfBusiness"
+        appendTo="body"
+        [virtualScroll]="true"
+      ></p-multiSelect>
+      <div
+        class="error-msg"
+        *ngIf="samplingGroup.get('ListOfBusiness').hasError('required')"
+      >
+        Please select a line of business
+      </div>
+    </div>
+    <div class="wrap-input100 mt-10 mb-0 w-30 mr-30">
+      <div class="label-input100">Payment Status</div>
+      <p-multiSelect
+        itemSize="30"
+        [maxSelectedLabels]="0"
+        #paymentStatusSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="paymentStatusList"
+        formControlName="paymentStatus"
+        [selectedItemsLabel]="'{0} Selected'"
+        appendTo="body"
+        [virtualScroll]="true"
+      ></p-multiSelect>
+      <div
+        class="error-msg"
+        *ngIf="samplingGroup.get('paymentStatus').hasError('required')"
+      >
+        Please select a payment status
+      </div>
+    </div>
+    <div class="wrap-input100 mt-10 mb-0 w-30">
+      <div class="label-input100">Claim Type</div>
+      <p-multiSelect
+        [maxSelectedLabels]="0"
+        itemSize="30"
+        #claimtypeSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="claimTypeList"
+        formControlName="claimType"
+        [virtualScroll]="true"
+        appendTo="body"
+        [selectedItemsLabel]="'{0} Selected'"
+      ></p-multiSelect>
+      <div
+        class="error-msg"
+        *ngIf="samplingGroup.get('claimType').hasError('required')"
+      >
+        Please select a claim Type
+      </div>
+    </div>
+  </div>
+  <div class="d-flex"></div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Audit Sampling By Category"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex justify-content-center">
+    <p class="horizontal-axis-enlarged" style="padding-top:150px;">
+      Claim Count
+    </p>
+    <div class="scroll-graph-x">
+      <google-chart
+        *ngIf="isAuditRendered"
+        #chart
+        [title]="titleAudit"
+        [type]="typeAudit"
+        [data]="dataAudit"
+        [options]="optionsAuditEnlarged"
+        [width]="700"
+        [height]="400"
+        [columnNames]="columnNamesAudit"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged">Claim Type</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-3 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>

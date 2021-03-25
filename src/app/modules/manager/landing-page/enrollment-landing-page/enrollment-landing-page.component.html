@@ -1,0 +1,364 @@
+<div class="mt-60" id="enrollment-landing">
+  <div class="mt-30">
+    <div class="manual-sync">
+      <div class="d-flex">
+        <div
+          class="refresh-btn d-flex"
+          [class.disabled]="synching"
+          (click)="synching ? '' : confirm()"
+        >
+          Sync Now
+          <div
+            class="refesh-icon ml-15"
+            [class.refresh-loading]="synching"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-title">Active Enrollment User Snapshot</div>
+    <div class="d-flex">
+      <div
+        class="card-with-icon card-blue d-flex mr-20"
+        [ngClass]="'flex-child-25'"
+      >
+        <div>
+          <img src="./../../../../../assets/images-new/examiner.png" />
+        </div>
+        <div class="ml-15 mt-10">
+          <div class="card-title-examiner">Enrollment Specialist</div>
+          <div class="card-value-examiner">
+            {{ activeEnrollmentUsers?.enrollmentSpecialistCount || 0 }}
+          </div>
+        </div>
+      </div>
+      <div
+        class="card-with-icon card-green d-flex mr-20"
+        [ngClass]="'flex-child-25'"
+      >
+        <div>
+          <img src="./../../../../../assets/images-new/manager.png" />
+        </div>
+        <div class="ml-15 mt-10">
+          <div class="card-title-examiner">Enrollment Lead</div>
+          <div class="card-value-examiner">
+            {{ activeEnrollmentUsers?.enrollmentLeadCount || 0 }}
+          </div>
+        </div>
+      </div>
+      <div
+        class="card-with-icon card-red d-flex mr-20"
+        [ngClass]="'flex-child-25'"
+      >
+        <div>
+          <img src="./../../../../../assets/images-new/auditor.png" />
+        </div>
+        <div class="ml-15 mt-10">
+          <div class="card-title-examiner">Enrollment Auditor</div>
+          <div class="card-value-examiner">
+            {{ activeEnrollmentUsers?.enrollmentAuditorCount || 0 }}
+          </div>
+        </div>
+      </div>
+      <div class="card-with-icon card-yellow d-flex mr-20">
+        <div>
+          <img src="./../../../../../assets/images-new/usergroup.png" />
+        </div>
+        <div class="ml-15 mt-10">
+          <div class="card-title-examiner">User Group</div>
+          <div class="card-value-examiner">
+            {{ activeEnrollmentUsers?.enrollmentUserGroupCount || 0 }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex space-between wrap-enrollment-task mt-15">
+    <div class="my-enrollment-task">
+      <div class="block-title">My Enrollment Task</div>
+      <div>
+        <div class="d-flex space-between">
+          <div
+            class="card card-purple hover mr-20"
+            [ngClass]="'flex-child-25'"
+            [routerLink]="
+              auditStatus?.enrollmentRebuttalReviewCount
+                ? ['/enrollment-rebut-review']
+                : null
+            "
+          >
+            <div class="card-title-examiner">Rebuttal/Review</div>
+            <div class="card-value-examiner">
+              {{ auditStatus?.enrollmentRebuttalReviewCount || 0 }}
+            </div>
+            <div class="card-hover">
+              Go To Review / Rebuttal Queue
+            </div>
+          </div>
+
+          <div
+            class="card card-grey hover mr-20"
+            [ngClass]="'flex-child-25'"
+            [routerLink]="
+              auditStatus?.enrollmentGeneralQueueCount
+                ? ['/enrollment-general-queue']
+                : null
+            "
+          >
+            <div class="card-title-examiner">General Queue</div>
+            <div class="card-value-examiner">
+              {{ auditStatus?.enrollmentGeneralQueueCount || 0 }}
+            </div>
+            <div class="card-hover">
+              Go To General Queue
+            </div>
+          </div>
+
+          <div
+            class="card card-yellow hover mr-20"
+            [ngClass]="'flex-child-25'"
+            [routerLink]="
+              auditStatus?.enrollmentAuditorRoutedInCount
+                ? ['/audit-routed-in-detail/list']
+                : null
+            "
+          >
+            <div class="card-title-examiner">Auditor Routed In</div>
+            <div class="card-value-examiner">
+              {{ auditStatus?.enrollmentAuditorRoutedInCount || 0 }}
+            </div>
+            <div class="card-hover">
+              Go To Auditor Routed In
+            </div>
+          </div>
+          <div
+            class="card card-red hover mr-20 "
+            [ngClass]="
+              daysCrossed
+                ? 'flex-child-25 card-amber hover card pulse'
+                : 'flex-child-25 card-amber hover card'
+            "
+            [routerLink]="['/pending-assignment-detail']"
+          >
+            <div class="card-title-examiner">Pending Reassignment</div>
+            <div class="card-value-examiner">{{ pendingCount }}</div>
+            <div class="card-hover">
+              View Pending Assignment
+            </div>
+          </div>
+          <div class="w-25"></div>
+        </div>
+        <div class="w-25"></div>
+      </div>
+    </div>
+  </div>
+    <!-- <div class="mr-20 w-31">
+      <div class="block-title">Quick Links</div>
+      <div class="big-btn mr-20" [routerLink]="'/UsergroupManagement'">
+        <div class="user-element-2"></div>
+        <div class="btn-label">Manage Usergroup</div>
+      </div>
+
+      <div
+        class="big-btn mt-15"
+        [routerLink]="'/enrollment-audit-landing-page'"
+      >
+        <div class="user-element-3"></div>
+        <div class="btn-label">Enrollment Audit</div>
+      </div>
+    </div> -->
+    <div>
+      <div class="block-title mb-0">Quick Links</div>
+      <div class="btn-group d-flex mt-10">
+        <div class="big-btn" [routerLink]="'/UsergroupManagement'">
+          <div class="user-element-5"></div>
+          <div class="btn-label">Manage User Group</div>
+        </div>
+  
+        <div class="big-btn" [routerLink]="'/UserConfig/edit-user'">
+          <div class="user-element-2"></div>
+          <div class="btn-label">Manage Users</div>
+        </div>
+  
+       
+  
+        <div class="big-btn" [routerLink]="'/enrollment-audit-landing-page'">
+          <div class="user-element-4"></div>
+          <div class="btn-label">Enrollment Audit</div>
+        </div>
+        <div style=" width:22.5%; ">
+         
+        </div>
+      </div>
+    </div>
+  <div class="d-flex space-between mt-20">
+    <div class="block-title">Enrollment Open Inventory</div>
+    <div class="wrap-list-view-chart-view d-flex">
+      <div
+        class="list-view"
+        [class.active.icon-list]="!this.viewChart"
+        (click)="selectMenu('list')"
+      >
+        <div class="icon-list"></div>
+      </div>
+      <div
+        class="chart-view "
+        [class.active.icon-chart]="this.viewChart"
+        (click)="selectMenu('chart')"
+      >
+        <div class="icon-chart"></div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!viewChart" class="wrap-cards enrollment-open-inventory mt-10">
+    <div class="card card-blue mt-15" style="cursor: default;">
+      <div class="wrap-section-title">
+        <div class="section-title">Assigned</div>
+        &nbsp;
+        <div class="section-title-count card-blue-bg">
+          {{ totalAssigned }}
+        </div>
+      </div>
+      <div class="d-grid card-grid-template-column">
+        <div
+          class="grid-work-category"
+          *ngFor="let item of this.assignedData; let i = index"
+        >
+          <div class="request-type">{{ item.requestType }}</div>
+          <div class="request-count">
+            {{ item.requestCount }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-red mt-15" style="cursor: default;">
+      <div class="wrap-section-title">
+        <div class="section-title">Pended</div>
+        &nbsp;
+        <div class="section-title-count card-red-bg">
+          {{ totalPended }}
+        </div>
+      </div>
+      <div class="d-grid card-grid-template-column">
+        <div
+          class="grid-work-category"
+          *ngFor="let item of this.pendedData; let i = index"
+        >
+          <div class="request-type">{{ item.requestType }}</div>
+          <div class="request-count">
+            {{ item.requestCount }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card card-grey mt-15" style="cursor: default">
+      <div class="wrap-section-title">
+        <div class="section-title">Unassigned</div>
+        &nbsp;
+        <div class="section-title-count card-grey-bg">
+          {{ totalUnAssigned }}
+        </div>
+      </div>
+      <div class="d-grid card-grid-template-column">
+        <div
+          class="grid-work-category"
+          *ngFor="let item of this.unAssignedData; let i = index"
+        >
+          <div class="request-type">{{ item.requestType }}</div>
+          <div class="request-count">
+            {{ item.requestCount }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="viewChart" class="mt-15 d-flex w-100 flex-parent">
+    <div
+      class="card-with-icon w-25 card-total d-flex "
+      [ngClass]="'flex-child-25'"
+    >
+      <div class="my-auto">
+        <div class="mt-1 ml-1 profile_progress progress-100">
+          <span>100</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">Total Request</div>
+        <div class="card-value-examiner">
+          {{
+            (piechartCount?.assignedCount || 0) +
+              (piechartCount?.pendedCount || 0) +
+              (piechartCount?.unAssignedCount || 0)
+          }}
+        </div>
+      </div>
+    </div>
+    <div
+      class="card-with-icon w-25 card-to-do d-flex "
+      [ngClass]="'flex-child-25'"
+    >
+      <div>
+        <div
+          class="mt-1 ml-1 profile_progress progress-{{
+            getPercentage(piechartCount?.assignedCount)
+          }}"
+        >
+          <span>{{ getPercentage(piechartCount?.assignedCount) }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">Assigned Request</div>
+        <div class="card-value-examiner">
+          {{ piechartCount?.assignedCount }}
+        </div>
+      </div>
+    </div>
+    <div
+      class="card-with-icon w-25 card-pended d-flex  "
+      [ngClass]="'flex-child-25'"
+    >
+      <div>
+        <div
+          class="mt-1 ml-1 profile_progress progress-{{
+            getPercentage(piechartCount?.pendedCount)
+          }}"
+        >
+          <span>{{ getPercentage(piechartCount?.pendedCount) }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">Pended Request</div>
+        <div class="card-value-examiner">
+          {{ piechartCount?.pendedCount }}
+        </div>
+      </div>
+    </div>
+    <div
+      class="card-with-icon w-25 card-unassigned d-flex "
+      [ngClass]="'flex-child-25'"
+    >
+      <div>
+        <div
+          class="mt-1 ml-1 profile_progress progress-{{
+            getPercentage(piechartCount?.unAssignedCount)
+          }}"
+        >
+          <span>{{ getPercentage(piechartCount?.unAssignedCount) }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">Unassigned Request</div>
+        <div class="card-value-examiner">
+          {{ piechartCount?.unAssignedCount }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-confirmDialog
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+  header="Confirmation"
+></p-confirmDialog>

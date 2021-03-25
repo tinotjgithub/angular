@@ -1,0 +1,139 @@
+<form [formGroup]="requestCategoryGroup">
+  <div class="d-flex space-between ">
+    <div class="section-label">{{ this.title }}</div>
+    <div>
+      <img
+        alt=" "
+        src="./../../../assets/images-new/max.png"
+        style="cursor: pointer;"
+        (click)="showDialog()"
+      />
+    </div>
+  </div>
+  <div class="d-flex mt-30" *ngIf="dataStatus?.length > 0">
+    <google-chart
+      #chart
+      [title]="titleStatus"
+      *ngIf="isStatusRendered"
+      [type]="typeStatus"
+      [data]="dataStatus"
+      (select)="isDataPresent ? openPopUp($event) : null"
+      [options]="optionsStatus"
+      [columnNames]="columnNamesStatus"
+      [height]="heightStatus"
+      [width]="widthStatus"
+    >
+    </google-chart>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-5 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <div class="row d-flex pl-30 pr-30 space-between mt-10 position-relative">
+    <div class="wrap-input100 w-100 mb-0">
+      <div class="label-input100">Work Category</div>
+      <p-multiSelect
+        #CategorySelect
+        showTransitionOptions="225ms ease-out"
+        [options]="catList"
+        pTooltip="Work Category"
+        tooltipPosition="bottom"
+        formControlName="category"
+        [virtualScroll]="true"
+        (onChange)="validateCategory()"
+        itemSize="30"
+        defaultLabel="Select Category"
+        appendTo="body"
+      ></p-multiSelect>
+      <div class="error-msg" style="top:52px" *ngIf="getCategory.touched">
+        <span
+          class="mr-3 mt-5"
+          *ngIf="getCategory.value.length === 0"
+          >Please select a work category.</span
+        >
+      </div>
+    </div>
+
+    <div class="wrap-input100 w-100 mb-0 mt-4">
+      <div class="label-input100">Processed Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onSelect)="validateDates()"
+        selectionMode="range"
+        pTooltip="Processed Date Range"
+        tooltipPosition="bottom"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        appendTo="body"
+        (onClose)="onSubmitStatus()"
+      >
+      </p-calendar>
+      <div class="error-msg" style="top:52px" *ngIf="getDateRange.touched">
+        <span class="mr-3 mt-5" *ngIf="!isValid"
+          >Date range should not exceed six months.</span
+        >
+      </div>
+    </div>
+  </div>
+
+  <p-dialog
+    *ngIf="displayEnlarged"
+    width="800"
+    height="500"
+    modal="true"
+    dismissableMask="true"
+    [responsive]="true"
+    [(visible)]="displayEnlarged"
+    [transitionOptions]="'0ms'"
+    header="{{ this.title }}"
+    [(visible)]="displayEnlarged"
+  >
+    <google-chart
+      #chart
+      [title]="titleStatus"
+      *ngIf="isStatusRendered"
+      [type]="typeStatus"
+      [data]="dataStatus"
+      (select)="isDataPresent ? openPopUp($event) : null"
+      [options]="optionsStatusEnlarged"
+      [width]="700"
+      [columnNames]="columnNamesStatus"
+      [height]="420"
+    >
+    </google-chart>
+    <div
+      *ngIf="!isDataPresent"
+      class="ml-5 d-flex space-between justify-content-center"
+    >
+      <p-message severity="warn" text="No Data Present!"></p-message>
+    </div>
+  </p-dialog>
+</form>
+
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  [style]="{ marginbottom: '20px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="{{ this.title }} ({{ cat }})"
+  (onHide)="closePopUp()"
+>
+  <app-enrollment-manager-dashboard-pop-up
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-enrollment-manager-dashboard-pop-up>
+</p-dialog>

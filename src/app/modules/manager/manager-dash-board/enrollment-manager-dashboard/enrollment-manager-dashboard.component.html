@@ -1,0 +1,223 @@
+<div class="tab-wrapper bottom-border mt-60">
+  <div class="tab-container">
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab1"
+      class="tab-menu-radio"
+      checked
+      #tab1
+    />
+    <label for="tab1" class="tab-menu px-4">Enrollment Dashboard</label>
+  </div>
+</div>
+
+<ng-container *ngIf="tab1.checked">
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between">
+        <div class="section-label">Open Inventory Nearing SLA Days</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="opninvsla.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div> 
+      </div>
+      <div class="mt-29">
+        <app-open-inventory-nearing-sla-days
+          #opninvsla
+        ></app-open-inventory-nearing-sla-days>
+      </div>
+    </div>
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="mt-29">
+        <app-open-inventory-age-work-category
+          #auditsampaudit
+        ></app-open-inventory-age-work-category>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="mt-29">
+        <app-open-inventory-by-work-category
+          #auditsampwrkcat
+        ></app-open-inventory-by-work-category>
+      </div>
+    </div>
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between">
+        <div class="section-label">Request Count By Queue And Status</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="reqcount.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-request-count-by-queue-status
+          #reqcount
+        ></app-request-count-by-queue-status>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="mt-29">
+        <app-request-count-by-work-category
+          #reqcountwrk
+        ></app-request-count-by-work-category>
+      </div>
+    </div>
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="mt-29">
+        <app-open-inventory-volume-by-age
+          #openinv
+        ></app-open-inventory-volume-by-age>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between">
+        <div class="section-label">My Team Productivity By Lead</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="prodlead.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-my-team-productivity-by-lead
+          #prodlead
+        ></app-my-team-productivity-by-lead>
+      </div>
+    </div>
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between">
+        <div class="section-label">Specialist Productivity By Transaction</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="prodspl.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-specialist-productivity-by-transaction
+          #prodspl
+        ></app-specialist-productivity-by-transaction>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between">
+        <div class="section-label">Transaction Processed Vs Audited</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="transprocessed.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-transaction-processed-vs-audited
+          #transprocessed
+        ></app-transaction-processed-vs-audited>
+      </div>
+    </div>
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between">
+        <div class="section-label">Audit Status By Lead</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="auditstslead.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-audit-status-by-lead #auditstslead></app-audit-status-by-lead>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between">
+        <div class="section-label">Audit Status By Specialist</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="auditstsspl.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-audit-status-by-specialist
+          #auditstsspl
+        ></app-audit-status-by-specialist>
+      </div>
+    </div>
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="d-flex space-between">
+        <div class="section-label">Rebuttal Failed Vs Accepted By Auditor</div>
+        <div>
+          <img
+            alt=" "
+            src="./../../../../../assets/images-new/max.png"
+            (click)="rebtlfldacpt.enlargedDisplay = true"
+            style="cursor: pointer;"
+          />
+        </div>
+      </div>
+      <div class="mt-29">
+        <app-rebuttal-failed-vs-accepted
+          #rebtlfldacpt
+        ></app-rebuttal-failed-vs-accepted>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="mt-29">
+        <app-assigned-vs-audited #assgndaudt></app-assigned-vs-audited>
+      </div>
+    </div>
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="mt-29">
+        <app-audit-sampling-by-work-category
+          #auditsampwrkcat
+        ></app-audit-sampling-by-work-category>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+      <div class="mt-29">
+        <app-audit-sampling-by-audit-method
+          #auditsampaudit
+        ></app-audit-sampling-by-audit-method>
+      </div>
+    </div>
+  </div>
+</ng-container>

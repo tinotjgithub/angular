@@ -1,0 +1,17 @@
+<app-detail-table [cols]="cols" [gridData]="gridData" header="Backlog - {{type}}" [deleteButton]="true"
+    [(selectedIds)]="selectedRecord" (onDelete)="deleteRecord($event)" (selectAndNavigate)="loadSubscription($event)"
+    dataKey="subscriptionId" [backToHome]="true" [conditionalSelect]="true" [selectItemCondition]="selectCondition">
+</app-detail-table>
+<p-dialog [blockScroll]="true" [style]="{ width: '70vw' }" [modal]="true" header="Delete Transaction"
+    [(visible)]="deletePopup">
+    <div class="d-flex mt-15">
+        <div class="wrap-input100">
+            <div class="label-input100">Reason</div>
+            <textarea class="input100" [(ngModel)]="reason" placeholder="Please enter the reason for delete"></textarea>
+            <span class="focus-input100"></span>
+        </div>
+    </div>
+    <div class="d-flex flex-end">
+        <div class="outline-btn delete" [class.disabled]="!reason" (click)="!reason ? '' : deleteTransactions()">Delete</div>
+    </div>
+</p-dialog>

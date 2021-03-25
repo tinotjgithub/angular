@@ -1,0 +1,67 @@
+<div class="tab-wrapper mt-60">
+  <div class="tab-container">
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab1"
+      class="tab-menu-radio"
+      checked
+      #tab1
+    />
+    <label for="tab1" class="tab-menu">Audited Claims</label>
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab2"
+      class="tab-menu-radio"
+      #tab2
+    />
+    <label for="tab2" class="tab-menu">Reassigned Claims</label>
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab3"
+      class="tab-menu-radio"
+      #tab3
+    />
+    <label for="tab3" class="tab-menu">Audit Sampling Claim Deletion</label>
+
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab4"
+      class="tab-menu-radio"
+      #tab4
+    />
+    <label for="tab4" class="tab-menu">User Report</label>
+    <input
+      type="radio"
+      name="tab-menu"
+      id="tab5"
+      class="tab-menu-radio"
+      #tab5
+    />
+    <label for="tab5" class="tab-menu">Claim Completion Report</label>    
+  </div>
+  <div class="tab-data" [hidden]="!tab4.checked">
+    <app-my-users [fromTab]="true"></app-my-users>
+  </div>
+  <div class="tab-data" [hidden]="!tab1.checked">
+    <app-claims-examiner-quality [fromTab]="true"></app-claims-examiner-quality>
+  </div>
+  <div class="tab-data" [hidden]="!tab2.checked">
+    <app-claim-reassignment-report
+      [fromTab]="true"
+    ></app-claim-reassignment-report>
+  </div>
+  <div class="tab-data" [hidden]="!tab3.checked">
+    <app-audit-sampling-deletion-report
+      [fromTab]="true"
+    ></app-audit-sampling-deletion-report>
+  </div>
+  <div class="tab-data" [hidden]="!tab5.checked">
+      <app-claim-completion-report></app-claim-completion-report>
+  </div>
+</div>

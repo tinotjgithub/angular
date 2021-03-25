@@ -1,0 +1,1041 @@
+<div class="mt-60" id="enrollment-landing">
+  <div _ngcontent-fsp-c6="" class="d-flex space-between mt-30">
+    <div _ngcontent-fsp-c6="" class="block-title">
+      My Enrollment Queue
+    </div>
+    <div _ngcontent-fsp-c6="" class="wrap-list-view-chart-view d-flex">
+      <div
+        _ngcontent-fsp-c6=""
+        class="list-view"
+        [ngClass]="{ active: view === 'list' }"
+        (click)="setView('list')"
+      >
+        <div _ngcontent-fsp-c6="" class="icon-list"></div>
+      </div>
+      <div
+        _ngcontent-fsp-c6=""
+        class="chart-view"
+        [ngClass]="{ active: view === 'chart' }"
+        (click)="setView('chart')"
+      >
+        <div _ngcontent-fsp-c6="" class="icon-chart"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST VIEW -->
+  <div class="wrap-cards mt-10" *ngIf="view === 'list'">
+    <div class="card card-blue mb p-2">
+      <div class="wrap-section-title">
+        <div class="section-title">Assigned</div>
+        &nbsp;
+        <div class="section-title-count card-blue-bg">
+          {{ requestSnapshot?.assigned.total || 0 }}
+        </div>
+      </div>
+      <div class="d-grid card-grid-template-column">
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Workbasket')"
+          [routerLink]="['/specialist/work-category/assigned-details']"
+          [queryParams]="{ type: 'Workbasket' }"
+        >
+          <div class="request-type">Workbasket</div>
+          <div class="request-count">
+            {{ requestSnapshot?.assigned.workbasketCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Workbasket Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Reconciliation')"
+          [routerLink]="['/specialist/work-category/assigned-details']"
+          [queryParams]="{ type: 'Reconciliation' }"
+        >
+          <div class="request-type">Reconciliation</div>
+          <div class="request-count">
+            {{ requestSnapshot?.assigned.reconciliationCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Reconciliation Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Fallout')"
+          [routerLink]="['/specialist/work-category/assigned-details']"
+          [queryParams]="{ type: 'Fallout' }"
+        >
+          <div class="request-type">Fallout</div>
+          <div class="request-count">
+            {{ requestSnapshot?.assigned.fallOutCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">Open Fallout Detail Page</div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('New Group Enrollment')"
+        >
+          <div class="request-type">New Group Enrollment</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open New Group Enrollment Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Group Renewal')"
+        >
+          <div class="request-type">Group Renewal</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Group Renewal Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Id Card Request')"
+        >
+          <div class="request-type">ID Card</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open ID Card Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Term By Absence')"
+        >
+          <div class="request-type">Term By Absence</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Term By Absence Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Payment Posting')"
+        >
+          <div class="request-type">Payment Posting</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Payment Posting Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Other Tickets')"
+        >
+          <div class="request-type">Other Tickets</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Other Tickets Detail Page
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-red mt-15 p-2">
+      <div class="wrap-section-title">
+        <div class="section-title">Pended</div>
+        &nbsp;
+        <div class="section-title-count card-red-bg">
+          {{ requestSnapshot?.pended.total || 0 }}
+        </div>
+      </div>
+      <div class="d-grid card-grid-template-column">
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Workbasket')"
+          [routerLink]="['/specialist/work-category/pended-details']"
+          [queryParams]="{ type: 'Workbasket' }"
+        >
+          <div class="request-type">Workbasket</div>
+          <div class="request-count">
+            {{ requestSnapshot?.pended.workbasketCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Workbasket Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Reconciliation')"
+          [routerLink]="['/specialist/work-category/pended-details']"
+          [queryParams]="{ type: 'Reconciliation' }"
+        >
+          <div class="request-type">Reconciliation</div>
+          <div class="request-count">
+            {{ requestSnapshot?.pended.reconciliationCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Reconciliation Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Fallout')"
+          [routerLink]="['/specialist/work-category/pended-details']"
+          [queryParams]="{ type: 'Fallout' }"
+        >
+          <div class="request-type">Fallout</div>
+          <div class="request-count">
+            {{ requestSnapshot?.pended.fallOutCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">Open Fallout Detail Page</div>
+        </div>
+
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('New Group Enrollment')"
+        >
+          <div class="request-type">New Group Enrollment</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open New Group Enrollment Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Group Renewal')"
+        >
+          <div class="request-type">Group Renewal</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Group Renewal Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Id Card Request')"
+        >
+          <div class="request-type">ID Card</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open ID Card Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Other Tickets')"
+        >
+          <div class="request-type">Other Tickets</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Other Tickets Detail Page
+          </div>
+        </div>
+        <!-- <div class="grid-work-category" *ngIf="displayWorkCategory('Workbasket')">
+          <div class="request-type">ID Card Existing (Group)</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open ID Card Existing (Group) Detail Page
+          </div>
+        </div> -->
+        <!-- <div class="grid-work-category" *ngIf="displayWorkCategory('Workbasket')">
+          <div class="request-type">ID Card Existing (Individual)</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open ID Card Existing (Individual) Detail Page
+          </div>
+        </div> -->
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Term By Absence')"
+        >
+          <div class="request-type">Term By Absence</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Term By Absence Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Payment Posting')"
+        >
+          <div class="request-type">Payment Posting</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Payment Posting Detail Page
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-green mt-15 p-2">
+      <div class="wrap-section-title">
+        <div class="section-title">Completed</div>
+        &nbsp;
+        <div class="section-title-count card-green-bg">
+          {{ requestSnapshot?.completed.total || 0 }}
+        </div>
+      </div>
+      <div class="d-grid card-grid-template-column">
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Workbasket')"
+          [routerLink]="['/specialist/work-category/completed-details']"
+          [queryParams]="{ type: 'Workbasket' }"
+        >
+          <div class="request-type">Workbasket</div>
+          <div class="request-count">
+            {{ requestSnapshot?.completed.workbasketCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Workbasket Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Reconciliation')"
+          [routerLink]="['/specialist/work-category/completed-details']"
+          [queryParams]="{ type: 'Reconciliation' }"
+        >
+          <div class="request-type">Reconciliation</div>
+          <div class="request-count">
+            {{ requestSnapshot?.completed.reconciliationCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Reconciliation Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Fallout')"
+          [routerLink]="['/specialist/work-category/completed-details']"
+          [queryParams]="{ type: 'Fallout' }"
+        >
+          <div class="request-type">Fallout</div>
+          <div class="request-count">
+            {{ requestSnapshot?.completed.fallOutCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">Open Fallout Detail Page</div>
+        </div>
+
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('New Group Enrollment')"
+        >
+          <div class="request-type">New Group Enrollment</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open New Group Enrollment Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Group Renewal')"
+        >
+          <div class="request-type">Group Renewal</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Group Renewal Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Id Card Request')"
+        >
+          <div class="request-type">ID Card</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open ID Card Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Term By Absence')"
+        >
+          <div class="request-type">Term By Absence</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Term By Absence Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Payment Posting')"
+        >
+          <div class="request-type">Payment Posting</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Payment Posting Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Other Tickets')"
+        >
+          <div class="request-type">Other Tickets</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Other Tickets Detail Page
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-yellow mt-15 p-2">
+      <div class="wrap-section-title">
+        <div class="section-title">Routed Out</div>
+        &nbsp;
+        <div class="section-title-count card-yellow-bg">
+          {{ requestSnapshot?.routedOut.total || 0 }}
+        </div>
+      </div>
+      <div class="d-grid card-grid-template-column">
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Workbasket')"
+          [routerLink]="['/specialist/work-category/routed-out-details']"
+          [queryParams]="{ type: 'Workbasket' }"
+        >
+          <div class="request-type">Workbasket</div>
+          <div class="request-count">
+            {{ requestSnapshot?.routedOut.workbasketCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Workbasket Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Reconciliation')"
+          [routerLink]="['/specialist/work-category/routed-out-details']"
+          [queryParams]="{ type: 'Reconciliation' }"
+        >
+          <div class="request-type">Reconciliation</div>
+          <div class="request-count">
+            {{ requestSnapshot?.routedOut.reconciliationCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Reconciliation Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Fallout')"
+          [routerLink]="['/specialist/work-category/routed-out-details']"
+          [queryParams]="{ type: 'Fallout' }"
+        >
+          <div class="request-type">Fallout</div>
+          <div class="request-count">
+            {{ requestSnapshot?.routedOut.fallOutCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">Open Fallout Detail Page</div>
+        </div>
+
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('New Group Enrollment')"
+        >
+          <div class="request-type">New Group Enrollment</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open New Group Enrollment Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Group Renewal')"
+        >
+          <div class="request-type">Group Renewal</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Group Renewal Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Id Card Request')"
+        >
+          <div class="request-type">ID Card</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open ID Card Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Term By Absence')"
+        >
+          <div class="request-type">Term By Absence</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Term By Absence Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Payment Posting')"
+        >
+          <div class="request-type">Payment Posting</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Payment Posting Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Other Tickets')"
+        >
+          <div class="request-type">Other Tickets</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Other Tickets Detail Page
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-purple mt-15 p-2">
+      <div class="wrap-section-title">
+        <div class="section-title">Audit Failed</div>
+        &nbsp;
+        <div class="section-title-count card-purple-bg">
+          {{ requestSnapshot?.auditFail.total || 0 }}
+        </div>
+      </div>
+      <div class="d-grid card-grid-template-column">
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Workbasket')"
+          [routerLink]="['/specialist/work-category/audit-failed-details']"
+          [queryParams]="{ type: 'Workbasket' }"
+        >
+          <div class="request-type">Workbasket</div>
+          <div class="request-count">
+            {{ requestSnapshot?.auditFail.workbasketCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Workbasket Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Reconciliation')"
+          [routerLink]="['/specialist/work-category/audit-failed-details']"
+          [queryParams]="{ type: 'Reconciliation' }"
+        >
+          <div class="request-type">Reconciliation</div>
+          <div class="request-count">
+            {{ requestSnapshot?.auditFail.reconciliationCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">
+            Open Reconciliation Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Fallout')"
+          [routerLink]="['/specialist/work-category/audit-failed-details']"
+          [queryParams]="{ type: 'Fallout' }"
+        >
+          <div class="request-type">Fallout</div>
+          <div class="request-count">
+            {{ requestSnapshot?.auditFail.fallOutCount || 0 }}
+          </div>
+          <div class="grid-work-category-hover">Open Fallout Detail Page</div>
+        </div>
+
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('New Group Enrollment')"
+        >
+          <div class="request-type">New Group Enrollment</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open New Group Enrollment Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Group Renewal')"
+        >
+          <div class="request-type">Group Renewal</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Group Renewal Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Id Card Request')"
+        >
+          <div class="request-type">ID Card</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open ID Card Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Term By Absence')"
+        >
+          <div class="request-type">Term By Absence</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Term By Absence Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Payment Posting')"
+        >
+          <div class="request-type">Payment Posting</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Payment Posting Detail Page
+          </div>
+        </div>
+        <div
+          class="grid-work-category"
+          *ngIf="displayWorkCategory('Other Tickets')"
+        >
+          <div class="request-type">Other Tickets</div>
+          <div class="request-count">0</div>
+          <div class="grid-work-category-hover">
+            Open Other Tickets Detail Page
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART VIEW -->
+
+  <div class="d-flex mt-30 wrap-claims-operations" *ngIf="view === 'chart'">
+    <div class="wrap-claim-count mr-30" style="padding: 10px">
+      <div class="d-flex space-between justify-content-center">
+        <div class="section-label">Assigned</div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <google-chart
+          (select)="navigateToDetailPage($event, 'assigned')"
+          [type]="type"
+          [data]="data.assigned"
+          [columnNames]="columnNames"
+          [options]="options"
+          [width]="width"
+          [height]="height"
+        >
+        </google-chart>
+      </div>
+    </div>
+    <div class="wrap-claim-count mr-30" style="padding: 10px">
+      <div class="d-flex space-between justify-content-center">
+        <div class="section-label">Pended</div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <google-chart
+          (select)="navigateToDetailPage($event, 'pended')"
+          [type]="type"
+          [data]="data.pended"
+          [columnNames]="columnNames"
+          [options]="options"
+          [width]="width"
+          [height]="height"
+        >
+        </google-chart>
+      </div>
+    </div>
+    <div class="wrap-claim-count mr-30" style="padding: 10px">
+      <div class="d-flex space-between justify-content-center">
+        <div class="section-label">Completed</div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <google-chart
+          (select)="navigateToDetailPage($event, 'completed')"
+          [type]="type"
+          [data]="data.completed"
+          [columnNames]="columnNames"
+          [options]="options"
+          [width]="width"
+          [height]="height"
+        >
+        </google-chart>
+      </div>
+    </div>
+    <div class="wrap-claim-count mr-30" style="padding: 10px">
+      <div class="d-flex space-between justify-content-center">
+        <div class="section-label">Routed Out</div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <google-chart
+          (select)="navigateToDetailPage($event, 'routed-out')"
+          [type]="type"
+          [data]="data.routedOut"
+          [columnNames]="columnNames"
+          [options]="options"
+          [width]="width"
+          [height]="height"
+        >
+        </google-chart>
+      </div>
+    </div>
+    <div class="wrap-claim-count" style="padding: 10px">
+      <div class="d-flex space-between justify-content-center">
+        <div class="section-label">Audit Failed</div>
+      </div>
+      <div class="d-flex justify-content-center">
+        <google-chart
+          (select)="navigateToDetailPage($event, 'audit-failed')"
+          [type]="type"
+          [data]="data.auditFail"
+          [columnNames]="columnNames"
+          [options]="options"
+          [width]="width"
+          [height]="height"
+        >
+        </google-chart>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex mt-30 justify-content-center" *ngIf="view === 'chart'">
+    <div class="d-flex justify-content-center mr-30">
+      <div
+        style="background-color: #e19b0e; width: 15px; height: 15px;border-radius: 4px;"
+      ></div>
+      <span style="font-size:13px">Workbasket</span>
+    </div>
+    <div class="d-flex flex-row justify-content-center mr-30">
+      <div
+        style="background-color: #058ba3; width: 15px; height: 15px;border-radius: 4px;"
+      ></div>
+      <span style="font-size:13px">Reconciliation</span>
+    </div>
+    <div class="d-flex flex-row justify-content-center  mr-30">
+      <div
+        style="background-color:#b84066; width: 15px; height: 15px;border-radius: 4px;"
+      ></div>
+      <span style="font-size:13px">Fallout</span>
+    </div>
+  </div>
+  <!-- <div class="d-flex w-100 flex-parent mt-12" *ngIf="view === 'chart'">
+    <div class="w-25 d-flex flex-child-25">
+      <google-chart
+        #chart
+        [title]="title"
+        [type]="type"
+        [data]="data"
+        [columnNames]="columnNames"
+        [options]="options"
+        [width]="width"
+        [height]="height"
+      >
+      </google-chart>
+    </div>
+    <div
+      class="card-with-icon w-25 card-to-do d-flex flex-child-25"
+      ng-reflect-klass="card-with-icon w-25 card-to-do"
+      ng-reflect-ng-class="flex-child-25"
+    >
+      <div>
+        <div
+          class="mt-1 ml-1 profile_progress progress-{{
+            getPercentage(requestSnapshot?.assigned.total)
+          }}"
+        >
+          <span>{{ getPercentage(requestSnapshot?.assigned.total) }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">Subscriptions Assigned</div>
+        <div class="card-value-examiner">
+          {{ requestSnapshot?.assigned.total }}
+        </div>
+      </div>
+    </div>
+
+    <div class="card-with-icon w-25 card-pended d-flex flex-child-25">
+      <div>
+        <div
+          class="mt-1 ml-1 profile_progress progress-{{
+            getPercentage(requestSnapshot?.pended.total)
+          }}"
+        >
+          <span>{{ getPercentage(requestSnapshot?.pended.total) }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">
+          Subscriptions Pended
+        </div>
+        <div class="card-value-examiner">
+          {{ requestSnapshot?.pended.total }}
+        </div>
+      </div>
+    </div>
+
+    <div class="card-with-icon w-25 card-completed d-flex flex-child-25">
+      <div>
+        <div
+          class="mt-1 ml-1 profile_progress progress-{{
+            getPercentage(requestSnapshot?.completed.total)
+          }}"
+        >
+          <span>{{ getPercentage(requestSnapshot?.completed.total) }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">
+          Subscriptions Completed
+        </div>
+        <div class="card-value-examiner">
+          {{ requestSnapshot?.completed.total }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex w-100 flex-parent" *ngIf="view === 'chart'">
+    <div class="card-with-icon w-25 card-routed d-flex flex-child-25">
+      <div>
+        <div
+          class="mt-1 ml-1 profile_progress progress-{{
+            getPercentage(requestSnapshot?.routedOut.total)
+          }}"
+        >
+          <span>{{ getPercentage(requestSnapshot?.routedOut.total) }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">
+          Subscriptions Routed
+        </div>
+        <div class="card-value-examiner">
+          {{ requestSnapshot?.routedOut.total }}
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="card-with-icon w-25 card-audit-failed d-flex flex-child-25"
+      ng-reflect-klass="card-with-icon w-25 card-to-do"
+      ng-reflect-ng-class="flex-child-25"
+    >
+      <div>
+        <div
+          class="mt-1 ml-1 profile_progress progress-{{
+            getPercentage(requestSnapshot?.auditFail.total)
+          }}"
+        >
+          <span>{{ getPercentage(requestSnapshot?.auditFail.total) }}</span>
+        </div>
+      </div>
+      <div class="ml-15 mt-10">
+        <div class="card-title-examiner">Subscriptions Audit Failed</div>
+        <div class="card-value-examiner">
+          {{ requestSnapshot?.auditFail.total }}
+        </div>
+      </div>
+    </div>
+
+    <div class="w-25 d-flex flex-child-25"></div>
+    <div class="w-25 d-flex flex-child-25"></div>
+  </div> -->
+  <!-- // QUICK LINK ITEMS -->
+  <div class="d-flex mt-15">
+    <div class="mr-15 section-label">Quick Links</div>
+  </div>
+
+  <!-- <div class="wrap-reques-category-btn mr-15"
+      [routerLink]="['/specialist/work-category']"
+      [queryParams]="{ type: 'Workbasket' }"
+    >
+      <div>Workbasket</div>
+      <div class="general-request-count">
+        {{ this.quickLinkSnapshot?.workbasket || 0 }}
+      </div>
+    </div>
+    <div class="wrap-reques-category-btn mr-15"
+      [routerLink]="['/specialist/work-category']"
+      [queryParams]="{ type: 'Reconciliation' }"
+    >
+      <div>Reconciliation</div>
+      <div class="general-request-count">
+        {{ this.quickLinkSnapshot?.reconciliation || 0 }}
+      </div>
+    </div>
+    <div class="wrap-reques-category-btn mr-15"
+      [routerLink]="['/specialist/work-category']"
+      [queryParams]="{ type: 'Fallout' }"
+    >
+      <div>Fallout</div>
+      <div class="general-request-count">
+        {{ this.quickLinkSnapshot?.fallout || 0 }}
+      </div>
+    </div>
+    <div class="wrap-reques-category-btn mr-15">
+      <div>ID Card (New Group)</div>
+      <div class="general-request-count">0</div>
+    </div>
+    <div class="wrap-reques-category-btn mr-15">
+      <div>ID Card (Individual)</div>
+      <div class="general-request-count">0</div>
+    </div>
+    <div class="wrap-reques-category-btn mr-15">
+      <div>ID Card (Group)</div>
+      <div class="general-request-count">0</div>
+    </div>
+    <div class="wrap-reques-category-btn mr-15">
+      <div>New Group Enrollment</div>
+      <div class="general-request-count">0</div>
+    </div>
+    <div class="wrap-reques-category-btn mr-15">
+      <div>Group Renewal</div>
+      <div class="general-request-count">0</div>
+    </div>
+    <div class="wrap-reques-category-btn">
+      <div>Other Tickets</div>
+      <div class="general-request-count">0</div>
+    </div> -->
+
+  <!-- <div class="d-grid quick-link-grid">
+      <div style="border: none; padding: 10px;border: 1px solid #dbdbdb; background-color: white">
+        <div class="card-title-examiner mb-12">Work Basket</div>
+        <div class="d-flex space-between">
+          <div class="d-flex flex-column ml-10">
+            <div class="d-flex flex-start">Assigned</div>
+            <div class="d-flex flex-start">{{ 0 }}</div>
+          </div>
+          <div class="d-flex flex-column mr-10">
+            <div class="d-flex flex-end">Assigned</div>
+            <div class="d-flex flex-end">{{ 0 }}</div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+  <div class="d-grid quick-link-grid">
+    <div
+      *ngIf="displayWorkCategory('Workbasket')"
+      class="quick-link-div"
+      [routerLink]="['/specialist/work-category']"
+      [queryParams]="{ type: 'Workbasket' }"
+    >
+      <div class="section-label-link mb-12 text-center" style="color: #20558b;">
+        Work Basket
+      </div>
+      <div class="d-flex space-between" style="color: #20558b;">
+        <div class="d-flex flex-column ml-10 ">
+          <div class="d-flex flex-start request-type">Assigned</div>
+          <div class="d-flex flex-start request-count-link">
+            {{ quickLinkSnapshot?.workbasket?.assignedCount || 0 }}
+          </div>
+        </div>
+        <div class="d-flex flex-column mr-10">
+          <div class="d-flex flex-end request-type">General</div>
+          <div class="d-flex flex-end request-count-link">
+            {{ quickLinkSnapshot?.workbasket?.generalCount || 0 }}
+          </div>
+        </div>
+      </div>
+      <div class="quick-link-grid-hover">
+        Open Work Basket <br />
+        <br />
+      </div>
+    </div>
+
+    <div
+      *ngIf="displayWorkCategory('Reconciliation')"
+      class="quick-link-div"
+      [routerLink]="['/specialist/work-category']"
+      [queryParams]="{ type: 'Reconciliation' }"
+    >
+      <div class="section-label-link mb-12 text-center" style="color: #20558b;">
+        Reconciliation
+      </div>
+      <div class="d-flex space-between" style="color: #20558b;">
+        <div class="d-flex flex-column ml-10">
+          <div class="d-flex flex-start request-type">Assigned</div>
+          <div class="d-flex flex-start request-count-link">
+            {{ quickLinkSnapshot?.reconciliation?.assignedCount || 0 }}
+          </div>
+        </div>
+        <div class="d-flex flex-column mr-10">
+          <div class="d-flex flex-end request-type">General</div>
+          <div class="d-flex flex-end request-count-link">
+            {{ quickLinkSnapshot?.reconciliation?.generalCount || 0 }}
+          </div>
+        </div>
+      </div>
+      <div class="quick-link-grid-hover">
+        Open Reconciliation <br />
+        <br />
+      </div>
+    </div>
+
+    <div
+      *ngIf="displayWorkCategory('Fallout')"
+      class="quick-link-div"
+      [routerLink]="['/specialist/work-category']"
+      [queryParams]="{ type: 'Fallout' }"
+    >
+      <div class="section-label-link mb-12 text-center" style="color: #20558b;">
+        Fallout
+      </div>
+      <div class="d-flex space-between" style="color: #20558b;">
+        <div class="d-flex flex-column ml-10">
+          <div class="d-flex flex-start request-type">Assigned</div>
+          <div class="d-flex flex-start request-count-link">
+            {{ quickLinkSnapshot?.fallout?.assignedCount || 0 }}
+          </div>
+        </div>
+        <div class="d-flex flex-column mr-10">
+          <div class="d-flex flex-end request-type">General</div>
+          <div class="d-flex flex-end request-count-link">
+            {{ quickLinkSnapshot?.fallout?.generalCount || 0 }}
+          </div>
+        </div>
+      </div>
+      <div class="quick-link-grid-hover">
+        Open Fallout <br />
+        <br />
+      </div>
+    </div>
+    <!-- <div class="quick-link-div">
+      <div
+        class="card-title-examiner mb-12 text-center"
+        style="color: #20558b;"
+      >
+        Work Basket
+      </div>
+      <div class="d-flex space-between" style="color: #20558b;">
+        <div class="d-flex flex-column ml-10">
+          <div class="d-flex flex-start">Assigned</div>
+          <div class="d-flex flex-start">0</div>
+        </div>
+        <div class="d-flex flex-column mr-10">
+          <div class="d-flex flex-end">Assigned</div>
+          <div class="d-flex flex-end">0</div>
+        </div>
+      </div>
+      <div class="quick-link-grid-hover">
+        Open Workbasket Landing Page
+      </div>
+    </div>
+    <div class="quick-link-div">
+      <div
+        class="card-title-examiner mb-12 text-center"
+        style="color: #20558b;"
+      >
+        Work Basket
+      </div>
+      <div class="d-flex space-between" style="color: #20558b;">
+        <div class="d-flex flex-column ml-10">
+          <div class="d-flex flex-start">Assigned</div>
+          <div class="d-flex flex-start">0</div>
+        </div>
+        <div class="d-flex flex-column mr-10">
+          <div class="d-flex flex-end">Assigned</div>
+          <div class="d-flex flex-end">0</div>
+        </div>
+      </div>
+      <div class="quick-link-grid-hover">
+        Open Workbasket Landing Page
+      </div>
+    </div> -->
+  </div>
+</div>

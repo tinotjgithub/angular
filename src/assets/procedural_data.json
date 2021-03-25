@@ -1,0 +1,25 @@
+{
+  "proceduralAccuracyDtoList": [
+    {
+      "monthStartDate": "2019-12-01",
+      "proceduralErrorCount": 1,
+      "totalAuditedClaims": 2,
+      "proceduralAccuracyPct": 1.0,
+      "target": 0.98
+    },
+    {
+      "monthStartDate": "2020-01-01",
+      "proceduralErrorCount": 1,
+      "totalAuditedClaims": 2,
+      "proceduralAccuracyPct": 0.98,
+      "target": 0.98
+    },
+    {
+      "monthStartDate": "2020-02-01",
+      "proceduralErrorCount": 1,
+      "totalAuditedClaims": 2,
+      "proceduralAccuracyPct": 0.95,
+      "target": 0.98
+    }
+  ]
+}

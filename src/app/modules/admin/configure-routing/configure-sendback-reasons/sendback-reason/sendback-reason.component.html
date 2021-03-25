@@ -1,0 +1,117 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+    <div [routerLink]="'/admin-configuration'">
+      <img alt = " " src="./../../../../../assets/images-new/left.png" style="margin-right: 15px; cursor: pointer;">
+    </div>
+    <div>Back To Configuration</div>
+  </div>
+  <div class="d-flex mt-30">
+    <div class="wrap-pend-reason w-70 mr-30">
+      <div class="d-flex space-between">
+        <div>
+          <span class="section-title">Send Back Reason</span><span *ngIf="sendBackReasonList?.length > 0" class="section-title-count">{{sendBackReasonList.length}}</span>
+        </div>
+        <div class="search-bar d-flex space-between mr-30" style="padding: 0 20px;">
+          <input type="text" class="search-input" style="width: 185px;" (input)="sendBackReasonTable ? sendBackReasonTable.filterGlobal($event.target.value, 'contains') : ''" placeholder="Search Send Back Reason">
+          <img alt = " " src="./../../../../../assets/images-new/search.png" style="width: 20px; height: 20px; margin-top: 10px;">
+        </div>
+      </div>
+      <div class="mt-30" *ngIf="sendBackReasonList?.length > 0">
+        <p-table [tableStyle]="{ 'table-layout': 'auto' }" [columns]="cols" #sendBackReasonTable editMode="row"
+          [value]="sendBackReasonList" [paginator]="true" [rows]="10" dataKey="sendBackReasonCode" [resizableColumns]="true"
+          [scrollable]="false">
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns" id="{{ col.field }}">
+                {{ col.header }}
+              </th>
+              <th id="th1"></th>
+              <th id="th2"></th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="rowData">
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <div class="wrap-input100 mb-0">
+                      <input class="input100" type="text" maxlength="50" name="name" [(ngModel)]="rowData.sendBackReason" required
+                        placeholder="Enter Send Back Reason">
+                      <span class="focus-input100"></span>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ rowData.sendBackReason }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td style="width: 115px;">
+                <div *ngIf="!editing">
+                  <img alt = " " src="./../../../../../assets/images-new/edit-form.png" pTooltip="Edit" pInitEditableRow
+                    title="Edit" (click)="onRowEditInit(rowData, ri)" style="cursor: pointer;margin-top: 12px;">
+                </div>
+                <div *ngIf="editing">
+                  <em pSaveEditableRow class="pi pi-check" pTooltip="Save" (click)="onRowEditSave(rowData, ri)"
+                    style="cursor: pointer; font-size: 30px; color:#20bc55; margin-top: 12px;"></em>
+                  <em pSaveEditableRow class="pi pi-times" pTooltip="Cancel" (click)="onRowEditCancel(ri)"
+                    style="cursor: pointer; margin-left: 20px; margin-top: 12px;"></em>
+                </div>
+              </td>
+              <td style="width: 115px;">
+                <div>
+                  <img alt = " " src="./../../../../../assets/images-new/delete.png" pTooltip="Delete"
+                    style="cursor: pointer; margin-top: 12px;" (click)="deleteRow(ri, sendBackReasonTable)">
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td class="text-center" [attr.colSpan]="cols.length + 2">
+                No reasons available.
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft" let-state>
+            <div class="result-no">
+              {{sendBackReasonList?.length > 0 ? ('Showing ' + (state.first + 1) +' - ' + (((state.first + state.rows) > sendBackReasonList?.length ? (sendBackReasonList?.length) : (state.first + state.rows) ) | number) + ' of '+ sendBackReasonList?.length) : 'Showing 0 - 0 of 0'}}
+            </div>
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+            <div class="result-no d-flex">
+              <div>Rows per page &nbsp; &nbsp;</div>
+              <select class="input100 result-no" style="width: 50px;" [(ngModel)]="sendBackReasonTable.rows" [ngModelOptions]="{standalone: true}">
+                <option>10</option>
+                <option>25</option>
+                <option>50</option>
+              </select>
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
+      <div class="mt-60 text-center" *ngIf="!sendBackReasonList || sendBackReasonList?.length < 1">
+        <p>No Send Back Reasons Present!! Please Add A Send Back Reason.</p>
+      </div>
+    </div>
+  
+    <div class="wrap-pend-reason-form w-40">
+      <div class="pend-reason-form-header d-flex space-between">
+        <div>Add Send Back Reason</div>
+      </div>
+      <div class="pend-reason-body">
+        <form [formGroup]="sendBackReasonGroup">
+          <div class="pl-30 pr-30 mt-15">
+            <div class="wrap-input100">
+              <span class="label-input100">Send Back Reason</span>
+              <input class="input100" maxlength="50" (keyup.enter)="isValid ? addSendBackReason(sendBackReasonTable) : ''" (ngModelChange)="sendBackReasonChange($event)" type="text"
+                formControlName="sendBackReason" placeholder="Enter Send Back Reason">
+              <span class="focus-input100"></span>
+            </div>
+          </div>
+        </form>
+        <div class="d-flex flex-end mt-15 pr-30">
+          <div class="outline-btn-blue" (click)="isValid ? addSendBackReason(sendBackReasonTable) : ''" [class.disabled]="!isValid">Add</div>
+        </div>
+      </div>
+    </div>
+  </div>
+<p-confirmDialog header="Confirmation" [acceptButtonStyleClass]="'accept-button'" [rejectButtonStyleClass]="'reject-button'"></p-confirmDialog>

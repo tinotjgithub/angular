@@ -1,0 +1,90 @@
+<form [formGroup]="usersForm" id="userList">
+  <div [class.mt-60]="!fromTab">
+    <div class="wrap-report">
+      <div class="section-title d-flex space-between" *ngIf="!fromTab">
+        <div class=" mt-30">Audited Claims</div>
+      </div>
+      <div class="popup-body">
+        <div class="d-flex pl-30 pr-30 mt-15">
+          <div class="wrap-input100 mr-30 w-30">
+            <span class="label-input100">Audited From</span>
+            <p-calendar
+              formControlName="fromDate"
+              dateFormat="mm/dd/yy"
+              (onSelect)="setFromDate($event)"
+              appendTo="body"
+              [maxDate]="toDate"
+              [showIcon]="true"
+              dateFormat="mm/dd/yy"
+              yearRange="1970:2099"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+            ></p-calendar>
+            <span class="focus-input100"></span>
+            <div class="error-msg" *ngIf="getFormControl('fromDate').touched">
+              <span
+                class="mb-0"
+                *ngIf="getFormControl('fromDate').hasError('required')"
+              >
+                Audited From Date is required.
+              </span>
+            </div>
+          </div>
+
+          <div class="wrap-input100 mr-30 w-30">
+            <span class="label-input100">Audited To</span>
+            <p-calendar
+              formControlName="toDate"
+              dateFormat="mm/dd/yy"
+              appendTo="body"
+              (onSelect)="setToDate($event)"
+              [minDate]="fromDate"
+              [maxDate]="endDate"
+              [showIcon]="true"
+              dateFormat="mm/dd/yy"
+              yearRange="1970:2099"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+            ></p-calendar>
+            <span class="focus-input100"></span>
+            <div class="error-msg" *ngIf="getFormControl('toDate').touched">
+              <span
+                class="mb-0"
+                *ngIf="getFormControl('toDate').hasError('required')"
+              >
+                Audited To Date is required.
+              </span>
+              <span
+                class="mb-0"
+                *ngIf="getFormControl('toDate').hasError('rangeError')"
+              >
+                Date range cannot exceed 6 months.
+              </span>
+            </div>
+          </div>
+          <div
+            class="solid-btn mt-30 ml-auto"
+            (click)="usersForm.invalid ? '' : submit()"
+            [class.disabled]="usersForm.invalid"
+            pTooltip="Generate Report"
+            tooltipPosition="bottom"
+          >
+            Generate
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="reportLoaded" class="wrap-report d-flex flex-start mt-30 pb-0">
+      <div class="w-100">
+        <app-report-table
+          [columns]="columns"
+          [header]="'Audited Claims Report'"
+          [data]="reportData"
+          (exportExcel)="downloadReport()"
+        >
+        </app-report-table>
+      </div>
+    </div>
+  </div>
+</form>

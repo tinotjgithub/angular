@@ -1,0 +1,184 @@
+<form class="ml-2 mt-30" [formGroup]="auditDates" (ngSubmit)="onSubmitAudit()">
+  <div class="d-flex w-100">
+    <div class="w-20 wrap-input100 mr-4">
+      <div class="label-input100">Frequency</div>
+      <p-dropdown
+        appendTo="body"
+        [styleClass]="'w-100'"
+        [autoWidth]="false"
+        tooltipPosition="bottom"
+        pTooltip="Frequency"
+        [options]="freqList"
+        (onChange)="OnSelectFrequency($event)"
+        formControlName="frequency"
+        placeholder="Select a frequency"
+      >
+      </p-dropdown>
+    </div>
+
+    <div class="w-20 wrap-input100" *ngIf="showMonthlyCalendar">
+      <div class="label-input100">Completion Date</div>
+      <p-calendar
+        appendTo="body"
+        (onClose)="validateDates()"
+        selectionMode="range"
+        view="month"
+        rangeSeparator=" - "
+        [maxDate]="maxMonth"
+        [readonlyInput]="true"
+        [showIcon]="true"
+        pTooltip="Completion Date"
+        tooltipPosition="bottom"
+        formControlName="dateRange"
+        dateFormat="mm/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <div
+        style="  color: red;
+font-size: 11px;
+position: absolute;
+top:55px;"
+      >
+        <span class="mr-2" *ngIf="getDateRange.hasError('rangeError')">
+          Date range should not exceed six months.</span
+        >
+      </div>
+    </div>
+
+    <div class="w-20 wrap-input100" *ngIf="showDailyCalendar">
+      <div class="label-input100">Completion Date</div>
+      <p-calendar
+        appendTo="body"
+        (onClose)="validateDates()"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        tooltipPosition="bottom"
+        pTooltip="Completion Date"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [maxDate]="maxDate"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <div
+        style="  color: red;
+font-size: 11px;
+position: absolute;
+top:55px;"
+      >
+        <span class="mr-2" *ngIf="getDateRange.hasError('invalidDaily')"
+          >Daily selection should be less than 30 days.</span
+        >
+      </div>
+    </div>
+  </div>
+</form>
+
+<div class="d-flex">
+  <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Processed Vs Audited</div>
+      <div>
+        <img
+          alt=" "
+          src="./../../../../../assets/images-new/max.png"
+          (click)="procdvsadt.enlargedDisplay = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-29">
+      <app-processed-vs-audited
+        [resetFormSubject]="resetFormSubject.asObservable()"
+        #procdvsadt
+      ></app-processed-vs-audited>
+    </div>
+  </div>
+  <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Audit Sampling By Work Category</div>
+      <div>
+        <img
+          alt=" "
+          src="./../../../../../assets/images-new/max.png"
+          (click)="auditsamp.enlargedDisplay = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-29">
+      <app-auditor-audit-sampling-work-category
+        [resetFormSubject]="resetFormSubject.asObservable()"
+        #auditsamp
+      ></app-auditor-audit-sampling-work-category>
+    </div>
+  </div>
+</div>
+<div class="d-flex">
+  <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Audit Sampling By Audit Method</div>
+      <div>
+        <img
+          alt=" "
+          src="./../../../../../assets/images-new/max.png"
+          (click)="adtsampadt.enlargedDisplay = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-29">
+      <app-auditor-audit-sampling-by-audit-method
+        [resetFormSubject]="resetFormSubject.asObservable()"
+        #adtsampadt
+      ></app-auditor-audit-sampling-by-audit-method>
+    </div>
+  </div>
+  <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Audit Sampling By Audit Status</div>
+      <div>
+        <img
+          alt=" "
+          src="./../../../../../assets/images-new/max.png"
+          (click)="adtsampadtsts.enlargedDisplay = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-29">
+      <app-audit-sampling-by-audit-status
+        [resetFormSubject]="resetFormSubject.asObservable()"
+        #adtsampadtsts
+      ></app-audit-sampling-by-audit-status>
+    </div>
+  </div>
+</div>
+<div class="d-flex">
+  <div class="wrap-claim-volume  w-50 mr-30 mt-30">
+    <div class="d-flex space-between ">
+      <div class="section-label">Audit Sampling By Benefit Plan</div>
+      <div>
+        <img
+          alt=" "
+          src="./../../../../../assets/images-new/max.png"
+          (click)="adtsampben.enlargedDisplay = true"
+          style="cursor: pointer;"
+        />
+      </div>
+    </div>
+    <div class="mt-29">
+      <app-audit-sampling-by-benifit-plan
+        [resetFormSubject]="resetFormSubject.asObservable()"
+        #adtsampben
+      ></app-audit-sampling-by-benifit-plan>
+    </div>
+  </div>
+</div>

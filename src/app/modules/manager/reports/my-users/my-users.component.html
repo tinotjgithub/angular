@@ -1,0 +1,209 @@
+<form [formGroup]="userListForm" id="userList">
+  <div [class.mt-60]="!fromTab">
+    <div class="wrap-report">
+      <div class="section-title d-flex space-between" *ngIf="!fromTab">
+        <div class=" mt-30">My Users</div>
+      </div>
+      <div class="popup-body">
+        <div class="d-flex pl-30 pr-30 mt-15">
+          <div class="wrap-input100 w-30 mr-30">
+            <span class="label-input100">Active From</span>
+            <p-calendar
+              formControlName="activeFrom"
+              appendTo="body"
+              [showIcon]="true"
+              dateFormat="mm/dd/yy"
+              yearRange="1970:2099"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              [maxDate]="today"
+              (onSelect)="checkToDate()"
+            ></p-calendar>
+            <div class="error-msg" *ngIf="getActiveFrom.touched">
+              <span class="mb-0" *ngIf="getActiveFrom.hasError('required')">
+                Active From Date is required.
+              </span>
+            </div>
+          </div>
+
+          <div class="wrap-input100 w-30 mr-30">
+            <span class="label-input100">Active To</span>
+            <p-calendar
+              formControlName="activeTo"
+              appendTo="body"
+              [showIcon]="true"
+              dateFormat="mm/dd/yy"
+              yearRange="1970:2099"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              [minDate]="getActiveFrom.value"
+            >
+            </p-calendar>
+            <span class="focus-input100"></span>
+            <div class="error-msg" *ngIf="getActiveTo.touched">
+              <span class="mb-0" *ngIf="getActiveTo.hasError('required')">
+                Active To Date is required.
+              </span>
+            </div>
+          </div>
+          <div class="wrap-input100 w-30 mr-30">
+            <span class="label-input100">Status</span>
+            <select
+              class="input100"
+              name="pass"
+              placeholder="Select Status"
+              formControlName="status"
+            >
+              <option value="All">All</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+            </select>
+            <span class="focus-input100"></span>
+            <div class="error-msg" *ngIf="getStatus.touched">
+              <span class="mb-0" *ngIf="getStatus.hasError('required')">
+                Status is required.
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex pl-30 pr-30 mt-15">
+          <div class="wrap-input100 w-30 mr-30">
+            <span class="label-input100">User Group</span>
+            <select
+              class="input100"
+              name="pass"
+              placeholder="Select User Group"
+              formControlName="userGroup"
+            >
+              <option value="" selected hidden>Select User Group</option>
+              <option
+                *ngFor="let group of userGroups"
+                [value]="group.groupId"
+                >{{ group.groupName }}</option
+              >
+            </select>
+            <span class="focus-input100"></span>
+          </div>
+
+          <div class="wrap-input100 w-30 mr-auto">
+            <span class="label-input100">Claims Lead</span>
+            <select
+              class="input100"
+              name="pass"
+              placeholder="Select User Group"
+              formControlName="lead"
+            >
+              <option value="" selected hidden>Select Claims Lead</option>
+              <option *ngFor="let lead of leadList" [value]="lead.value">{{
+                lead.label
+              }}</option>
+            </select>
+            <span class="focus-input100"></span>
+          </div>
+          <div class="d-flex mr-30 mt-20">
+            <div
+              class="solid-btn"
+              (click)="userListForm.invalid ? '' : submit()"
+              [class.disabled]="userListForm.invalid"
+              pTooltip="Generate Report"
+              tooltipPosition="bottom"
+            >
+              Generate
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isDataPresent" class="wrap-report mt-30 pb-0">
+      <div class="d-flex mt-30">
+        <div class="mr-auto">
+          <span class="section-title">User List</span>
+          <span class="section-title-count" *ngIf="gridData?.length > 0">{{
+            gridData.length
+          }}</span>
+        </div>
+        <div>
+          <div
+            class="outline-btn mr-30"
+            [class.disabled]="!gridData || gridData.length < 1"
+            (click)="!gridData || gridData.length < 1 ? '' : exportExcel()"
+          >
+            Export to Excel
+          </div>
+        </div>
+      </div>
+      <div class="w-100 mt-15">
+        <p-table
+          #myUsersTable
+          [styleClass]="'td200'"
+          [responsive]="true"
+          [columns]="cols"
+          [tableStyle]="{ 'table-layout': 'auto' }"
+          [value]="gridData"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          [scrollable]="false"
+        >
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of cols" id="{{ col.field }}">
+                {{ col.header }}
+              </th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-rowData let-columns="cols">
+            <tr >
+              <td *ngFor="let col of cols">
+                {{ rowData[col.field] }}
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage" let-columns>
+            <tr style="text-align: center">
+              <td [attr.colspan]="columns.length">
+                No records found
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft" let-state>
+            <div class="result-no">
+              {{
+                gridData?.length > 0
+                  ? "Showing " +
+                    (state.first + 1) +
+                    " - " +
+                    ((state.first + state.rows > state.totalRecords
+                      ? state.totalRecords
+                      : state.first + state.rows
+                    ) | number) +
+                    " of " +
+                    state.totalRecords
+                  : "Showing 0 - 0 of 0"
+              }}
+            </div>
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+            <div class="result-no d-flex">
+              <div>Rows per page &nbsp; &nbsp;</div>
+              <select
+                class="input100 result-no"
+                style="width: 50px;"
+                (click)="myUsersTable.reset()"
+                [(ngModel)]="myUsersTable.rows"
+                [ngModelOptions]="{ standalone: true }"
+              >
+                <option>10</option>
+                <option>25</option>
+                <option>50</option>
+              </select>
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,297 @@
+
+button {
+	outline: none !important;
+	border: none;
+	background: transparent;
+}
+button:hover {
+	cursor: pointer;
+}
+
+.btn-group{
+    margin-top: 25px;
+    justify-content: space-between;
+  }
+
+  .big-btn{
+    display: flex;
+    background-color: white;
+    font-size: 18px;
+    color:#07568d;
+    width:22.5%; 
+    height: 55px;
+    text-align: center; 
+    line-height: 55px;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #DFE0EB;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 10px;
+  }
+
+  .big-btn:hover{
+    background-color: #07568d;
+    color:white;
+  }
+
+  .big-btn:hover img{
+    fill: white;
+  }
+  
+  .user-element-1 {
+    background-image: url('src/assets/images-new/search-user.png');
+    width: 34px;
+    height:34px;
+    background-size: cover;
+  }
+
+  .big-btn:hover .user-element-1 {
+    background-image: url('src/assets/images-new/search-user-1.png');
+  }
+  
+  
+  .user-element-2 {
+    background-image: url('src/assets/images-new/add-user.png');
+    width: 34px;
+    height:34px;
+    background-size: cover;
+  }
+  .big-btn:hover .user-element-2 {
+    background-image: url('src/assets/images-new/add-user-1.png');
+  }
+  
+  
+  .user-element-3 {
+    background-image: url('src/assets/images-new/schedule-notification.png');
+    width: 34px;
+    height:34px;
+    background-size: cover;
+  }
+  .big-btn:hover .user-element-3 {
+    background-image: url('src/assets/images-new/schedule-notification-1.png');
+  }
+  .user-element-4 {
+    background-image: url('src/assets/images-new/ql-claims-audit.png');
+    width: 34px;
+    height:34px;
+    background-size: cover;
+  }
+  .big-btn:hover .user-element-4 {
+    background-image: url('src/assets/images-new/ql-claims-audit-hover.png');
+  }
+  .user-element-5 {
+    background-image: url('src/assets/images-new/ql-user-group.png');
+    width: 34px;
+    height:34px;
+    background-size: cover;
+  }
+  .big-btn:hover .user-element-5 {
+    background-image: url('src/assets/images-new/ql-user-group-hover.png');
+  }
+  
+  
+  
+  .btn-label{
+    margin-left: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .solid-btn{
+    background-color:#00B33D;
+    font-size: 14px;
+    color:white;
+    min-width: 150px;
+    padding:0 30px; 
+    height: 35px;
+    text-align: center; 
+    line-height: 35px;
+    border-radius: 50px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #00B33D;
+    cursor: pointer;
+  }
+  .button-loader {
+      width: 20px;
+      margin-top: -3px;
+      margin-right: 5px;
+  }
+  .solid-btn:hover {
+    background-color: rgb(0, 126, 42);
+    color:white;
+  }
+  
+  .cancel-btn{
+    background-color:#969B9F;
+    font-size: 14px;
+    color:white;
+    min-width: 150px;
+    padding:0 30px; 
+    height: 35px;
+    text-align: center; 
+    line-height: 35px;
+    border-radius: 50px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #969B9F;
+    cursor: pointer;
+  }
+  .cancel-btn:hover {
+    background-color:rgb(104, 108, 110);
+    color:white;
+  }
+
+  .disabled {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none
+  }
+
+  .outline-btn{
+    background-color:transparent;
+    font-size: 14px;
+    color:#00B33D;
+    min-width: 150px;
+    padding:0 30px; 
+    height: 35px;
+    text-align: center; 
+    line-height: 35px;
+    border-radius: 50px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #00B33D;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &.dashboard {
+      min-width: 100px;
+      padding:0 20px; 
+    }
+    &.delete {
+      color :rgb(230, 60, 60);
+      border: 1px solid rgb(230, 60, 60);
+      &:hover {
+        background-color: rgb(230, 60, 60);
+        color:white;
+      }
+    }
+    &-blue {
+      background-color:transparent;
+      font-size: 14px;
+      min-width: 150px;
+      padding:0 30px; 
+      height: 35px;
+      text-align: center; 
+      line-height: 35px;
+      border-radius: 50px;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      color:#20558B;
+      border: 1px solid #20558B;
+      &:hover {
+        background-color: #20558B;
+        color:white;
+      }
+    }
+  }
+
+  .outline-btn:hover {
+    background-color: #00B33D;
+    color:white;
+  }
+  
+  .btn-claim{
+    display: flex;
+    background-color: #2BB22D;
+    font-size: 20px;
+    color:white;
+    width:30%; 
+    height: 40px;
+    text-align: center; 
+    line-height: 40px;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #DFE0EB;
+    cursor: pointer;
+  }
+  .footer-ok-btn{
+    background-color:#00B33D;
+    font-size: 14px;
+    color:white;
+    min-width: 120px;
+    padding:0 30px; 
+    height: 35px;
+    text-align: center; 
+    line-height: 35px;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #00B33D;
+    cursor: pointer;
+  }
+  .footer-ok-btn:hover {
+    background-color: rgb(0, 126, 42);
+    color:white;
+  }
+  .footer-cancel-btn{
+    background-color:#969B9F;
+    font-size: 14px;
+    color:white;
+    min-width: 120px;
+    padding:0 30px; 
+    height: 35px;
+    text-align: center; 
+    line-height: 35px;
+    border-radius: 6px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #969B9F;
+    cursor: pointer;
+  }
+  .footer-cancel-btn:hover {
+    background-color:rgb(104, 108, 110);
+    color:white;
+  }
+  .refresh-btn{
+    background-color: transparent;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 30px;
+    height:35px;
+    line-height: 26px;
+    cursor: pointer;
+  }
+  .refesh-icon{
+    background-image: url("src/assets/images-new/refresh.png");
+    width:24px;
+    height:24px;
+    background-size: cover;
+  }
+  .refresh-btn:hover{
+    background-color: #20558B;
+    color: white;
+  }
+  .refresh-btn:hover .refesh-icon{
+    background-image: url("src/assets/images-new/refresh-hover.png");
+    width:24px;
+    height:24px;
+    background-size: cover;
+  }
+
+  .route-icon {
+    background-image: url("src/assets/images-new/route-icon.png");
+    width:24px;
+    height:24px;
+    cursor: pointer;
+    background-size: cover;
+    &:hover {
+      background-image: url("src/assets/images-new/route-icon-hover.png");
+    }
+  }

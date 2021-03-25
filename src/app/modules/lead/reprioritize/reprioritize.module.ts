@@ -1,0 +1,53 @@
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { ReprioritizeComponent } from "./reprioritize.component";
+import { Routes, RouterModule } from "@angular/router";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { TableModule } from "primeng/table";
+import { CalendarModule } from "primeng/calendar";
+import { DialogModule } from "primeng/dialog";
+import { DropdownModule } from "primeng/dropdown";
+import { InputTextModule } from "primeng/inputtext";
+import { ButtonModule } from "primeng/button";
+import {CheckboxModule} from 'primeng/checkbox';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {TooltipModule} from 'primeng/tooltip';
+import { MultiSelectModule } from 'primeng/multiselect';
+const routes: Routes = [
+  {
+    path: "",
+    component: ReprioritizeComponent,
+    data: {
+      breadcrumb: []
+    }
+  },
+  {
+    path: "Reprioritize",
+    component: ReprioritizeComponent,
+    data: {
+      breadcrumb: [{ label: "Manual Prioritization" }]
+    }
+  }
+];
+
+@NgModule({
+  declarations: [ReprioritizeComponent],
+  imports: [
+    RouterModule.forChild(routes),
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TableModule,
+    CommonModule,
+    CalendarModule,
+    DialogModule,
+    TooltipModule,
+    InputTextModule,
+    ButtonModule,
+    DropdownModule,
+    ConfirmDialogModule,
+    CheckboxModule,
+    MultiSelectModule
+  ]
+})
+export class ReprioritizeModule {}

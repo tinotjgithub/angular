@@ -1,0 +1,172 @@
+<div class="d-flex justify-content-center">
+  <div class="m-0 scroll-graph-x">
+    <div class="d-flex">
+      <p style="padding-top:15px;" class="horizontal-axis text-center">
+        Claim Count
+      </p>
+      <google-chart
+        *ngIf="isAgeRendered"
+        #chart
+        [title]="titleAge"
+        [type]="typeAge"
+        [data]="dataAge"
+        [options]="optionsAge"
+        [columnNames]="columnNamesAge"
+        [width]="widthAge"
+        [height]="heightAge"
+        (select)="selectBar($event)"
+      >
+      </google-chart>
+    </div>
+  </div>
+</div>
+<p class="vertical-axis text-center">Claim Age (Days)</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mb-2 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<form
+  [formGroup]="countByAgeGroup"
+  class="position-relative"
+  (ngSubmit)="onSubmitAge()"
+>
+  <div class="row d-flex pl-30  space-between mt-20 position-relative">
+    <div class="wrap-input100 w-100 mb-0 mr-30">
+      <div class="label-input100">Queue Name</div>
+      <p-multiSelect
+        #queueSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="queueList"
+        pTooltip="Queue Names"
+        tooltipPosition="bottom"
+        formControlName="queueName"
+        [virtualScroll]="true"
+        (onChange)="validateQueue()"
+        itemSize="30"
+        defaultLabel="Select Queue"
+        appendTo="body"
+      ></p-multiSelect>
+      <div class="error-msg" style="top:49px" *ngIf="getQueue.touched">
+        <span class="mr-2" *ngIf="getQueue.hasError('required')"
+          >Please select a queue.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex pl-30 space-between mt-20 position-relative">
+    <div class="wrap-input100 w-100 mb-0">
+      <div class="label-input100">Claim Status</div>
+      <p-multiSelect
+        #statusSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="statusList"
+        pTooltip="Claim Status"
+        tooltipPosition="bottom"
+        formControlName="status"
+        [virtualScroll]="true"
+        (onChange)="validateStatus()"
+        itemSize="30"
+        defaultLabel="Select Status"
+        appendTo="body"
+      ></p-multiSelect>
+      <div class="error-msg" style="top:49px" *ngIf="getStatusSelect.touched">
+        <span class="mr-2" *ngIf="getStatusSelect.hasError('required')"
+          >Please select a status.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex pl-30 space-between mt-20 position-relative">
+    <div class="wrap-input100 mb-0">
+      <div class="label-input100">Processed Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        pTooltip="Processed Date Range"
+        tooltipPosition="bottom"
+        (onClose)="countByAgeGroup.invalid ? '' : validateDates()"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        appendTo="body"
+      >
+      </p-calendar>
+      <div class="error-msg" style="top:55px" *ngIf="getDateRange.touched">
+        <span class="mr-2" *ngIf="getDateRange.hasError('required')"
+          >Date range is required.</span
+        >
+        <span class="mr-2" *ngIf="getDateRange.hasError('inValidDate')"
+          >Date range should not exceed six months.</span
+        >
+      </div>
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="triggerZoom"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="triggerZoom"
+  [transitionOptions]="'0ms'"
+  header="Claims Volume By Age"
+>
+  <div class="d-flex justify-content-center">
+    <div class="m-0 scroll-graph-x">
+      <div class="d-flex">
+        <p class="horizontal-axis text-center">Claim Count</p>
+        <google-chart
+          *ngIf="isAgeRendered"
+          #chart
+          [title]="titleAge"
+          [type]="typeAge"
+          [data]="dataAge"
+          [options]="optionsAgeEnlarged"
+          [width]="widthAge"
+          [height]="400"
+          [columnNames]="columnNamesAge"
+          (select)="selectBar($event)"
+        >
+        </google-chart>
+      </div>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged mb-2">Claim Age (Days)</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="detailsView"
+  [style]="{ width: '90vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="detailsView"
+  [contentStyle]="{ padding: 0, maxHeight: '100%' }"
+  [transitionOptions]="'0ms'"
+  header="{{ 'Claims Volume By Age - ' + barDetails.type }}"
+>
+  <div class="d-flex">
+    <app-report-table
+      class="w-100"
+      header="{{ barDetails.type }}"
+      [isChart]="true"
+      [data]="chartDetails"
+      [columns]="cols"
+      (exportExcel)="downloadExcel()"
+    ></app-report-table>
+  </div>
+</p-dialog>

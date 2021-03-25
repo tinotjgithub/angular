@@ -1,0 +1,151 @@
+<div class="d-flex">
+  <p style="padding-top:20px;" class="horizontal-axis">Transaction Count</p>
+  <div style="overflow-x:auto; max-width: 520px; min-width: 520px;">
+    <google-chart
+      #chart
+      [title]="myTitleProductivity"
+      *ngIf="isProductivityRendered"
+      [type]="myTypeProductivity"
+      [data]="myDataProductivity"
+      [options]="myOptionsProductivity"
+      [columnNames]="myColumnNamesProductivity"
+      [height]="myHeightProductivity"
+      [width]="myWidthProductivity"
+    >
+    </google-chart>
+  </div>
+</div>
+<p class="vertical-axis">Time (am/pm)</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mb-2 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<form
+  class="ml-2 "
+  [formGroup]="myTeamProductivityDates"
+  (ngSubmit)="onSubmitMyTeamProductivity()"
+>
+  <div class="d-flex">
+    <div class="wrap-input100">
+      <div class="label-input100">Frequency</div>
+      <p-dropdown
+        appendTo="body"
+        [styleClass]="'w-100'"
+        [autoWidth]="false"
+        tooltipPosition="bottom"
+        pTooltip="Frequency"
+        [options]="freqList"
+        (onChange)="OnSelectFrequency($event)"
+        formControlName="frequency"
+        placeholder="Select a frequency"
+      >
+      </p-dropdown>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="wrap-input100 mb-0" *ngIf="showMonthlyCalendar">
+      <div class="label-input100">Completion Date</div>
+      <p-calendar
+        appendTo="body"
+        (onClose)="validateDates()"
+        selectionMode="range"
+        view="month"
+        rangeSeparator=" - "
+        [maxDate]="maxMonth"
+        [readonlyInput]="true"
+        [showIcon]="true"
+        pTooltip="Completion Date"
+        tooltipPosition="bottom"
+        formControlName="dateRange"
+        dateFormat="mm/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <div
+        style="  color: red;
+        font-size: 11px;
+        position: absolute;
+        top:55px;"
+      >
+        <span class="mr-2" *ngIf="getDateRange.hasError('rangeError')">
+          Date range should not exceed six months.</span
+        >
+      </div>
+    </div>
+    <div class="wrap-input100 mb-0" *ngIf="showDailyCalendar">
+      <div class="label-input100">Completion Date</div>
+      <p-calendar
+        appendTo="body"
+        (onClose)="validateDates()"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        tooltipPosition="bottom"
+        pTooltip="Completion Date"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [maxDate]="maxDate"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <div
+        style="  color: red;
+        font-size: 11px;
+        position: absolute;
+        top:55px;"
+      >
+        <span class="mr-2" *ngIf="getDateRange.hasError('invalidDaily')"
+          >Daily selection should be less than 30 days.</span
+        >
+      </div>
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="My Hourly Productivity"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex">
+    <p style="padding-top:150px;" class="horizontal-axis-enlarged">
+      Transaction Count
+    </p>
+    <div style="overflow-x:auto; max-width: 700px; min-width: 700px;">
+      <google-chart
+        #chart
+        [ngStyle]="{ width: '80%' }"
+        [title]="myTitleProductivity"
+        *ngIf="isProductivityRendered"
+        [type]="myTypeProductivity"
+        [data]="myDataProductivity"
+        [options]="myOptionsProductivityEnlarged"
+        [width]="700"
+        [columnNames]="myColumnNamesProductivity"
+        [height]="400"
+        [width]="myWidthProductivityEnlarged"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged">Time (am/pm)</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>

@@ -1,0 +1,193 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+    <div [routerLink]="'/configuration-menu'">
+        <img alt=" " src="./../../../../../assets/images-new/left.png" style="margin-right: 15px; cursor: pointer;" />
+    </div>
+    <div>Back To Configuration</div>
+</div>
+<div class="mt-30">
+    <form [formGroup]="targetSettings" style="display: contents;">
+        <div class="wrap-pend-reason">
+            <div class="d-flex space-between">
+                <div>
+                    <span class="section-title">SLA Days Configuration</span><span *ngIf="gridData?.length > 0" class="section-title-count">{{
+                                                (scoreTable?.filteredValue || gridData)?.length
+                                }}</span>
+                </div>
+                <div class="d-flex">
+                    <div class="search-bar d-flex space-between mr-30" [class.mr-30]="!assign">
+                        <input type="text" class="search-input" (input)="
+                                            scoreTable
+                                              ? scoreTable.filterGlobal($event.target.value, 'contains')
+                                              : ''
+                                          " placeholder="Search SLA" />
+                        <img alt=" " src="./../../../assets/images-new/search.png" style="width: 20px; height: 20px; margin-top: 10px;" />
+                    </div>
+                    <div class="solid-btn mr-30" (click)="addTarget = true">
+                        Add New SLA
+                    </div>
+                </div>
+            </div>
+            <div class="mt-30" *ngIf="gridData?.length > 0">
+                <div>
+                    <p-table #scoreTable [responsive]="true" [columns]="cols" [tableStyle]="{ 'table-layout': 'auto' }"
+                        [value]="gridData" [paginator]="true" [rows]="10" [resizableColumns]="true"
+                        [scrollable]="false">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of cols" id="{{ col.field }}" [hidden]="!col.visible">
+                                    {{ col.header }}
+                                </th>
+                                <th id="edit">Edit</th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData let-columns="cols">
+                            <tr [pSelectableRow]="rowData">
+                                <td *ngFor="let col of cols" [hidden]="!col.visible">
+                                    {{ rowData[col.field] }}
+                                </td>
+                                <td>
+                                    <img alt=" " src="./../../../../../assets/images-new/edit-form.png" pTooltip="Edit"
+                                        title="Edit" (click)="editSLATarget(rowData)"
+                                        style="cursor: pointer;margin-top: 12px;" />
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr style="text-align: center;">
+                                <td [attr.colspan]="columns.length">
+                                    No records found
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="paginatorleft" let-state>
+                            <div class="result-no">
+                                {{
+                    gridData?.length > 0
+                      ? "Showing " +
+                        (scoreTable?.filteredValue
+                          ? scoreTable?.filteredValue?.length > 0
+                            ? state.first + 1
+                            : 0
+                          : state.first + 1) +
+                        " - " +
+                        ((state.first + state.rows >
+                        (scoreTable?.filteredValue || gridData)?.length
+                          ? (scoreTable?.filteredValue || gridData).length
+                          : state.first + state.rows
+                        ) | number) +
+                        " of " +
+                        (scoreTable?.filteredValue || gridData)?.length
+                      : "Showing 0 - 0 of 0"
+                  }}
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="paginatorright">
+                            <div class="result-no d-flex">
+                                <div>Rows per page &nbsp; &nbsp;</div>
+                                <select class="input100 result-no" style="width: 50px;" (click)="scoreTable.reset()"
+                                    [(ngModel)]="scoreTable.rows" [ngModelOptions]="{ standalone: true }">
+                                    <option>10</option>
+                                    <option>25</option>
+                                    <option>50</option>
+                                </select>
+                            </div>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+            <div class="mt-60 text-center mb-30" *ngIf="!gridData || gridData?.length < 1">
+                <p>No SLA targetSLA setting present!! Please add one.</p>
+            </div>
+        </div>
+        <p-dialog [(visible)]="addTarget" modal="true" [header]="isEdit ? 'Update Target' : 'Add SLA Target'"
+            (onHide)="clearData()">
+            <div class="mt-15">
+                <div class="wrap-input100">
+                    <span class="label-input100">Month</span>
+                    <p-calendar appendTo="body" view="month" [readonlyInput]="true"
+                        [showIcon]="true" formControlName="period" dateFormat="mm/yy" [monthNavigator]="true"
+                        [yearNavigator]="true" yearRange="1970:2099">
+                    </p-calendar>
+                    <div class="error-msg" *ngIf="
+                this.targetSettings.controls.period.touched &&
+                this.targetSettings.controls.period.invalid
+              ">
+                        <span *ngIf="targetSettings.hasError('required')">
+                            Date Period is required.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-15">
+                <div class="wrap-input100">
+                    <span class="label-input100">SLA Name</span>
+                    <input autocomplete="off" type="text" class="input100" formControlName="slaName" />
+                    <span class="focus-input100"></span>
+                    <div class="error-msg" *ngIf="
+                this.targetSettings.controls.slaName.touched &&
+                this.targetSettings.controls.slaName.invalid
+              ">
+                        <span *ngIf="this.targetSettings.controls.slaName.hasError('required')">
+                            SLA Name is required.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-15">
+                <div class="wrap-input100">
+                  <span class="label-input100">Work Category</span>
+                  <select formControlName="workCategory" class="input100" placeholder="Select Type">
+                    <option value="" disabled selected hidden data-default>Select Category</option>
+                    <option *ngFor="let type of requestTypes" value="{{ type.id }}">{{
+                      type.name
+                    }}</option>
+                  </select>
+                  <span class="focus-input100"></span>
+                  <div class="error-msg" *ngIf="
+              this.targetSettings.controls.workCategory.touched &&
+              this.targetSettings.controls.workCategory.invalid
+            ">
+                      <span *ngIf="this.targetSettings.controls.workCategory.hasError('required')">
+                          Work Category is required.
+                      </span>
+                  </div>
+                </div>
+            </div>
+            <div class="mt-15">
+                <div class="wrap-input100">
+                    <span class="label-input100">Turn Around Time (Days)</span>
+                    <input autocomplete="off" type="text" class="input100" formControlName="turnAroundTime"
+                        (keyup)="preventInputTurnaround($event)" />
+                    <span class="focus-input100"></span>
+                    <div class="error-msg" *ngIf="
+                this.targetSettings.controls.turnAroundTime.touched &&
+                this.targetSettings.controls.turnAroundTime.invalid
+              ">
+                        <span *ngIf="
+                  targetSettings.controls.turnAroundTime.hasError('required')
+                ">
+                            Turn Around Time is required.
+                        </span>
+
+                        <span *ngIf="
+                  this.targetSettings.controls.turnAroundTime.hasError(
+                    'invalidTurnNumber'
+                  )
+                ">
+                            turn around days must be a numeric value.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-end mt-15">
+                <div class="cancel-btn mr-30" (click)="addTarget = false">Cancel</div>
+                <div class="solid-btn" (click)="!targetSettings.valid ? '' : saveTargetScore()"
+                    [class.disabled]="!targetSettings.valid">
+                    {{ isEdit ? "Update" : "Save" }}
+                </div>
+            </div>
+        </p-dialog>
+    </form>
+</div>

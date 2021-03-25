@@ -1,0 +1,245 @@
+<div class="d-flex">
+  <p class="horizontal-axis text-center">Claim Count</p>
+  <div class="scroll-graph-x">
+    <!-- (select)="openPopUp($event)" -->
+    <google-chart
+      *ngIf="isAuditRendered"
+      #chart
+      [title]="titleAudit"
+      [type]="typeAudit"
+      [data]="dataAudit"
+      [options]="optionsAudit"
+      [width]="widthAudit"
+      [columnNames]="columnNamesAudit"
+      [height]="heightAudit"
+      (select)="selectBar($event)"
+    >
+    </google-chart>
+  </div>
+</div>
+<div
+  *ngIf="!isDataPresent"
+  class="mr-3 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<p class="vertical-axis text-center">Processed Date</p>
+<form class="ml-2 " [formGroup]="auditDates" (ngSubmit)="onSubmitAudit()">
+  <div class="d-flex">
+    <div class="wrap-input100">
+      <div class="label-input100">Frequency</div>
+      <p-dropdown
+        appendTo="body"
+        [styleClass]="'w-100'"
+        [autoWidth]="false"
+        tooltipPosition="bottom"
+        pTooltip="Frequency"
+        [options]="freqList"
+        (onChange)="OnSelectFrequency($event)"
+        formControlName="frequency"
+        placeholder="Select a frequency"
+      >
+      </p-dropdown>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div class="wrap-input100 mb-0" *ngIf="showMonthlyCalendar">
+      <div class="label-input100">Processed Date Range</div>
+      <p-calendar
+        appendTo="body"
+        [maxDate]="maxMonth"
+        (onClose)="validateDates()"
+        selectionMode="range"
+        view="month"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        pTooltip="Processed Date Range"
+        tooltipPosition="bottom"
+        formControlName="dateRange"
+        dateFormat="mm/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <div
+        style="  color: red;
+font-size: 11px;
+position: absolute;
+top:55px;"
+      >
+        <span class="mr-2" *ngIf="getDateRange.hasError('rangeError')">
+          Date range should not exceed six months.</span
+        >
+      </div>
+    </div>
+    <div class="wrap-input100" *ngIf="showWeeklyCalendar">
+      <div class="label-input100">From</div>
+      <p-calendar
+        appendTo="body"
+        [maxDate]="maxDate"
+        [disabledDays]="[0, 2, 3, 4, 5, 6]"
+        (onClose)="validateDates()"
+        [showWeek]="true"
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="weeklyFromDate"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+    </div>
+    <div class="wrap-input100 mb-0" *ngIf="showDailyCalendar">
+      <div class="label-input100">Processed Date Range</div>
+      <p-calendar
+        appendTo="body"
+        [maxDate]="maxDate"
+        (onClose)="validateDates()"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        tooltipPosition="bottom"
+        pTooltip="Processed Date Range"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+      <div
+        style="  color: red;
+font-size: 11px;
+position: absolute;
+top:55px;"
+      >
+        <span class="mr-2" *ngIf="getDateRange.hasError('invalidDaily')"
+          >Daily selection should be less than 30 days.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="d-flex" *ngIf="showWeeklyCalendar">
+    <div class="wrap-input100 mb-0">
+      <div class="label-input100">To</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        appendTo="body"
+        (onClose)="validateDates()"
+        [showWeek]="true"
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="weeklyToDate"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+
+      <div
+        style="  color: red;
+  font-size: 11px;
+  position: absolute;
+  top:55px;"
+      >
+        <span class="mr-2" *ngIf="getDateRange.hasError('invalidWeekly')"
+          >Weekly selection should be less than 60 days.</span
+        >
+        <span class="mr-2" *ngIf="getDateRange.hasError('invalidDateError')"
+          >Start date is greater than End date.</span
+        >
+      </div>
+    </div>
+  </div>
+</form>
+
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Claims Audit Summary"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex">
+    <p class="horizontal-axis-enlarged" style="padding-top:150px;">
+      Claim Count
+    </p>
+    <!-- (select)="openPopUp($event)" -->
+    <div style="overflow-x:auto; max-width: 700px; min-width: 700px;">
+      <google-chart
+        *ngIf="isAuditRendered"
+        #chart
+        [title]="titleAudit"
+        [type]="typeAudit"
+        [data]="dataAudit"
+        [options]="optionsAuditEnlarged"
+        [width]="800"
+        [height]="400"
+        [columnNames]="columnNamesAudit"
+        (select)="selectBar($event)"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged">Processed Date</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-3 mb-3 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="detailsView"
+  [style]="{ width: '90vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="detailsView"
+  [contentStyle]="{ padding: 0, maxHeight: '100%' }"
+  [transitionOptions]="'0ms'"
+  header="{{ 'Claims Audit Summary - ' + barDetails.type }}"
+>
+  <div class="d-flex">
+    <app-report-table
+      class="w-100"
+      header="{{ barDetails.type }}"
+      [isChart]="true"
+      [data]="chartDetail"
+      [columns]="cols"
+      (exportExcel)="downloadExcel()"
+    ></app-report-table>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="detailsView"
+  [style]="{ width: '90vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="detailsView"
+  [contentStyle]="{ padding: 0, maxHeight: '100%' }"
+  [transitionOptions]="'0ms'"
+  header="{{ 'Claims Audit Summary - ' + barDetails.type }}"
+>
+  <div class="d-flex">
+    <app-report-table
+      class="w-100"
+      header="{{ barDetails.type }}"
+      [isChart]="true"
+      [data]="chartDetail"
+      [columns]="cols"
+      (exportExcel)="downloadExcel()"
+    ></app-report-table>
+  </div>
+</p-dialog>

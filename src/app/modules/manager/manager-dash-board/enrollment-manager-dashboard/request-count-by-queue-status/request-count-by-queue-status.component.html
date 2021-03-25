@@ -1,0 +1,163 @@
+<div class="d-flex">
+  <p class="horizontal-axis" style="padding-top:15px;">Queue Name</p>
+  <div class="scroll-graph mt-10" style="max-height: 200px;">
+    <google-chart
+      *ngIf="isReqCountRendered"
+      #chart
+      [title]="titleReqCount"
+      [type]="typeReqCount"
+      [data]="dataReqCount"
+      [options]="optionsReqCount"
+      (select)="isDataPresent ? openPopUp($event) : null"
+      [columnNames]="columnNamesReqCount"
+      [width]="widthReqCount"
+      [height]="heightReqCount"
+    >
+    </google-chart>
+    <div
+      *ngIf="!isDataPresent"
+      class="d-flex space-between justify-content-center"
+    >
+      <p-message severity="warn" text="No Data Present!"></p-message>
+    </div>
+  </div>
+</div>
+<p class="vertical-axis text-center">Enrollment Request Count</p>
+<form
+  [formGroup]="requestCountQueueGrp"
+  class="position-relative"
+  (ngSubmit)="onSubmitReqCount()"
+>
+  <div class="row d-flex pl-30 pr-30 space-between mt-10 position-relative">
+    <div class="wrap-input100 w-100 mb-0 mr-30">
+      <div class="label-input100">Queue Name</div>
+      <p-multiSelect
+        #queueSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="queueList"
+        pTooltip="Queue Names"
+        tooltipPosition="bottom"
+        formControlName="queueName"
+        [virtualScroll]="true"
+        (onChange)="validateQueues()"
+        itemSize="30"
+        defaultLabel="Select Queue"
+        appendTo="body"
+      ></p-multiSelect>
+      <div class="error-msg" style="top:49px" *ngIf="getQueue.touched">
+        <span class="mr-2" *ngIf="getQueue.hasError('required')"
+          >Please select a user group.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex pl-30 pr-30 space-between mt-10 position-relative">
+    <div class="wrap-input100 w-100 mb-0 mr-30">
+      <div class="label-input100">PROMT Status</div>
+      <p-multiSelect
+        #statusSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="statusList"
+        pTooltip="PROMT Status"
+        tooltipPosition="bottom"
+        formControlName="status"
+        [virtualScroll]="true"
+        (onChange)="validateStatus()"
+        itemSize="30"
+        defaultLabel="Select Status"
+        appendTo="body"
+      ></p-multiSelect>
+      <div class="error-msg" style="top:52px" *ngIf="getStatus.touched">
+        <span class="mr-3 mt-5" *ngIf="getStatus.hasError('required')"
+          >Please select a status.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex pl-30 pr-30 space-between mt-20 position-relative">
+    <div class="wrap-input100">
+      <div class="label-input100">Request Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        pTooltip="Request Date Range"
+        tooltipPosition="bottom"
+        (onClose)="requestCountQueueGrp.invalid ? '' : validateDates()"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        appendTo="body"
+      >
+      </p-calendar>
+    </div>
+    <div class="error-msg" style="top:49px" *ngIf="getDateRange.touched">
+      <span class="mr-2" *ngIf="getDateRange.hasError('inValidDate')"
+        >Date range should not exceed six months.</span
+      >
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="450"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Request Count By Queue and Status"
+>
+  <div class="d-flex">
+    <p class="horizontal-axis-enlarged mt-10" style="padding-top:50px;">
+      Queue Name
+    </p>
+    <div class="scroll-graph mt-10" style="max-height: 300px;">
+      <google-chart
+        *ngIf="isReqCountRendered"
+        #chart
+        [title]="titleReqCount"
+        [type]="typeReqCount"
+        (select)="isDataPresent ? openPopUp($event) : null"
+        [data]="dataReqCount"
+        [options]="optionsReqCountEnlarged"
+        [width]="700"
+        [height]="800"
+        [columnNames]="columnNamesReqCount"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <p class="vertical-axis-enlarged text-center">Enrollment Request Count</p>
+</p-dialog>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Request Count By Queue and Status ({{ queueName }} - {{
+    action
+  }})"
+  (onHide)="closePopUp()"
+>
+  <app-enrollment-manager-dashboard-pop-up
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-enrollment-manager-dashboard-pop-up>
+</p-dialog>

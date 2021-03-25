@@ -1,0 +1,114 @@
+<form [formGroup]="dateForm">
+  <div class="d-flex space-between">
+    <div class="section-label">My Hourly Productivity By Transaction</div>
+    <div>
+      <img
+        alt=" "
+        src="./../../../../../assets/images-new/max.png"
+        style="cursor: pointer;"
+        (click)="enlargedDisplay = true"
+      />
+    </div>
+  </div>
+  <div class="d-flex mt-10">
+    <p class="horizontal-axis text-center">Transaction Count</p>
+    <div
+      class="d-flex scroll-graph-x"
+      style="min-width: 100%;"
+      *ngIf="myData?.length > 0"
+    >
+      <google-chart
+        #chart
+        [title]="myTitle"
+        style="min-width: 100%;"
+        [type]="myType"
+        [data]="myData"
+        [options]="myOptions"
+        [columnNames]="myColumnNames"
+        [width]="'100%'"
+        [height]="myHeight"
+      >
+      </google-chart>
+    </div>
+
+    <div
+      class="d-flex justify-content-center align-items-center"
+      style="height: 225px;"
+      *ngIf="!myData || myData?.length < 1"
+    ></div>
+  </div>
+  <div
+    *ngIf="!this.isDataPresent"
+    class="d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <p class="vertical-axis">Time (am/pm)</p>
+  <div class="d-flex justify-content-center w-100">
+    <div class="wrap-input100 w-100 mb-0">
+      <div class="label-input100">Completion Date Range</div>
+      <p-calendar
+        appendTo="body"
+        formControlName="dateRange"
+        [maxDate]="maxDate"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        [monthNavigator]="true"
+        (onClose)="dateForm.valid ? getData() : ''"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      ></p-calendar>
+      <div
+        class="error-msg"
+        *ngIf="
+          dateForm.controls.dateRange.touched &&
+          dateForm.controls.dateRange.invalid
+        "
+      >
+        <div *ngIf="dateForm.controls.dateRange.hasError('required')">
+          Date Range is required.
+        </div>
+        <div *ngIf="dateForm.controls.dateRange.hasError('invalidDate')">
+          Date Range should be less than 6 months.
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<p-dialog
+  width="800"
+  height="480"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  *ngIf="enlargedDisplay"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="My Hourly Productivity By Transaction"
+>
+  <div class="d-flex">
+    <p class="horizontal-axis-enlarged text-center">Transaction Count</p>
+    <div style="overflow-x:auto; max-width: 750px; min-width: 750px;">
+      <google-chart
+        #chart
+        [title]="myTitle"
+        [type]="myType"
+        [data]="myData"
+        [options]="myOptionsEnlarged"
+        [width]="750"
+        [columnNames]="myColumnNames"
+        [height]="400"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <div
+    *ngIf="!this.isDataPresent"
+    class="ml-5 mb-3 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <p class="vertical-axis-enlarged">Time (am/pm)</p>
+</p-dialog>

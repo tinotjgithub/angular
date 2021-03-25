@@ -1,0 +1,96 @@
+<div class="mt-60">
+  <div class="wrap-pend-reason">
+    <div class="d-flex space-between">
+      <div>
+        <span class="section-title">Add To Audit Queue</span>
+        <span *ngIf="gridData?.length > 0" class="section-title-count">{{gridData?.length}}</span>
+      </div>
+    </div>
+    <div class="d-flex mt-30 pl-30 pr-30">
+      <div class="d-flex claim-status mr-30 mt-10">
+        <div class="wrap-label">Unassigned Claims Count</div>
+        <div class="count">{{gridData.length}}</div>
+      </div>
+      <div class="wrap-input100 w-30 mr-30">
+        <div class="label-input100">Auditor Name</div>
+        <p-dropdown appendTo="body" [style]="{width: '100%'}" [autoWidth]="true" [options]="auditorNames" [ngModel]="auditor" [optionLabel]="'name'"
+          (onChange)="change($event)" [placeholder]="'Select'"></p-dropdown>
+      </div>
+      <div class="d-flex claim-status mt-10 mr-auto">
+        <div class="wrap-label">Assigned Queue Count</div>
+        <div class="count">{{ assignedQueueCount || 0}}</div>
+      </div>
+      <div class="d-flex claim-status mt-10">
+        <div class="wrap-label">Selected Claims Count</div>
+        <div class="count">{{selectedValues?.length || 0}}</div>
+      </div>
+    </div>
+    <div class="d-flex pl-30 pr-30 mb-30">
+      <ng-container *ngIf="showAlert">
+        <div style="color: red; font-size: 14px;" *ngIf="this.selectedValues.length === 0">Please select atleast one
+          Claim</div>
+        <div style="color: red; font-size: 14px;" *ngIf="this.auditor === ''">Please select an Auidtor name</div>
+      </ng-container>
+      <div class="solid-btn ml-auto" (click)="assign()">Assign</div>
+    </div>
+    <p-table id="test" #dt [columns]="cols" [columnResizeMode]="'fit'" [value]="gridData"
+      [tableStyle]="{ 'table-layout': 'auto' }" [(selection)]="selectedValues" [metaKeySelection]="true"
+      [paginator]="true" [rows]="10" [resizableColumns]="true" [scrollable]="false" dataKey="claimId"
+      *ngIf="!showSpinner">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th id="tableHeader">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th *ngFor="let col of columns" id="{{ col.field }}" [pSortableColumn]="col.field"
+          [pSortableColumnDisabled]="!(col.field === 'billedAmount' || col.field === 'receiptDate')">
+            {{ col.header }}
+            <p-sortIcon *ngIf="col.field === 'billedAmount' || col.field === 'receiptDate'" [field]="col.field">
+            </p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+          <td>
+            <p-tableCheckbox [value]="rowData"> </p-tableCheckbox>
+          </td>
+          <td *ngFor="let col of columns">
+            {{ rowData[col.field] }}
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [attr.colspan]="columns.length" style="text-align: center">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{gridData?.length > 0 ?
+            ('Showing ' + (dt?.filteredValue ? (dt?.filteredValue?.length > 0 ? (state.first + 1) : 0) : (state.first + 1)) +' - ' +
+            (
+              (
+              (state.first + state.rows) > (dt?.filteredValue || gridData)?.length ? ((dt?.filteredValue || gridData).length) : (state.first + state.rows)
+              )| number
+            ) + ' of '+ (dt?.filteredValue || gridData)?.length) : 'Showing 0 - 0 of 0'}}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <div class="result-no d-flex">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select class="input100 result-no" style="width: 50px;" (click)="dt.reset()" [(ngModel)]="dt.rows" [ngModelOptions]="{standalone: true}">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+<p-confirmDialog header="Confirmation" [acceptButtonStyleClass]="'accept-button'" [rejectButtonStyleClass]="'reject-button'"></p-confirmDialog>
+<app-loader [showSpinner]="showSpinner">
+  <app-loader>

@@ -1,0 +1,22 @@
+<div class="d-flex w-100" style="margin-top: -6px;">
+  <div class="w-100" style="transition: all 0.5s ease;" [class.mr-30]="input?.length < maxNoOfFiles && !disableadd">
+    <span class="label-input100">Upload Attachment</span>
+    <div class="wrap-input100 mr-30" *ngFor="let val of input; index as i">
+      <div class="file_input_group" [class.disabled]="disabled">
+        <span *ngIf="val">{{val?.fileName}}</span>
+        <span class="label-placeholder" *ngIf="!val">Browse file</span>
+        <input class="input100" type="file" (change)="getVal($event, i)"
+          [attr.disabled]="disabled || disableupload ? '' : null" placeholder="Browse Attachment">
+        <span class="focus-input100"></span>
+        <em *ngIf="!disabledownload" [class.visible]="val?.fileName" class="fas fa-lg fa-file-download download"
+          (click)="downloadClick(val)" aria-hidden="true" pTooltip="Download file."></em>
+        <em *ngIf="!disabledelete" [class.visible]="i > 0 ? true : (val?.fileName)" (click)="removeFile(i)"
+          class="pi pi-times delete" aria-hidden="true" pTooltip="Delete file."></em>
+      </div>
+    </div>
+  </div>
+  <div class="ml-30">
+    <img alt = " " [class.disabled]="disabled || checkValues()" *ngIf="input?.length < maxNoOfFiles && !disableadd"
+      src="./../../../../assets/images-new/add.png" pTooltip="Add another file" (click)="addFile()" style="margin-top: 25px; cursor: pointer;">
+  </div>
+</div>

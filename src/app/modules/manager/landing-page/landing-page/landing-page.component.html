@@ -1,0 +1,12 @@
+<div *ngIf="authService.managerType === 'enrollment'">
+  <app-enrollment-landing-page></app-enrollment-landing-page>
+</div> 
+
+<div
+  *ngIf="
+    authService.managerType === 'claims' || authService.managerType === 'both'
+  "
+>
+  <app-claims-landing-page></app-claims-landing-page>
+</div>
+  

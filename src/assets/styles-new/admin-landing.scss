@@ -1,0 +1,76 @@
+
+  /*//////////////////////////Schedule Notification Start/////////////////////////////////////*/
+  .wrap-schedule-notifications{
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid #DFE0EB;
+    margin-top: 25px;
+    padding-top: 30px;
+    /* padding-bottom: 30px; */
+  }
+  .section-title-count {
+    font-size: 14px;
+    color: white;
+    background-color: #20558B;
+    padding: 1px 6px;
+    height: 20px;
+    line-height: 10px;
+    border-radius: 52px;
+    margin-left: 5px;
+  }
+  .wrap-row{
+    border-bottom: 1px solid #DFE0EB;
+    height: 50px;
+    line-height: 50px;
+  }
+  .email-subject{
+    width:20%;
+    color:#20558B;
+    font-size: 14px;
+    text-decoration: underline;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 30px;
+  }
+  .email-trigger, .from-date, .to-date, .user-type{
+    width:20%;
+    color: rgba(50, 60, 71, 0.7);
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .user-type{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .table-header{
+    font-weight: 600;
+  }
+  /*//////////////////////////Schedule Notification End/////////////////////////////////////*/
+
+  .manual-sync {
+    position: absolute;
+    top: -20px;
+    right: 0;
+    .refresh-btn {
+      color: transparent;
+      &:hover {
+        color: white;
+      }
+    }
+  }
+
+  .refresh-loading {
+    animation: rotation 2s infinite linear;
+  }
+    @keyframes rotation {
+      from {
+          transform: rotate(0deg);
+          -webkit-transform: rotate(0deg);
+      }
+      to {
+          transform: rotate(359deg);
+          -webkit-transform: rotate(359deg);
+      }
+  }

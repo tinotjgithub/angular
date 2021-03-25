@@ -1,0 +1,241 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+  <div> <img alt = " " src="./../../../../../assets/images-new/left.png" [routerLink]="'/actions'" style="margin-right: 15px; cursor: pointer;"></div>
+  <div>Back To Action Menu</div>
+</div>
+
+<div class="d-flex mt-10">
+  <div class="wrap-get-claim pb-30 mr-15">
+    <div class="popup-header d-flex space-between">
+      <div class="section-label">Get Claims From</div>
+    </div>
+    <div class="popup-body">
+      <form [formGroup]="assignFromForm">
+        <div class="d-flex pl-30 pr-30 mt-15">
+          <div class="wrap-input100 w-50 mr-30">
+            <div class="label-input100">Role</div>
+            <p-dropdown formControlName="role" appendTo="body" [style]="{width: '100%'}" placeholder="--Select--"
+              [options]="fromRoles" (onChange)="assignFromRoleSelected($event)" [optionLabel]="'label'" [disabled]= 'pendingAssignment'>
+            </p-dropdown>
+            <div class="error-msg" style="top:55px" *ngIf="this.getFormControl('role').touched">
+              <div *ngIf="this.getFormControl('role').hasError('required')">
+                Role is required.
+              </div>
+            </div>
+          </div>
+          <div class="wrap-input100 w-50">
+            <div class="label-input100">Name</div>
+            <p-dropdown formControlName="userName" field="label" [style]="{width: '100%'}" appendTo="body"
+              placeholder="Search Name" [options]="userNamesAssignFrom" [filter]="true" (onChange)="loadUserGroups($event)"
+              [optionLabel]="'label'" [disabled]="assignToExaminerFromLeadlogin || pendingAssignment">
+            </p-dropdown>
+            <div class="error-msg" style="top:55px" *ngIf="this.getFormControl('userName').touched">
+              <div *ngIf="this.getFormControl('userName').hasError('required')">
+                Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex pl-30 pr-30">
+          <div class="wrap-input100">
+            <div class="label-input100">User Group</div>
+            <p-multiSelect [options]="userGroups" formControlName="userGroup" appendTo="body" [optionLabel]="'label'" (onChange) = "autoLoadGrid()"></p-multiSelect>
+          </div>
+        </div>
+        <div class="d-flex pl-30 pr-30">
+          <div class="wrap-input100">
+            <div class="label-input100">Reassignment Type</div>
+            <select formControlName="assignmentType" [attr.disabled]="this.getFormControl('userName').value ? null : ''" class="input100" aria-placeholder="Reassignment Type">
+              <option value="" disabled selected hidden data-default>Select Type</option>
+              <option value="auto">Auto</option>
+              <option value="manual">Manual</option>
+            </select>
+            <div class="error-msg" style="top:55px" *ngIf="this.getFormControl('assignmentType').touched">
+              <div *ngIf="this.getFormControl('assignmentType').hasError('required')">
+                Reassignment Type is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pl-30 pr-30" *ngIf="claimStatusCount.length > 0">Claim Status</div>
+        <div class="d-flex pl-30 pr-30 space-between" *ngIf="claimStatusCount.length > 0">
+          <div class="d-flex claim-status" *ngFor="let item of claimStatusCount">
+            <div class="wrap-label">{{ item.status }}</div>
+            <div class="count">{{ item.count }}</div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="mr-15" style="margin-top: 14%;" *ngIf="!auto">
+    <img alt = " " src="./../../../../../assets/images-new/right.png">
+  </div>
+
+  <div class="wrap-get-claim pb-30" *ngIf="!auto">
+    <div class="popup-header d-flex space-between">
+      <div class="section-label">Assign Claims To</div>
+    </div>
+    <div class="popup-body">
+      <form [formGroup]="assignToForm">
+        <div class="d-flex pl-30 pr-30 mt-15">
+          <div class="wrap-input100 w-50 mr-30">
+            <div class="label-input100">Role</div>
+            <p-dropdown formControlName="role" [disabled]="assignFromForm.invalid" appendTo="body"
+              [optionLabel]="'label'" [style]="{width: '100%'}" placeholder="--Select--" [options]="toRoles"
+              (onChange)="assignToRoleSelected($event)">
+            </p-dropdown>
+            <div class="error-msg" style="top:55px" *ngIf="this.getAssignToFormControl('role').touched">
+              <div *ngIf="this.getAssignToFormControl('role').hasError('required')">
+                Role is required.
+              </div>
+            </div>
+          </div>
+          <div class="wrap-input100 w-50 mr-30">
+            <div class="label-input100">Status</div>
+            <p-multiSelect formControlName="status" [disabled]="
+                assignFromForm.invalid ||
+                this.getAssignToFormControl('role').invalid ||
+                disableStatus
+              " appendTo="body" placeholder="--Select--" [options]="assinToStatus" [disabled]="disableStatus"
+              (onChange)="onAssignToStatusSelcted()" [optionLabel]="'label'" [maxSelectedLabels]="1">
+            </p-multiSelect>
+            <div class="error-msg" style="top:55px" *ngIf="this.getAssignToFormControl('status').touched">
+              <div *ngIf="
+                  this.getAssignToFormControl('status').hasError('required')
+                ">
+                Status is required.
+              </div>
+            </div>
+          </div>
+          <div class="wrap-input100 w-50">
+            <div class="label-input100">Name</div>
+            <p-dropdown *ngIf="!multiSelectUsers" [style]="{width: '100%'}" formControlName="userName" field="label"
+              [disabled]="assignFromForm.invalid" appendTo="body" placeholder="Search Name" [filter]="true"
+              [options]="userNamesAssignTo" [optionLabel]="'label'">
+            </p-dropdown>
+            <p-multiSelect *ngIf="multiSelectUsers" formControlName="userName" [disabled]="assignFromForm.invalid"
+              appendTo="body" placeholder="Search Name" [options]="userNamesAssignTo" [optionLabel]="'label'">
+            </p-multiSelect>
+
+            <div class="error-msg" style="top:55px" *ngIf="this.getAssignToFormControl('userName').touched">
+              <div *ngIf="
+                  this.getAssignToFormControl('userName').hasError('required')
+                ">
+                Name is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex pl-30 pr-30">
+          <div class="wrap-input100">
+            <div class="label-input100">Reassignment Reason</div>
+            <p-dropdown [style]="{width: '100%'}" formControlName="reassignReason" [disabled]="assignFromForm.invalid"
+              appendTo="body" placeholder="--Select--" [options]="getReassignmentReasonSource">
+            </p-dropdown>
+            <div class="error-msg" style="top:55px" *ngIf="this.getAssignToFormControl('reassignReason').touched">
+              <div *ngIf="
+                  this.getAssignToFormControl('reassignReason').hasError(
+                    'required'
+                  )
+                ">
+                Reassignmet Reason is required.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex pl-30 pr-30">
+          <div class="wrap-input100">
+            <div class="label-input100">Reassignment Comment</div>
+            <textarea class="input100" [disabled]="assignFromForm.invalid" formControlName="reassignComments" maxlength = "256"
+              style="width: 100%;">
+            </textarea>
+            <span class="focus-input100"></span>
+          </div>
+        </div>
+        <div class="d-flex space-between pl-30 pr-30">
+          <div class="d-flex claim-status"
+            [ngStyle]="{visibility: (assignToForm.valid && claimsRefreshed) ? 'visible' : 'hidden'}">
+            <div class="wrap-label">Listed Claim </div>
+            <div class="count">{{ listedCount || 0 }}</div>
+          </div>
+          <div class="d-flex">
+            <div class="outline-btn btn-blue" (click)="assignToForm.invalid ? '' : listClaims()"
+              [class.disabled]="assignToForm.invalid">List Claims</div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="wrap-manage-user mt-30" *ngIf="gridData && gridData.length > 0">
+  <div class="d-flex space-between pr-30 mb-30">
+    <div>
+      <span class="section-title">Claims</span><span *ngIf="gridData && gridData.length > 0" class="section-title-count">{{gridData.length}}</span>
+    </div>
+    <div class="solid-btn" *ngIf="!auto" [class.disabled]="!claimsRefreshed || selectedValues.length === 0"
+      (click)="(!claimsRefreshed || selectedValues.length === 0) ? '' : reAssign()">Assign</div>
+    <div class="solid-btn" [class.disabled]="selectedValues.length === 0" *ngIf="auto"
+        (click)="(selectedValues.length === 0) ? '' : reAssign()">Assign</div>
+  </div>
+  <p-table id="test" #dt [columns]="cols" [columnResizeMode]="fit" [value]="gridData"
+    [tableStyle]="{ 'table-layout': 'auto' }" [styleClass]="'prime_borderless'" [(selection)]="selectedValues"
+    [metaKeySelection]="true" [paginator]="true" [rows]="10" [resizableColumns]="true" [scrollable]="false"
+    dataKey="claimId">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th id="tableHeader">
+          <p-tableHeaderCheckbox *ngIf="!auto" [disabled]="
+                  !claimsRefreshed ||
+                  (claimsRefreshed && managerToManagerOrLeadToLead)
+                "></p-tableHeaderCheckbox>
+          <p-tableHeaderCheckbox *ngIf="auto"></p-tableHeaderCheckbox>
+        </th>
+        <th *ngFor="let col of columns" id="{{ col.field }}" style="min-width: 105px;">
+          {{ col.header }}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr [pSelectableRow]="rowData">
+        <td>
+          <p-tableCheckbox *ngIf="!auto" [pTooltip]="
+                  !claimsRefreshed
+                    ? 'Please List Claims to enable selection'
+                    : managerToManagerOrLeadToLead
+                    ? 'All Claims will be automatically selected when Manager to Manager or Lead to Lead assignment is selected'
+                    : 'Select'
+                " [value]="rowData" [disabled]="!claimsRefreshed || managerToManagerOrLeadToLead">
+          </p-tableCheckbox>
+          <p-tableCheckbox *ngIf="auto" [value]="rowData"></p-tableCheckbox>
+        </td>
+        <td *ngFor="let col of columns">
+          {{ rowData[col.field] }}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+      <tr>
+        <td [attr.colspan]="columns.length + 1" style="text-align: center">
+          No records found
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft" let-state>
+      <div class="result-no">
+        {{gridData?.length > 0 ? ('Showing ' + (state.first + 1) +' - ' + (((state.first + state.rows) > state.totalRecords ? (state.totalRecords) : (state.first + state.rows) ) | number) + ' of '+ state.totalRecords) : 'Showing 0 - 0 of 0'}}
+      </div>
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+      <div class="result-no d-flex">
+        <div>Rows per page &nbsp; &nbsp;</div>
+        <select class="input100 result-no" style="width: 50px;" [(ngModel)]="dt.rows" [ngModelOptions]="{standalone: true}">
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+        </select>
+      </div>
+    </ng-template>
+  </p-table>
+</div>
+<p-confirmDialog header="Confirmation" [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"></p-confirmDialog>
+<app-loader [showSpinner]="showSpinner"></app-loader>

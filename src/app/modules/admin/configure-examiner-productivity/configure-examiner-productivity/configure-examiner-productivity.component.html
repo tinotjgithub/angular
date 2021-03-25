@@ -1,0 +1,55 @@
+<form [formGroup]="formGroup">
+  <div class="d-flex cursor-pointer mt-60" href="#">
+    <div [routerLink]="'/admin-configuration'">
+      <img
+        alt=" "
+        src="./../../../../../assets/images-new/left.png"
+        style="margin-right: 15px; cursor: pointer;"
+      />
+    </div>
+    <div>Back To Configuration</div>
+  </div>
+  <div class="wrap-claim-volume mt-30 w-100">
+    <div class="d-flex space-between">
+      <div class="section-title">{{isEnrollment ? 'Specialist' : 'Examiner'}} Productivity Configuration</div>
+      <div>
+        <span class="mr-2"
+          ><p-checkbox
+            (onChange)="submit()"
+            [binary]="true"
+            [formControl]="formGroup.controls['routedOutStatus']"
+          ></p-checkbox
+        ></span>
+        <span class="mr-5 section-label-title"> Routed Out {{isEnrollment ? 'Transaction' : 'Claims'}}</span>
+      </div>
+    </div>
+    <div class="support-body">
+      <div
+        class="section-label-title d-flex space-between"
+        style="margin-top:60px; margin-bottom:50px;"
+      >
+        <div class="d-flex space-between">
+          <div>
+            <span class="mr-4 ml-4">Productivity</span>
+            <span class="mr-4">=</span>
+            <span class="mr-4 section-label-bordered">Completed {{isEnrollment ? 'Transaction' : 'Claims'}}</span>
+            <span class="mr-4" *ngIf="!isEnrollment">+</span>
+            <span class="mr-4 section-label-bordered" *ngIf="!isEnrollment"
+              >Completed & Routed Claims</span
+            >
+            <span
+              *ngIf="formGroup.controls['routedOutStatus'].value"
+              class="mr-4"
+              >+</span
+            >
+            <span
+              *ngIf="formGroup.controls['routedOutStatus'].value"
+              class="mr-4 section-label-bordered"
+              >Routed Out {{isEnrollment ? 'Transaction' : 'Claims'}}</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

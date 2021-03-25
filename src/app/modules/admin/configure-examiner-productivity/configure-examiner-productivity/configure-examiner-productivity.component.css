@@ -1,0 +1,23 @@
+::ng-deep body .ui-chkbox .ui-chkbox-box.ui-state-focus {
+  border-color: #4cc14f;
+  color: #4cc14f;
+}
+
+::ng-deep body .ui-chkbox .ui-chkbox-box.ui-state-active {
+  border-color: #4cc14f;
+  background-color: #4cc14f;
+  color: #ffffff;
+}
+::ng-deep
+  body
+  .ui-chkbox
+  .ui-chkbox-box.ui-state-active:not(.ui-state-disabled):hover {
+  border-color: #4cc14f;
+  background-color: #4cc14f;
+  color: #ffffff;
+}
+::ng-deep body .ui-chkbox .ui-chkbox-box.ui-state-active.ui-state-focus {
+  border-color: #4cc14f;
+  background-color: #4cc14f;
+  color: #ffffff;
+}

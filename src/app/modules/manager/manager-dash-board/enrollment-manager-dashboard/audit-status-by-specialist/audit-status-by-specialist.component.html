@@ -1,0 +1,165 @@
+<div class="d-flex">
+  <p class="horizontal-axis" style="padding-top:15px;">Specialist Name</p>
+  <div class="scroll-graph mt-10" style="max-height: 200px;">
+    <google-chart
+      *ngIf="isReqCountRendered"
+      #chart
+      [title]="titleReqCount"
+      [type]="typeReqCount"
+      [data]="dataReqCount"
+      [options]="optionsReqCount"
+      (select)="isDataPresent ? openPopUp($event) : null"
+      [columnNames]="columnNamesReqCount"
+      [width]="widthReqCount"
+      [height]="heightReqCount"
+    >
+    </google-chart>
+    <div
+      *ngIf="!isDataPresent"
+      class="d-flex space-between justify-content-center"
+    >
+      <p-message severity="warn" text="No Data Present!"></p-message>
+    </div>
+  </div>
+</div>
+<p class="vertical-axis text-center">Audited Transactions Count</p>
+<form
+  [formGroup]="countByProdVolGroup"
+  class="position-relative"
+  (ngSubmit)="onSubmitReqCount()"
+>
+  <div class="row d-flex pl-30 pr-30 space-between mt-10 position-relative">
+    <div class="wrap-input100 w-100 mb-0">
+      <div class="label-input100">User Group Name</div>
+      <p-multiSelect
+        #userGrpSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="userGrpList"
+        pTooltip="User Group Names"
+        tooltipPosition="bottom"
+        formControlName="userGrpName"
+        [virtualScroll]="true"
+        (onChange)="validateUserGroups()"
+        itemSize="30"
+        defaultLabel="Select User Group"
+        appendTo="body"
+      ></p-multiSelect>
+      <div class="error-msg" style="top:50px" *ngIf="getGroup.touched">
+        <span class="mr-2" *ngIf="getGroup.hasError('required')"
+          >Please select a user group.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex pl-30 pr-30 space-between mt-10 position-relative">
+    <div class="wrap-input100 w-100 mb-0 mt-3">
+      <div class="label-input100">Specialists Name</div>
+      <p-multiSelect
+        #SpecialistSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="specialistListArray"
+        pTooltip="Enrollment Specialist"
+        tooltipPosition="bottom"
+        formControlName="specialistName"
+        [virtualScroll]="true"
+        (onChange)="validateSpecialist()"
+        itemSize="30"
+        defaultLabel="Select Specialist"
+        appendTo="body"
+      ></p-multiSelect>
+      <div
+        class="error-msg"
+        style="top:50px"
+        *ngIf="getSpecialistsSelect.touched"
+      >
+        <span class="mr-2" *ngIf="getSpecialistsSelect.hasError('required')"
+          >Please select an enrollment specialist.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex pl-30 pr-30 space-between mt-20 position-relative">
+    <div class="wrap-input100">
+      <div class="label-input100">Processed Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        pTooltip="Processed Date Range"
+        tooltipPosition="bottom"
+        (onClose)="countByProdVolGroup.invalid ? '' : validateDates()"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        appendTo="body"
+      >
+      </p-calendar>
+    </div>
+    <div class="error-msg" style="top:49px" *ngIf="getDateRange.touched">
+      <span class="mr-2" *ngIf="getDateRange.hasError('inValidDate')"
+        >Date range should not exceed six months.</span
+      >
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="450"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Audit Status By Specialist"
+>
+  <div class="d-flex">
+    <p class="horizontal-axis-enlarged mt-10" style="padding-top:50px;">
+      Specialist Name
+    </p>
+    <div class="scroll-graph mt-10" style="max-height: 300px;">
+      <google-chart
+        *ngIf="isReqCountRendered"
+        #chart
+        [title]="titleReqCount"
+        [type]="typeReqCount"
+        (select)="isDataPresent ? openPopUp($event) : null"
+        [data]="dataReqCount"
+        [options]="optionsReqCountEnlarged"
+        [width]="700"
+        [height]="800"
+        [columnNames]="columnNamesReqCount"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <p class="vertical-axis-enlarged text-center">Audited Transactions Count</p>
+</p-dialog>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Audit Status By Specialist ({{ specialistName }} - {{ action }})"
+  (onHide)="closePopUp()"
+>
+  <app-enrollment-manager-dashboard-pop-up
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-enrollment-manager-dashboard-pop-up>
+</p-dialog>

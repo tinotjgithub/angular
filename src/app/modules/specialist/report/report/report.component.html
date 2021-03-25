@@ -1,0 +1,21 @@
+<div class="tab-wrapper mt-60">
+    <div class="tab-container scroll-graph-x">
+        <input type="radio" name="tab-menu" id="tab1" class="tab-menu-radio" checked #tab1/>
+        <label for="tab1" class="tab-menu" id="tab-label1">Member Count By Status and Transaction​</label>
+
+        <input type="radio" name="tab-menu" id="tab2" class="tab-menu-radio" #tab2/>
+        <label for="tab2" class="tab-menu" id="tab-label2">Audit Status</label>
+
+        <input type="radio" name="tab-menu" id="tab3" class="tab-menu-radio" #tab3/>
+        <label for="tab3" id="tab-label3" class="tab-menu">Audit Rebuttal</label>
+    </div>
+    <div class="tab-data" *ngIf="tab1.checked">
+        <app-member-count-by-status-transaction></app-member-count-by-status-transaction>
+    </div>
+    <div class="tab-data" *ngIf="tab2.checked">
+        <app-audit-status></app-audit-status>
+    </div>
+    <div class="tab-data" *ngIf="tab3.checked">
+        <app-audit-rebuttal></app-audit-rebuttal>
+    </div>
+</div>

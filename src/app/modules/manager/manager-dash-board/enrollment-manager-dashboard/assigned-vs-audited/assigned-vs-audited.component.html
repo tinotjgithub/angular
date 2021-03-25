@@ -1,0 +1,179 @@
+<div class="d-flex space-between">
+  <div class="section-label">{{ OpenInv }}</div>
+  <div>
+    <img
+      alt=" "
+      src="./../../../assets/images-new/max.png"
+      style="cursor: pointer;"
+      (click)="showDialog()"
+    />
+  </div>
+</div>
+<div class="d-flex flex-end">
+  <span class="label-input50">{{ auditorName }}&nbsp;&nbsp;</span>
+</div>
+<div class="d-flex scroll-graph-x mt-10">
+  <p class="horizontal-axis" style="padding-top:50px;">Transaction Count</p>
+  <google-chart
+    *ngIf="isAgeRendered"
+    #chart
+    [title]="titleAge"
+    [type]="typeAge"
+    (select)="isDataPresent ? openPopUp($event) : null"
+    [data]="dataAge"
+    [options]="optionsAge"
+    [columnNames]="columnNamesAge"
+    [width]="widthAge"
+    [height]="heightAge"
+  >
+  </google-chart>
+</div>
+<div
+  *ngIf="!isDataPresent"
+  class="ml-5 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<p class="vertical-axis text-center">Work Category</p>
+<form
+  [formGroup]="assignedVsAuditedGroup"
+  class="position-relative"
+  (ngSubmit)="onSubmitReqCount()"
+>
+  <div class="row d-flex pl-30 pr-30 space-between mt-10 position-relative">
+    <div class="wrap-input100 w-100 mb-0">
+      <div class="label-input100">User Group Name</div>
+      <p-multiSelect
+        #userGrpSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="userGrpList"
+        pTooltip="User Group Names"
+        tooltipPosition="bottom"
+        formControlName="userGrpName"
+        [virtualScroll]="true"
+        (onChange)="validateUserGroups()"
+        itemSize="30"
+        defaultLabel="Select User Group"
+        appendTo="body"
+      ></p-multiSelect>
+      <div class="error-msg" style="top:50px" *ngIf="getGroup.touched">
+        <span class="mr-2" *ngIf="getGroup.hasError('required')"
+          >Please select a user group.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex pl-30 pr-30 space-between mt-10 position-relative">
+    <div class="wrap-input100 w-100 mb-0 mt-3">
+      <div class="label-input100">Auditors Name</div>
+      <p-multiSelect
+        #AuditorSelect
+        showTransitionOptions="225ms ease-out"
+        [options]="auditorListArray"
+        pTooltip="Enrollment Auditor"
+        tooltipPosition="bottom"
+        formControlName="auditorName"
+        [virtualScroll]="true"
+        (onChange)="validateAuditor()"
+        itemSize="30"
+        defaultLabel="Select Auditor"
+        appendTo="body"
+      ></p-multiSelect>
+      <div class="error-msg" style="top:50px" *ngIf="getAuditorsSelect.touched">
+        <span class="mr-2" *ngIf="getAuditorsSelect.hasError('required')"
+          >Please select an enrollment auditor.</span
+        >
+      </div>
+    </div>
+  </div>
+  <div class="row d-flex pl-30 pr-30 space-between mt-20 position-relative">
+    <div class="wrap-input100">
+      <div class="label-input100">Processed Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        pTooltip="Processed Date Range"
+        tooltipPosition="bottom"
+        (onClose)="assignedVsAuditedGroup.invalid ? '' : validateDates()"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        appendTo="body"
+      >
+      </p-calendar>
+    </div>
+    <div class="error-msg" style="top:49px" *ngIf="getDateRange.touched">
+      <span class="mr-2" *ngIf="getDateRange.hasError('inValidDate')"
+        >Date range should not exceed six months.</span
+      >
+    </div>
+  </div>
+</form>
+
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="{{ OpenInv }} "
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex flex-end">
+    <span class="label-input50">{{ auditorName }}&nbsp;&nbsp;</span>
+  </div>
+  <div class="d-flex scroll-graph-x">
+    <p class="horizontal-axis-enlarged" style="padding-top:150px;">
+      Transaction Count
+    </p>
+    <google-chart
+      *ngIf="isAgeRendered"
+      #chart
+      [title]="titleAge"
+      (select)="isDataPresent ? openPopUp($event) : null"
+      [type]="typeAge"
+      [data]="dataAge"
+      [options]="optionsAgeEnlarged"
+      [width]="widthAgeEnlarged"
+      [height]="380"
+      [columnNames]="columnNamesAge"
+    >
+    </google-chart>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="ml-5 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <p class="vertical-axis-enlarged text-center">
+    Work Category
+  </p>
+</p-dialog>
+
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [transitionOptions]="'0ms'"
+  header="Assigned Vs Audited by Auditor ( {{ workCategory }} - {{ action }} )"
+  (onHide)="closePopUp()"
+>
+  <app-enrollment-manager-dashboard-pop-up
+    #gridView
+    [editUser]="editUser"
+    (cancelProcess)="this.editMode = false"
+  >
+  </app-enrollment-manager-dashboard-pop-up>
+</p-dialog>

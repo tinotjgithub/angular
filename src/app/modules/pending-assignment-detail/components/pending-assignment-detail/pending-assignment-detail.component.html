@@ -1,0 +1,151 @@
+<div class="mt-60">
+  <!-- <div class="d-flex">
+    <div [routerLink]="''">
+      <img
+        alt=" "
+        src="./../../../../../assets/images-new/left.png"
+        style="margin-right: 15px; cursor: pointer;"
+      />
+    </div>
+    <div>Back To Home</div>
+  </div> -->
+  <div class="mt-30 wrap-pend-reason">
+    <div class="d-flex mb-30">
+      <span class="section-title">Pending Reassignment Details</span>
+      <span
+        *ngIf="routedClaimList?.length > 0"
+        class="section-title-count mt-10 pt-1"
+        >{{ routedClaimList.length }}</span
+      >
+      <div class="search-bar ml-auto d-flex space-between mr-30">
+        <input
+          type="text"
+          class="search-input"
+          (input)="
+            claimsTable
+              ? claimsTable.filterGlobal($event.target.value, 'contains')
+              : ''
+          "
+          placeholder="Search ..."
+        />
+        <img
+          alt=" "
+          src="./../../../../../assets/images-new/search.png"
+          style="width: 20px; height: 20px; margin-top: 10px;"
+        />
+      </div>
+    </div>
+    <p-table
+      [columns]="cols"
+      [responsive]="true"
+      [resizableColumns]="true"
+      [value]="routedClaimList"
+      [paginator]="true"
+      [rows]="10"
+      #claimsTable
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th id="col" *ngFor="let col of columns">
+            {{ col.header }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+        <tr
+          [ngClass]="
+            rowData.daysLeftDeactivation > 3
+              ? 'left-border-green'
+              : rowData.daysLeftDeactivation > 0
+              ? 'left-border-amber'
+              : 'left-border-red'
+          "
+        >
+          <td
+            *ngFor="let col of columns"
+            [ngStyle]="{
+              color:
+                (col.field === 'daysLeftDeactivation' &&
+                  (rowData['daysLeftDeactivation'] > 3
+                    ? '#006400'
+                    : rowData['daysLeftDeactivation'] > 0
+                    ? '#FFBF00'
+                    : 'red')) ||
+                (col.field === 'userLogInName' &&
+                  (rowData['daysLeftDeactivation'] > 3
+                    ? '#006400'
+                    : rowData['daysLeftDeactivation'] > 0
+                    ? '#FFBF00'
+                    : 'red'))
+            }"
+            [ngClass]="{ 'pointer-link': col.field === 'userLogInName' }"
+            (click)="
+              col.field === 'userLogInName' ? navigateToAssignment(rowData) : ''
+            "
+            [pTooltip] = "col.field === 'userLogInName' ? 'Load Claims for Reassignment': ''"
+          >
+            {{ rowData[col.field] }}
+          </td>
+          <div class="mu-hover" id="{{ rowIndex }}">
+              <div class="d-flex">
+                <div>
+                  <img alt = " " pTooltip = "Load Claims for Reassignment"
+                    src="./../../../../../assets/images-new/pending-assignment.png"
+                    (click)="navigateToAssignment(rowData)"
+                    title="Edit"
+                    style="cursor: pointer; margin-bottom: 20px;"
+                  />
+                </div>
+              </div>
+            </div>
+        </tr> </ng-template
+      ><ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{
+            routedClaimList?.length > 0
+              ? "Showing " +
+                (claimsTable?.filteredValue
+                  ? claimsTable?.filteredValue?.length > 0
+                    ? state.first + 1
+                    : 0
+                  : state.first + 1) +
+                " - " +
+                ((state.first + state.rows >
+                (claimsTable?.filteredValue || routedClaimList)?.length
+                  ? (claimsTable?.filteredValue || routedClaimList).length
+                  : state.first + state.rows
+                ) | number) +
+                " of " +
+                (claimsTable?.filteredValue || routedClaimList)?.length
+              : "Showing 0 - 0 of 0"
+          }}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <div class="result-no d-flex">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select
+            class="input100 result-no"
+            style="width: 50px;"
+            (change)="claimsTable.reset()"
+            [(ngModel)]="claimsTable.rows"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td [attr.colspan]="columns.length + 1" style="text-align: center">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <p-confirmDialog [header]="isEnrollment ? 'Reassignment' : 'Claim Reassignment'" [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"></p-confirmDialog>
+</div>

@@ -1,0 +1,18 @@
+<div id="mySidebar" class="sidebar" (mouseover)="toggleSidebar()" (mouseout)="toggleSidebar()" style="background-image: url('../../../assets/images-new/Sidebar-bg.png'); background-size: cover;">
+  <div class="promt-logo">
+    <img src="./../../../../../assets/images-new/Group 419.png"
+        style="width:34px;">
+    <ng-container *ngIf="!mini">PROMT</ng-container>
+  </div>
+  <span class="scroll-graph-y">
+    <ng-container *ngFor="let item of menuItems">
+      <div href="#" class="d-flex wrap-menu-item" [class.small]="roleId === 'Manager'" [routerLink]="item.routerLink" [class.menu-active]="isActive(item.routerLink)">
+          <div class="menu-unit" [ngClass]="item.icon || ''"></div>
+          <div class="icon-text">{{item.label}}</div>
+      </div>
+    </ng-container>
+  </span>
+  <div  class="wrap-ust-logo">
+      <div class="ust-logo"></div>  
+  </div>
+</div>

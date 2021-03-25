@@ -1,0 +1,113 @@
+<div class="row justify-content-center">
+  <div id="donutchart" class="col-6 w-100 h-100 d-flex justify-content-center">
+    <google-chart
+      #chart1
+      [title]="titleCategory"
+      *ngIf="isProfessionalRendered"
+      [type]="typeCategory"
+      [data]="dataProfessional"
+      [options]="optionsProfessional"
+      [height]="heightCategory"
+      style="width: 100%;"
+      [width]="'100%'"
+      (select)="isDataPresent ? openClaimTypePopUp($event) : null"
+    >
+    </google-chart>
+  </div>
+  <div id="donutchart" class="col-6 w-100 h-100 d-flex justify-content-center">
+    <google-chart
+      #chart2
+      [title]="titleCategory"
+      *ngIf="isCheckRendered"
+      [type]="typeCategory"
+      [data]="dataCheck"
+      (select)="isDataPresent ? openPaymentStatusPopUp($event) : null"
+      [options]="optionsCheck"
+      [height]="heightCategory"
+      style="width: 100%;"
+      [width]="'100%'"
+    >
+    </google-chart>
+  </div>
+</div>
+<div class="row">
+  <div
+    *ngIf="!isDataPresent"
+    class="col-6 mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="col-6 mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div id="donutchart" class="col-6 w-100 h-100 d-flex justify-content-center">
+    <google-chart
+      #chart3
+      [title]="titleCategory"
+      *ngIf="isEdiRendered"
+      [type]="typeCategory"
+      [data]="dataEdi"
+      (select)="isDataPresent ? openClaimSourcePopUp($event) : null"
+      [options]="optionsEdi"
+      [height]="heightCategory"
+      style="width: 100%;"
+      [width]="'100%'"
+    >
+    </google-chart>
+  </div>
+  <div id="donutchart" class="col-6 w-100 h-100 d-flex justify-content-center">
+    <google-chart
+      #chart5
+      [title]="titleCategory"
+      *ngIf="isAdjRendered"
+      [type]="typeCategory"
+      [data]="dataAdj"
+      [options]="optionsAdj"
+      [height]="heightCategory"
+      (select)="isDataPresent ? openAdjPopUp($event) : null"
+      style="width: 100%;"
+      [width]="'100%'"
+    >
+    </google-chart>
+  </div>
+</div>
+<div class="row">
+  <div
+    *ngIf="!isDataPresent"
+    class="col-6 mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="col-6 mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</div>
+<p-dialog
+  *ngIf="editMode"
+  [style]="{ width: '80vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="editMode"
+  [contentStyle]="{ padding: 0, maxHeight: '100%', overflowY: 'auto' }"
+  [transitionOptions]="'0ms'"
+  header="Claims Audit By Category - {{ this.editUser.type }}"
+  (onHide)="closePopUp()"
+>
+  <div class="d-flex">
+    <app-claims-audited-category-details
+      class="w-100"
+      header="Claims Audit By Category"
+      [editUser]="editUser"
+      (cancelProcess)="this.editMode = false"
+    ></app-claims-audited-category-details>
+  </div>
+</p-dialog>

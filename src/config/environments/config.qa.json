@@ -1,0 +1,9 @@
+{
+  "SERVER_API_URL": "http://hps-promt-qa-public-253563869.us-east-2.elb.amazonaws.com:8081",
+  "AUDITOR_SERVER_URL": "http://hps-promt-qa-public-253563869.us-east-2.elb.amazonaws.com:8083",
+  "HEALTH_EDGEURL": "http://localhost:9090",
+  "LOGIN_OPTION": "local",
+  "ENTITY_ID": "http://idp.ustdev.com/adfs/services/trust",
+  "ENROLLMENT_SERVER_URL": "http://hps-promt-qa-public-253563869.us-east-2.elb.amazonaws.com:8084",
+  "ENROLLMENT_AUDITOR_SERVER_URL": "http://hps-promt-qa-public-253563869.us-east-2.elb.amazonaws.com:8087"
+}

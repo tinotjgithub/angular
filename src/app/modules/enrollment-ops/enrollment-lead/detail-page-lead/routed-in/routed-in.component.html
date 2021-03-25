@@ -1,0 +1,72 @@
+<app-detail-table [cols]="cols" [name]="name" [gridData]="gridData" header="Routed In - {{type}}" [assign]="true"
+    [(selectedIds)]="selectedRecord" (onAssignToggle)="assignOpenClose($event)" dataKey="subscriptionId" [(viewAssign)]="showAssign" [backToHome]="true">
+    <form [formGroup]="dialogForm" dialog>
+        <div class="d-flex pl-30 pr-30 mt-30">
+            <div class="wrap-input100 w-45 mr-30">
+                <span class="label-input100">User Group</span>
+                <p-multiSelect formControlName="userGroup" (onChange)="onChangeUserGrp()"
+                    showTransitionOptions="225ms ease-out" [options]="userGroupList"
+                    [selectedItemsLabel]="'{0} Selected'" [virtualScroll]="true" appendTo="body" [optionLabel]="'name'">
+                </p-multiSelect>
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 w-45">
+                <div class="label-input100">Specialist Name</div>
+                <p-multiSelect formControlName="specialistName" showTransitionOptions="225ms ease-out"
+                    [options]="specialistList" [selectedItemsLabel]="'{0} Selected'" [virtualScroll]="true"
+                    [disabled]="dialogForm.get('userGroup').invalid" (onChange)="checkSubscriptionMessage()"
+                    appendTo="body">
+                    <ng-template let-spec pTemplate="item">
+                        <div style="width: 100%">
+                            <div class="ui-helper-clearfix auditor-name">
+                                {{ spec.label }}
+                            </div>
+                            <div class="d-flex space-between">
+                                <div class="ui-helper-clearfix queue-count">
+                                    {{ spec.assignedCount }} Assigned Subscriptions
+                                </div>
+                                <div class="ui-helper-clearfix queue-count">
+                                    {{ spec.pendedCount }} Pended Subscriptions
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-multiSelect>
+                <span class="focus-input100"></span>
+            </div>
+        </div>
+
+        <div class="d-flex pl-30 pr-30">
+            <div class="wrap-input100 w-45 mr-30">
+                <span class="label-input100">Route Reason</span>
+                <select class="input100" formControlName="routeReasonCode">
+                    <option *ngFor="let item of routeReasons" value="{{item.routeReasonCode}}">
+                        {{item.routeReason}}
+                    </option>
+                </select>
+
+                <span class="focus-input100"></span>
+            </div>
+        </div>
+
+        <div class="d-flex pl-30 pr-30">
+            <div class="wrap-input100">
+                <span class="label-input100">Comment</span>
+                <input class="input100" formControlName="comments" type="email" name="custom-email"
+                    placeholder="Enter Comment" maxlength="256" />
+                <span class="focus-input100"></span>
+            </div>
+        </div>
+
+        <div class="d-flex pl-30 pr-30" *ngIf="checkedMessage">
+            <div class="text-danger">{{ checkedMessage }}</div>
+        </div>
+
+        <div class="d-flex flex-end mt-15 pr-30">
+            <div class="cancel-btn mr-30" (click)="cancelChanges()">Cancel</div>
+            <div class="solid-btn" (click)="saveDetails()" [ngClass]="{ disabled: dialogForm.invalid }">
+                Assign {{ selectedClaims?.length }} Subscriptions
+            </div>
+        </div>
+    </form>
+</app-detail-table>

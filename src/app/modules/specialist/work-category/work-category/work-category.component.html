@@ -1,0 +1,633 @@
+<div class="mt-60">
+  <div class="d-flex space-between">
+    <div class="block-title pt-3">Enrollment {{type}} Snapshot</div>
+    <div class="wrap-input100 mb-15 w-200">
+      <span class="label-input100">Work Category</span>
+      <select [(ngModel)]="requestType" class="input100" (change)="updateType()" placeholder="Select Category">
+        <option value="" disabled selected hidden data-default>Select Category</option>
+        <option *ngFor="let type of requestTypes" value="{{type.id}}">{{type.name}}</option>
+      </select>
+      <span class="focus-input100"></span>
+    </div>
+  </div>
+  <div class="d-flex">
+    <div
+      class="card w20 card-grey hover mr-20" 
+      [routerLink]="['/specialist/work-category/assigned-details']"
+      [queryParams]="{ type: type }"
+    >
+      <div class="card-title-examiner">Assigned</div>
+      <div class="card-value-examiner">
+        {{ statusCount?.assigned || 0 }}
+      </div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/routed-in.png" />
+      </div>
+      <div class="card-hover">
+        View Assigned
+      </div>
+    </div>
+    <div
+      class="card w20 card-green hover mr-20"
+      (click)="statusCount?.completed ? targetClick('/specialist/work-category/completed-details') : ''"
+    >
+      <div class="card-title-examiner">Completed Today</div>
+      <div class="card-value-examiner">
+        {{ statusCount?.completed || 0 }}
+      </div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/completed.png" />
+      </div>
+      <div class="card-hover">
+        View Completed
+      </div>
+    </div>
+    <div
+      class="card w20 card-red hover mr-20"
+      (click)="statusCount?.pended ? targetClick('/specialist/work-category/pended-details') : ''"
+    >
+      <div class="card-title-examiner">Pended</div>
+      <div class="card-value-examiner">{{ statusCount?.pended || 0 }}</div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/pended.png" />
+      </div>
+      <div class="card-hover">
+        View Pended
+      </div>
+    </div>
+    <div
+      class="card w20 card-yellow hover mr-20"
+      (click)="statusCount?.routedOut ? targetClick('/specialist/work-category/routed-out-details') : ''"
+    >
+      <div class="card-title-examiner">Routed Out</div>
+      <div class="card-value-examiner">
+        {{ statusCount?.routedOut || 0 }}
+      </div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/routed-out.png" />
+      </div>
+      <div class="card-hover">
+        View Routed Out
+      </div>
+    </div>
+    <div
+      class="card w20 hover card-purple"
+      (click)="statusCount?.auditFailed ? targetClick('/specialist/work-category/audit-failed-details') : ''"
+    >
+      <div class="card-title-examiner">Audit Failed</div>
+      <div class="card-value-examiner">
+        {{ statusCount?.auditFailed || 0 }}
+      </div>
+      <div class="card-icon">
+        <img alt=" " src="./../../../assets/images-new/audit-failed.png" />
+      </div>
+      <div class="card-hover">
+        View Audit Failed
+      </div>
+    </div>
+  </div>
+</div>
+<div class="btn-group justify-content-start d-flex mb-2">
+  <div
+    pTooltip="Get a Member"
+    class="btn-claim mr-auto mt-15"
+    [class.disabled]="ticketDetails"
+    (click)="!ticketDetails ? getMemberDetails() : ''"
+  >
+    <div>Get {{ type === "Workbasket" ? "a Member" : "Transaction" }}</div>
+  </div>
+  <div class="d-flex">
+    <div>
+      <img alt=" " src="./../../../assets/images-new/target.png" />
+    </div>
+    <div class="mt-10 ml-10">
+      <div class="target-label">Daily Target</div>
+      <div>
+        <span class="target-count">{{ statusCount?.target || 0 }}</span
+        ><span class="target-count-label">&nbsp;Request / day</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="wrap-claim-details w-details"
+  *ngIf="ticketDetails && ticketDetails.taskAssignmentId"
+>
+  <div class="d-flex space-between">
+    <div class="d-flex">
+      <div
+        class="claim-id-head mr-20"
+        pTooltip="Click to Open Claim in HRP"
+        (click)="copyAndOpenHRP(claimId)"
+      >
+        Subscription ID -
+        <input
+          style="position: absolute; top: 0; left: 0; opacity: 0;"
+          value="{{ ticketDetails?.subscriptionId }}"
+          #claimId
+        /><span id="claimId">{{ ticketDetails?.subscriptionId }}</span>
+      </div>
+      <div>
+        <img
+          alt=" "
+          src="./../../../assets/images-new/copy.png"
+          style="cursor: pointer;"
+          pTooltip="Click to copy Claim ID"
+          (click)="justCopy(claimId)"
+        />
+      </div>
+    </div>
+
+    <div class="d-flex">
+      <div>
+        <img alt=" " src="./../../../assets/images-new/stop-watch.png" />
+      </div>
+      <div class="ml-10">
+        <div class="target-label">Ticket Processing Time</div>
+        <div>
+          <span class="target-count" [ngStyle]="{ color: timerColor }">
+            {{ endTimer }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex mt-20">
+    <ng-container *ngFor="let col of cols; index as i">
+      <div class="col" *ngIf="i < 4" [class.pl-0]="i === 0">
+        <div class="label-placeholder">{{ col.header }}</div>
+        <ng-container
+          *ngTemplateOutlet="valueCont; context: { field: col.field }"
+        ></ng-container>
+      </div>
+    </ng-container>
+    <div class="col pr-0"></div>
+  </div>
+  <div class="d-flex mt-20">
+    <ng-container *ngFor="let col of cols; index as i">
+      <div
+        class="col"
+        *ngIf="i > 3 && i < 9"
+        [class.pl-0]="i === 4"
+        [class.pr-0]="i === 8"
+      >
+        <div class="label-placeholder">{{ col.header }}</div>
+        <ng-container
+          *ngTemplateOutlet="valueCont; context: { field: col.field }"
+        ></ng-container>
+      </div>
+    </ng-container>
+  </div>
+  <div class="d-flex mt-20">
+    <!-- <ng-container *ngFor="let col of cols; index as i">
+            <div class="col" *ngIf="i > 9" [class.pl-0]="i === 10" [class.pr-0]="i === (cols.length - 1)">
+                <div class="label-placeholder">{{ col.header }}</div>
+                <ng-container *ngTemplateOutlet="valueCont; context:{field: col.field}"></ng-container>
+            </div>
+        </ng-container> -->
+
+    <div class="col pl-0 pr-0">
+      <div class="label-placeholder">Error Details</div>
+      <div class="label-value">
+        {{ (ticketDetails && ticketDetails["errorDescription"]) || "-" }}
+      </div>
+    </div>
+  </div>
+
+  <ng-template let-field="field" #valueCont>
+    <ng-container *ngIf="field === 'memberGroup'">
+      <div class="label-value">
+        {{
+          ticketDetails?.memberGroupName || ticketDetails?.memberGroupId || "-"
+        }}
+      </div>
+    </ng-container>
+    <ng-container *ngIf="field === 'benefitPlan'">
+      <div class="label-value">
+        {{
+          ticketDetails?.benefitPlanName || ticketDetails?.benefitPlanId || "-"
+        }}
+      </div>
+    </ng-container>
+    <ng-container *ngIf="field === 'workBasketDays'">
+      <div class="label-value">
+        {{
+          ticketDetails?.workBasketDays || 0
+        }}
+      </div>
+    </ng-container>
+    <ng-container *ngIf="field !== 'memberGroup' && field !== 'benefitPlan' && field !== 'workBasketDays'">
+      <div class="label-value">
+        {{ (ticketDetails && ticketDetails[field]) || "-" }}
+      </div>
+    </ng-container>
+  </ng-template>
+
+  <div class="d-flex flex-end mt-30">
+    <div
+      class="outline-btn route mr-30"
+      (click)="isRoute = true"
+      pTooltip="Route"
+    >
+      Route My Task
+    </div>
+    <div class="outline-btn pend mr-30" (click)="isPend = true" pTooltip="Pend">
+      Pend My Task
+    </div>
+    <div
+      class="outline-btn complete"
+      (click)="isComplete = true"
+      pTooltip="Complete"
+    >
+      Complete My Task
+    </div>
+  </div>
+</div>
+<p-dialog
+  [(visible)]="isComplete"
+  [modal]="true"
+  header="Complete My Task"
+  (onHide)="completFormClear()"
+  [transitionOptions]="'0ms'"
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="10000"
+>
+  <form [formGroup]="completeForm" *ngIf="isComplete">
+    <div class="d-flex mt-15">
+      <div class="wrap-input100 w-50 mr-30">
+        <div class="label-input100" for="transCat">Transaction Type</div>
+        <select
+          name="transCat"
+          formControlName="transactionTypeCode"
+          class="input100"
+          placeholder="Select Type"
+        >
+          <option value="" disabled selected hidden data-default
+            >Select Type</option
+          >
+          <option
+            *ngFor="let type of transactionTypes"
+            value="{{ type.transactionTypeCode }}"
+            >{{ type.transactionType }}</option
+          >
+        </select>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          style="top: 50px;"
+          *ngIf="
+            getCompleteControl('transactionTypeCode').touched &&
+            getCompleteControl('transactionTypeCode').invalid
+          "
+        >
+          <div
+            *ngIf="
+              getCompleteControl('transactionTypeCode').hasError('required')
+            "
+          >
+            Transaction Type is Required.
+          </div>
+        </div>
+      </div>
+      <div class="wrap-input100 w-50">
+        <div class="label-input100" for="transCat">Transaction Category</div>
+        <select
+          name="transCat"
+          formControlName="transactionCategoryCode"
+          class="input100"
+          placeholder="Select Category"
+        >
+          <option value="" disabled selected hidden data-default
+            >Select Category</option
+          >
+          <option
+            *ngFor="let category of transactionCategories"
+            value="{{ category.transactionCategoryCode }}"
+            >{{ category.category }}</option
+          >
+        </select>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          style="top: 50px;"
+          *ngIf="
+            getCompleteControl('transactionCategoryCode').touched &&
+            getCompleteControl('transactionCategoryCode').invalid
+          "
+        >
+          <div
+            *ngIf="
+              getCompleteControl('transactionCategoryCode').hasError('required')
+            "
+          >
+            Transaction Category is Required.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex mt-15">
+      <div class="wrap-input100 w-50 mr-30">
+        <div class="label-input100" for="transCount">Transaction Count</div>
+        <input
+          type="number"
+          formControlName="transactionCount"
+          numbersOnly
+          class="input100"
+          name="transCount"
+          (input)="preventInput($event)"
+        />
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          style="top: 50px;"
+          *ngIf="
+            getCompleteControl('transactionCount').touched &&
+            getCompleteControl('transactionCount').invalid
+          "
+        >
+          <div
+            *ngIf="getCompleteControl('transactionCount').hasError('required')"
+          >
+            Transaction Count is Required.
+          </div>
+        </div>
+      </div>
+      <div class="w-50"></div>
+    </div>
+    <div class="d-flex">
+      <div class="wrap-input100">
+        <div class="label-input100">Comments</div>
+        <textarea
+          name="comments"
+          formControlName="comment"
+          class="input100"
+          maxlength="256"
+        ></textarea>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          style="top: 50px;"
+          *ngIf="
+            getCompleteControl('comment').touched &&
+            getCompleteControl('comment').invalid
+          "
+        >
+          <div *ngIf="getCompleteControl('comment').hasError('required')">
+            Comment is Required.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <div class="footer-cancel-btn mr-20" (click)="isComplete = false">
+        Cancel
+      </div>
+      <div
+        class="footer-ok-btn"
+        [class.disabled]="completeForm.invalid || actionPerforming"
+        (click)="
+          completeForm.valid || !actionPerforming
+            ? performAction('Complete')
+            : ''
+        "
+      >
+        Complete
+      </div>
+    </div>
+  </form>
+</p-dialog>
+<p-dialog
+  [(visible)]="isPend"
+  [modal]="true"
+  header="Pend My Task"
+  (onHide)="pendForm.reset()"
+  [transitionOptions]="'0ms'"
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="10000"
+>
+  <form [formGroup]="pendForm" *ngIf="isPend">
+    <div class="d-flex mt-15">
+      <div class="wrap-input100">
+        <div class="label-input100" for="pendReason">Pend Reason</div>
+        <select
+          name="pendReason"
+          formControlName="pendReasonCode"
+          class="input100"
+          placeholder="Select Reason"
+        >
+          <option value="" disabled selected hidden data-default
+            >Select Reason</option
+          >
+          <option
+            *ngFor="let reason of pendReasons"
+            value="{{ reason.pendReasonCode }}"
+            >{{ reason.pendReason }}</option
+          >
+        </select>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          style="top: 50px;"
+          *ngIf="
+            getPendControl('pendReasonCode').touched &&
+            getPendControl('pendReasonCode').invalid
+          "
+        >
+          <div *ngIf="getPendControl('pendReasonCode').hasError('required')">
+            Pend Reason is Required.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="wrap-input100">
+        <div class="label-input100">Comments</div>
+        <textarea
+          name="comments"
+          formControlName="pendComment"
+          class="input100"
+          maxlength="256"
+        ></textarea>
+        <span class="focus-input100"></span>
+      </div>
+      <div
+        class="error-msg"
+        style="top: 50px;"
+        *ngIf="
+          getPendControl('pendComment').touched &&
+          getPendControl('pendComment').invalid
+        "
+      >
+        <div *ngIf="getPendControl('pendComment').hasError('required')">
+          Comment is Required.
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <div class="footer-cancel-btn mr-20" (click)="isPend = false">Cancel</div>
+      <div
+        class="footer-ok-btn"
+        [class.disabled]="pendForm.invalid || actionPerforming"
+        (click)="
+          pendForm.valid || !actionPerforming ? performAction('Pend') : ''
+        "
+      >
+        Pend
+      </div>
+    </div>
+  </form>
+</p-dialog>
+<p-dialog
+  [(visible)]="isRoute"
+  [modal]="true"
+  header="Route My Task"
+  (onHide)="initiateRouteForm()"
+  [transitionOptions]="'0ms'"
+  [style]="{ width: '50vw' }"
+  [baseZIndex]="10000"
+>
+  <form [formGroup]="routeForm" *ngIf="isRoute">
+    <div class="d-flex mt-15">
+      <div class="wrap-input100 w-50 mr-30">
+        <div class="label-input100" for="name">Route Role</div>
+        <select
+          name="name"
+          formControlName="toRoleId"
+          class="input100"
+          (change)="getLeadNames()"
+          placeholder="Select Role"
+        >
+          <option value="" disabled selected hidden data-default
+            >Select Role</option
+          >
+          <option
+            *ngFor="let role of routeRoles"
+            value="{{ role.routeRoleId }}"
+            >{{ role.routeRoleName }}</option
+          >
+        </select>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          style="top: 50px;"
+          *ngIf="
+            getRouteControl('toRoleId').touched &&
+            getRouteControl('toRoleId').invalid
+          "
+        >
+          <div *ngIf="getRouteControl('toRoleId').hasError('required')">
+            Route Role is Required.
+          </div>
+        </div>
+      </div>
+      <div class="wrap-input100 w-50">
+        <div class="label-input100" for="name">Route To</div>
+        <select
+          name="name"
+          formControlName="routeUserId"
+          class="input100"
+          placeholder="Select Name"
+        >
+          <option value="" disabled selected hidden data-default
+            >Select Name</option
+          >
+          <option
+            *ngFor="let lead of leadNames"
+            value="{{ lead.routeUserId }}"
+            >{{ lead.routeUserName }}</option
+          >
+        </select>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          style="top: 50px;"
+          *ngIf="
+            getRouteControl('routeUserId').touched &&
+            getRouteControl('routeUserId').invalid
+          "
+        >
+          <div *ngIf="getRouteControl('routeUserId').hasError('required')">
+            Route To is Required.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="wrap-input100">
+        <div class="label-input100" for="routeReason">Route Reason</div>
+        <select
+          name="routeReason"
+          formControlName="routeReasonCode"
+          class="input100"
+          placeholder="Select Reason"
+        >
+          <option value="" disabled selected hidden data-default
+            >Select Reason</option
+          >
+          <option
+            *ngFor="let reason of routeReasons"
+            value="{{ reason.routeReasonCode }}"
+            >{{ reason.routeReason }}</option
+          >
+        </select>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          style="top: 50px;"
+          *ngIf="
+            getRouteControl('routeReasonCode').touched &&
+            getRouteControl('routeReasonCode').invalid
+          "
+        >
+          <div *ngIf="getRouteControl('routeReasonCode').hasError('required')">
+            Route Reason is Required.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="wrap-input100">
+        <div class="label-input100">Comments</div>
+        <textarea
+          name="comments"
+          formControlName="routeComments"
+          class="input100"
+          maxlength="256"
+        ></textarea>
+        <span class="focus-input100"></span>
+        <div
+          class="error-msg"
+          style="top: 50px;"
+          *ngIf="
+            getRouteControl('routeComments').touched &&
+            getRouteControl('routeComments').invalid
+          "
+        >
+          <div *ngIf="getRouteControl('routeComments').hasError('required')">
+            Comments is Required.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <div class="footer-cancel-btn mr-20" (click)="isRoute = false">
+        Cancel
+      </div>
+      <div
+        class="footer-ok-btn"
+        [class.disabled]="routeForm.invalid || actionPerforming"
+        (click)="
+          routeForm.valid || !actionPerforming ? performAction('Route') : ''
+        "
+      >
+        Route
+      </div>
+    </div>
+  </form>
+</p-dialog>
+<p-confirmDialog
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+  header="Confirmation"
+></p-confirmDialog>

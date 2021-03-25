@@ -1,0 +1,38 @@
+<button type="button" (click)="showDialog()" pButton pTooltip="View" icon="fas fa-search-plus fa-lg" style="border-radius: 70%;
+  background: none;
+  border: none;
+  color: #007ad9;
+  margin: 2.5px"></button>
+
+<google-chart *ngIf="isExaminerCountRendered" #chart [title]="titleExaminerCount" [type]="typeExaminerCount"
+  [data]="dataExaminerCount" [options]="optionsExaminerCount" [columnNames]="columnNamesExaminerCount"
+  [width]="widthExaminerCount" [height]="heightExaminerCount">
+</google-chart>
+<form [formGroup]="countByExaminerCountGroup" (ngSubmit)="onSubmitExaminerCount()">
+  <div class="row justify-content-center" style="margin-left:5px; margin-right:5px;">
+    <span>
+      <p-dropdown appendTo="body" [options]="statusList" formControlName="status" [autoWidth]="false"
+        placeholder="Select an status" tooltip="User Status" tooltipPosition="bottom"></p-dropdown>
+    </span>
+    <span>
+      <p-calendar [maxDate]="maxDate" (onSelect)="validateDates()" [inputStyle]="{ width: '180px' }"
+        selectionMode="range" rangeSeparator=" - " [readonlyInput]="true" [showIcon]="true" formControlName="dateRange"
+        dateFormat="mm/dd/yy" [monthNavigator]="true" [yearNavigator]="true" yearRange="1970:2099">
+      </p-calendar>
+    </span>
+    <span>
+      <p-button tooltip="OK" tooltipPosition="bottom" [disabled]="inValidDate" type="submit" label="OK"></p-button>
+    </span>
+  </div>
+  <div class="row justify-content-center">
+    <span style="color: red; font-size: 11px;" *ngIf="inValidDate">Date range should not exceed six months</span>
+  </div>
+</form>
+<p-dialog *ngIf="enlargedDisplay" width="800" height="500" modal="true" dismissableMask="true" [responsive]="true"
+  [(visible)]="enlargedDisplay" [transitionOptions]="'0ms'" header="Claims Examiner Count By Claims Lead"
+  [(visible)]="enlargedDisplay">
+  <google-chart *ngIf="isExaminerCountRendered" #chart [title]="titleExaminerCount" [type]="typeExaminerCount"
+    [data]="dataExaminerCount" [options]="optionsExaminerCountEnlarged" [width]="800" [height]="400"
+    [columnNames]="columnNamesExaminerCount">
+  </google-chart>
+</p-dialog>

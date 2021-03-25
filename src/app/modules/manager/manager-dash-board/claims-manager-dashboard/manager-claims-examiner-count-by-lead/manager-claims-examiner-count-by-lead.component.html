@@ -1,0 +1,130 @@
+<div class="d-flex">
+  <p style="padding-top: 10px;" class="horizontal-axis">Claims Lead Name</p>
+  <div class="scroll-graph" style="max-height: 160px; min-height: 160px;">
+    <google-chart
+      *ngIf="isExaminerCountRendered"
+      #chart
+      [title]="titleExaminerCount"
+      [type]="typeExaminerCount"
+      [data]="dataExaminerCount"
+      [options]="optionsExaminerCount"
+      [columnNames]="columnNamesExaminerCount"
+      [width]="widthExaminerCount"
+      [height]="heightExaminerCount"
+      (select)="selectBar($event)"
+    >
+    </google-chart>
+  </div>
+</div>
+<p class="vertical-axis text-center">Examiner Count</p>
+<div
+  *ngIf="!isDataPresent"
+  class="mb-2 d-flex space-between justify-content-center"
+>
+  <p-message severity="warn" text="No Data Present!"></p-message>
+</div>
+<form
+  [formGroup]="countByExaminerCountGroup"
+  (ngSubmit)="onSubmitExaminerCount()"
+>
+  <div class="d-flex space-between mt-30">
+    <div class="wrap-input100 mb-0 mr-5">
+      <div class="label-input100">Claims Examiner Status</div>
+      <p-dropdown
+        appendTo="body"
+        (onChange)="countByExaminerCountGroup.invalid ? '' : validateDates()"
+        [options]="statusList"
+        formControlName="status"
+        placeholder="Select an status"
+        tooltip="Claims Examiner Status"
+        [style]="{ width: '100%' }"
+        tooltipPosition="bottom"
+      ></p-dropdown>
+      <span class="focus-input100"></span>
+    </div>
+  </div>
+  <div class="d-flex space-between mt-30">
+    <div class="wrap-input100 mb-0 mr-5">
+      <div class="label-input100">Active/Inactive Date Range</div>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onClose)="countByExaminerCountGroup.invalid ? '' : validateDates()"
+        pTooltip="Active/Inactive Date Range"
+        tooltipPosition="bottom"
+        appendTo="body"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="dateRange"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+      >
+      </p-calendar>
+    </div>
+  </div>
+</form>
+<p-dialog
+  *ngIf="enlargedDisplay"
+  width="800"
+  height="500"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="enlargedDisplay"
+  [transitionOptions]="'0ms'"
+  header="Claims Examiner Count By Claims Lead"
+  [(visible)]="enlargedDisplay"
+>
+  <div class="d-flex">
+    <p style="padding-top:150px;" class="horizontal-axis-enlarged">
+      Claims Lead Name
+    </p>
+    <div class="scroll-graph-y" style="max-height: 400px;  min-height: 400px;">
+      <google-chart
+        *ngIf="isExaminerCountRendered"
+        #chart
+        [title]="titleExaminerCount"
+        [type]="typeExaminerCount"
+        [data]="dataExaminerCount"
+        [options]="optionsExaminerCountEnlarged"
+        [width]="700"
+        [height]="400"
+        [columnNames]="columnNamesExaminerCount"
+        (select)="selectBar($event)"
+      >
+      </google-chart>
+    </div>
+  </div>
+  <p class="vertical-axis-enlarged text-center">Examiner Count</p>
+  <div
+    *ngIf="!isDataPresent"
+    class="mb-2 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+</p-dialog>
+<p-dialog
+  *ngIf="detailsView"
+  [style]="{ width: '90vw', height: '80%', maxHeight: '800px' }"
+  modal="true"
+  dismissableMask="true"
+  [responsive]="true"
+  [(visible)]="detailsView"
+  [contentStyle]="{ padding: 0, maxHeight: '100%' }"
+  [transitionOptions]="'0ms'"
+  header="{{ 'Examiners under ' + barDetails.leadName }}"
+>
+  <div class="d-flex">
+    <app-report-table
+      class="w-100"
+      header="{{ barDetails.type }}"
+      [isChart]="true"
+      [data]="chartDetail"
+      [columns]="cols"
+      (exportExcel)="downloadExcel()"
+    ></app-report-table>
+  </div>
+</p-dialog>

@@ -1,0 +1,563 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+  <div [routerLink]="'/configuration-menu'">
+    <img
+      alt=" "
+      src="./../../../../../assets/images-new/left.png"
+      style="margin-right: 15px; cursor: pointer;"
+    />
+  </div>
+  <div>Back To Configuration</div>
+</div>
+<div class="mt-30">
+  <form [formGroup]="targetSettings" style="display: contents;">
+    <div class="tab-container">
+      <input
+        type="radio"
+        name="tab-menu"
+        id="tab1"
+        class="tab-menu-radio"
+        (click)="onClickQuality()"
+        checked
+        #tab1
+      />
+      <label for="tab1" class="tab-menu large">Quality Score Trend</label>
+
+      <input
+        type="radio"
+        name="tab-menu"
+        id="tab2"
+        class="tab-menu-radio"
+        (click)="onClickSpecialistProductivity()"
+        #tab2
+      />
+      <label for="tab2" class="tab-menu large"
+        >Specialist Productivity Target</label
+      >
+
+      <input
+        type="radio"
+        name="tab-menu"
+        id="tab3"
+        class="tab-menu-radio"
+        (click)="onClickSpecialistDailyWorking()"
+        #tab3
+      />
+      <label for="tab3" class="tab-menu large">
+        Specialist Daily Working Hours
+      </label>
+
+      <input
+        type="radio"
+        name="tab-menu"
+        id="tab4"
+        class="tab-menu-radio"
+        (click)="onClickAuditorDailyWorking()"
+        #tab4
+      />
+      <label for="tab4" class="tab-menu large">
+        Auditor Daily Working Hours
+      </label>
+    </div>
+    <div class="wrap-pend-reason">
+      <div class="d-flex space-between">
+        <div>
+          <span class="section-title">{{
+            isQuality
+              ? "Quality Score Trend"
+              : isSpecialistProductivity
+              ? "Specialist Productivity Score"
+              : isSpecialistDailyWorking
+              ? "Specialist Daily Working Hours"
+              : "Auditor Daily Working Hours"
+          }}</span
+          ><span *ngIf="gridData?.length > 0" class="section-title-count">{{
+            gridData.length
+          }}</span>
+        </div>
+        <div class="solid-btn mr-30" (click)="addTarget = true">
+          Add New Target
+        </div>
+      </div>
+      <div class="mt-30" *ngIf="gridData?.length > 0">
+        <div
+          *ngIf="
+            isQuality && !isSpecialistProductivity && !isSpecialistDailyWorking
+          "
+        >
+          <p-table
+            #scoreTable
+            [responsive]="true"
+            [columns]="cols"
+            [tableStyle]="{ 'table-layout': 'auto' }"
+            [value]="gridData"
+            [paginator]="true"
+            [rows]="10"
+            [resizableColumns]="true"
+            [scrollable]="false"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th
+                  *ngFor="let col of cols"
+                  id="{{ col.field }}"
+                  [hidden]="!col.visible"
+                >
+                  {{ col.header }}
+                </th>
+                <th id="edit">Edit</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="cols">
+              <tr [pSelectableRow]="rowData">
+                <td *ngFor="let col of cols" [hidden]="!col.visible">
+                  {{ rowData[col.field] }}
+                </td>
+                <td>
+                  <img
+                    alt=" "
+                    src="./../../../../../assets/images-new/edit-form.png"
+                    pTooltip="Edit"
+                    title="Edit"
+                    (click)="editTarget(rowData)"
+                    style="cursor: pointer;margin-top: 12px;"
+                  />
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" let-columns>
+              <tr style="text-align: center;">
+                <td [attr.colspan]="columns.length">
+                  No records found
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft" let-state>
+              <div class="result-no">
+                {{
+                  gridData?.length > 0
+                    ? "Showing " +
+                      (scoreTable?.filteredValue
+                        ? scoreTable?.filteredValue?.length > 0
+                          ? state.first + 1
+                          : 0
+                        : state.first + 1) +
+                      " - " +
+                      ((state.first + state.rows >
+                      (scoreTable?.filteredValue || gridData)?.length
+                        ? (scoreTable?.filteredValue || gridData).length
+                        : state.first + state.rows
+                      ) | number) +
+                      " of " +
+                      (scoreTable?.filteredValue || gridData)?.length
+                    : "Showing 0 - 0 of 0"
+                }}
+              </div>
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+              <div class="result-no d-flex">
+                <div>Rows per page &nbsp; &nbsp;</div>
+                <select
+                  class="input100 result-no"
+                  style="width: 50px;"
+                  (click)="scoreTable.reset()"
+                  [(ngModel)]="scoreTable.rows"
+                  [ngModelOptions]="{ standalone: true }"
+                >
+                  <option>10</option>
+                  <option>25</option>
+                  <option>50</option>
+                </select>
+              </div>
+            </ng-template>
+          </p-table>
+        </div>
+        <div
+          *ngIf="
+            !sQuality && isSpecialistProductivity && !isSpecialistDailyWorking
+          "
+        >
+          <p-table
+            #scoreTable
+            [responsive]="true"
+            [columns]="cols"
+            [tableStyle]="{ 'table-layout': 'auto' }"
+            [value]="gridData"
+            [paginator]="true"
+            [rows]="10"
+            [resizableColumns]="true"
+            [scrollable]="false"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th
+                  *ngFor="let col of cols"
+                  id="{{ col.field }}"
+                  [hidden]="!col.visible"
+                >
+                  {{ col.header }}
+                </th>
+                <th id="action">Edit</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="cols">
+              <tr [pSelectableRow]="rowData">
+                <td *ngFor="let col of cols" [hidden]="!col.visible">
+                  {{ rowData[col.field] }}
+                </td>
+                <td>
+                  <img
+                    alt=" "
+                    src="./../../../../../assets/images-new/edit-form.png"
+                    pTooltip="Edit"
+                    title="Edit"
+                    (click)="editTarget(rowData)"
+                    style="cursor: pointer;margin-top: 12px;"
+                  />
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" let-columns>
+              <tr style="text-align: center;">
+                <td [attr.colspan]="columns.length">
+                  No records found
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft" let-state>
+              <div class="result-no">
+                {{
+                  gridData?.length > 0
+                    ? "Showing " +
+                      (scoreTable?.filteredValue
+                        ? scoreTable?.filteredValue?.length > 0
+                          ? state.first + 1
+                          : 0
+                        : state.first + 1) +
+                      " - " +
+                      ((state.first + state.rows >
+                      (scoreTable?.filteredValue || gridData)?.length
+                        ? (scoreTable?.filteredValue || gridData).length
+                        : state.first + state.rows
+                      ) | number) +
+                      " of " +
+                      (scoreTable?.filteredValue || gridData)?.length
+                    : "Showing 0 - 0 of 0"
+                }}
+              </div>
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+              <div class="result-no d-flex">
+                <div>Rows per page &nbsp; &nbsp;</div>
+                <select
+                  class="input100 result-no"
+                  style="width: 50px;"
+                  (click)="scoreTable.reset()"
+                  [(ngModel)]="scoreTable.rows"
+                  [ngModelOptions]="{ standalone: true }"
+                >
+                  <option>10</option>
+                  <option>25</option>
+                  <option>50</option>
+                </select>
+              </div>
+            </ng-template>
+          </p-table>
+        </div>
+
+        <div
+          *ngIf="
+            !isQuality && !isSpecialistProductivity && isSpecialistDailyWorking
+          "
+        >
+          <p-table
+            #scoreTable
+            [responsive]="true"
+            [columns]="cols"
+            [tableStyle]="{ 'table-layout': 'auto' }"
+            [value]="gridData"
+            [paginator]="true"
+            [rows]="10"
+            [resizableColumns]="true"
+            [scrollable]="false"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th
+                  *ngFor="let col of cols"
+                  id="{{ col.field }}"
+                  [hidden]="!col.visible"
+                >
+                  {{ col.header }}
+                </th>
+                <th id="edit">Edit</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="cols">
+              <tr [pSelectableRow]="rowData">
+                <td *ngFor="let col of cols" [hidden]="!col.visible">
+                  {{ rowData[col.field] }}
+                </td>
+                <td>
+                  <img
+                    alt=" "
+                    src="./../../../../../assets/images-new/edit-form.png"
+                    pTooltip="Edit"
+                    title="Edit"
+                    (click)="editTarget(rowData)"
+                    style="cursor: pointer;margin-top: 12px;"
+                  />
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" let-columns>
+              <tr style="text-align: center;">
+                <td [attr.colspan]="columns.length">
+                  No records found
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft" let-state>
+              <div class="result-no">
+                {{
+                  gridData?.length > 0
+                    ? "Showing " +
+                      (scoreTable?.filteredValue
+                        ? scoreTable?.filteredValue?.length > 0
+                          ? state.first + 1
+                          : 0
+                        : state.first + 1) +
+                      " - " +
+                      ((state.first + state.rows >
+                      (scoreTable?.filteredValue || gridData)?.length
+                        ? (scoreTable?.filteredValue || gridData).length
+                        : state.first + state.rows
+                      ) | number) +
+                      " of " +
+                      (scoreTable?.filteredValue || gridData)?.length
+                    : "Showing 0 - 0 of 0"
+                }}
+              </div>
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+              <div class="result-no d-flex">
+                <div>Rows per page &nbsp; &nbsp;</div>
+                <select
+                  class="input100 result-no"
+                  style="width: 50px;"
+                  (click)="scoreTable.reset()"
+                  [(ngModel)]="scoreTable.rows"
+                  [ngModelOptions]="{ standalone: true }"
+                >
+                  <option>10</option>
+                  <option>25</option>
+                  <option>50</option>
+                </select>
+              </div>
+            </ng-template>
+          </p-table>
+        </div>
+
+        <div
+          *ngIf="
+            !isQuality && !isSpecialistProductivity && !isSpecialistDailyWorking
+          "
+        >
+          <p-table
+            #scoreTable
+            [responsive]="true"
+            [columns]="cols"
+            [tableStyle]="{ 'table-layout': 'auto' }"
+            [value]="gridData"
+            [paginator]="true"
+            [rows]="10"
+            [resizableColumns]="true"
+            [scrollable]="false"
+          >
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th
+                  *ngFor="let col of cols"
+                  id="{{ col.field }}"
+                  [hidden]="!col.visible"
+                >
+                  {{ col.header }}
+                </th>
+                <th id="edit">Edit</th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="cols">
+              <tr [pSelectableRow]="rowData">
+                <td *ngFor="let col of cols" [hidden]="!col.visible">
+                  {{ rowData[col.field] }}
+                </td>
+                <td>
+                  <img
+                    alt=" "
+                    src="./../../../../../assets/images-new/edit-form.png"
+                    pTooltip="Edit"
+                    title="Edit"
+                    (click)="editTarget(rowData)"
+                    style="cursor: pointer;margin-top: 12px;"
+                  />
+                </td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" let-columns>
+              <tr style="text-align: center;">
+                <td [attr.colspan]="columns.length">
+                  No records found
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="paginatorleft" let-state>
+              <div class="result-no">
+                {{
+                  gridData?.length > 0
+                    ? "Showing " +
+                      (scoreTable?.filteredValue
+                        ? scoreTable?.filteredValue?.length > 0
+                          ? state.first + 1
+                          : 0
+                        : state.first + 1) +
+                      " - " +
+                      ((state.first + state.rows >
+                      (scoreTable?.filteredValue || gridData)?.length
+                        ? (scoreTable?.filteredValue || gridData).length
+                        : state.first + state.rows
+                      ) | number) +
+                      " of " +
+                      (scoreTable?.filteredValue || gridData)?.length
+                    : "Showing 0 - 0 of 0"
+                }}
+              </div>
+            </ng-template>
+            <ng-template pTemplate="paginatorright">
+              <div class="result-no d-flex">
+                <div>Rows per page &nbsp; &nbsp;</div>
+                <select
+                  class="input100 result-no"
+                  style="width: 50px;"
+                  (click)="scoreTable.reset()"
+                  [(ngModel)]="scoreTable.rows"
+                  [ngModelOptions]="{ standalone: true }"
+                >
+                  <option>10</option>
+                  <option>25</option>
+                  <option>50</option>
+                </select>
+              </div>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+      <div
+        class="mt-60 text-center mb-30"
+        *ngIf="!gridData || gridData?.length < 1"
+      >
+        <p>No target setting present!! Please add one.</p>
+      </div>
+    </div>
+    <p-dialog
+      [(visible)]="addTarget"
+      modal="true"
+      [header]="isEdit ? 'Update Target' : 'Add Target'"
+      (onHide)="clearData()"
+    >
+      <div class="mt-15">
+        <div class="wrap-input100">
+          <span class="label-input100">From Date</span>
+          <p-calendar
+            [maxDate]="maxDate"
+            appendTo="body"
+            [readonlyInput]="true"
+            [showIcon]="true"
+            formControlName="startDate"
+            dateFormat="mm/dd/yy"
+            [monthNavigator]="true"
+            (onSelect)="checkToDate()"
+            [yearNavigator]="true"
+            yearRange="1970:2099"
+          >
+          </p-calendar>
+        </div>
+      </div>
+      <div class="mt-15">
+        <div class="wrap-input100">
+          <span class="label-input100">End Date</span>
+          <p-calendar
+            [maxDate]="maxDate"
+            appendTo="body"
+            [minDate]="getStartDate.value"
+            [readonlyInput]="true"
+            [showIcon]="true"
+            formControlName="endDate"
+            dateFormat="mm/dd/yy"
+            [monthNavigator]="true"
+            [yearNavigator]="true"
+            yearRange="1970:2099"
+          >
+          </p-calendar>
+        </div>
+      </div>
+      <div class="mt-15">
+        <div class="wrap-input100">
+          <span class="label-input100">
+            {{
+              this.isQuality || this.isSpecialistProductivity
+                ? "Target (%)"
+                : "Target Hour(s)"
+            }}</span
+          >
+          <input
+            autocomplete="off"
+            type="text"
+            class="input100"
+            maxlength="max"
+            min="minTarget"
+            max="maxValue"
+            formControlName="target"
+            (keyup)="preventInput($event, target)"
+            numbersOnly
+          />
+          <span class="focus-input100"></span>
+
+          <div
+            class="error-msg"
+            *ngIf="
+              this.targetSettings.controls.target.touched &&
+              this.targetSettings.controls.target.invalid
+            "
+          >
+            <span
+              *ngIf="targetSettings.controls.target.hasError('invalidNumber')"
+            >
+              Target must be a positive value.
+            </span>
+
+            <span *ngIf="targetSettings.controls.target.hasError('required')">
+              Target is required.
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-end mt-15">
+        <div class="cancel-btn mr-30" (click)="addTarget = false">Cancel</div>
+        <div
+          class="solid-btn"
+          (click)="!targetSettings.valid ? '' : saveTargetScore()"
+          [class.disabled]="!targetSettings.valid"
+        >
+          {{ isEdit ? "Update" : "Save" }}
+        </div>
+      </div>
+    </p-dialog>
+  </form>
+</div>

@@ -1,0 +1,343 @@
+<div class="mt-12">
+  <div class="d-flex flex space-between">
+    <div>
+      <span class="section-title"
+        >Claims Nearing &nbsp;{{ editUser.age }} Days&nbsp; &nbsp;{{
+          header
+        }}</span
+      >
+      <span class="section-title-count" *ngIf="data?.length > 0">{{
+        data.length
+      }}</span>
+    </div>
+
+    <div class="outline-btn mr-30" (click)="exportExcel()">
+      Export To Excel
+    </div>
+  </div>
+  <div class="mt-12 mr-4 ml-4" *ngIf="gridData?.length > 0">
+    <p-table
+      [styleClass]="'td200'"
+      #scoreTable
+      [tableStyle]="{ 'table-layout': 'auto' }"
+      class="flexcolumn"
+      [scrollable]="false"
+      [responsive]="true"
+      [columns]="cols"
+      [value]="gridData"
+      [paginator]="true"
+      [rows]="5"
+      [resizableColumns]="true"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th
+            [style]="{ width: 'auto', display: col.display }"
+            *ngFor="let col of cols"
+            id="{{ col.field }}"
+            [hidden]="!col.visible"
+          >
+            {{ col.header }}
+          </th>
+        </tr>
+
+        <tr *ngIf="editUser.type !== 'open-inventory'">
+          <th></th>
+          <th class="pt-1 pb-1">
+            <input
+              pInputText
+              type="text"
+              placeholder="Search by Claim Age"
+              (input)="
+                scoreTable.filter($event.target.value, 'claimAge', 'startsWith')
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th class="pt-1 pb-1">
+            <input
+              pInputText
+              type="text"
+              placeholder="Search by Nearing Threshold Sla Days"
+              (input)="
+                scoreTable.filter(
+                  $event.target.value,
+                  'nearingSlaDays',
+                  'startsWith'
+                )
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th class="pt-1 pb-1">
+            <input
+              pInputText
+              type="text"
+              placeholder="Search by Threshold SLA Days"
+              (input)="
+                scoreTable.filter(
+                  $event.target.value,
+                  'thresholdTime',
+                  'startsWith'
+                )
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th class="pt-1 pb-1">
+            <input
+              pInputText
+              placeholder="Search by Status"
+              type="text"
+              (input)="
+                scoreTable.filter($event.target.value, 'status', 'startsWith')
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th class="pt-1 pb-1">
+            <input
+              pInputText
+              placeholder="Search by User Group"
+              type="text"
+              (input)="
+                scoreTable.filter(
+                  $event.target.value,
+                  'userGroupName',
+                  'startsWith'
+                )
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th class="pt-1 pb-1">
+            <input
+              placeholder="Search by Claim Age"
+              pInputText
+              type="text"
+              (input)="
+                scoreTable.filter($event.target.value, 'claimAge', 'startsWith')
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th>
+            <input
+              pInputText
+              type="text"
+              placeholder="Search by Provider Name"
+              (input)="
+                scoreTable.filter(
+                  $event.target.value,
+                  'providerName',
+                  'startsWith'
+                )
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th>
+            <input
+              pInputText
+              placeholder="Search by Member Group Name"
+              type="text"
+              (input)="
+                scoreTable.filter(
+                  $event.target.value,
+                  'memberGroupName',
+                  'startsWith'
+                )
+              "
+              class="p-column-filter"
+            />
+          </th>
+        </tr>
+        <tr *ngIf="editUser.type === 'open-inventory'">
+          <th></th>
+          <th class="pt-1 pb-1">
+            <input
+              pInputText
+              type="text"
+              placeholder="Search by Claim Age"
+              (input)="
+                scoreTable.filter($event.target.value, 'claimAge', 'startsWith')
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th class="pt-1 pb-1">
+            <input
+              pInputText
+              type="text"
+              placeholder="Search by Nearing SLA"
+              (input)="
+                scoreTable.filter(
+                  $event.target.value,
+                  'nearingSlaDays',
+                  'startsWith'
+                )
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th class="pt-1 pb-1">
+            <input
+              pInputText
+              placeholder="Search by Status"
+              type="text"
+              (input)="
+                scoreTable.filter($event.target.value, 'status', 'startsWith')
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th class="pt-1 pb-1">
+            <input
+              pInputText
+              placeholder="Search by User Group"
+              type="text"
+              (input)="
+                scoreTable.filter(
+                  $event.target.value,
+                  'userGroupName',
+                  'startsWith'
+                )
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th class="pt-1 pb-1">
+            <input
+              placeholder="Search by Claim Age"
+              pInputText
+              type="text"
+              (input)="
+                scoreTable.filter($event.target.value, 'claimAge', 'startsWith')
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th>
+            <input
+              pInputText
+              type="text"
+              placeholder="Search by Provider Name"
+              (input)="
+                scoreTable.filter(
+                  $event.target.value,
+                  'providerName',
+                  'startsWith'
+                )
+              "
+              class="p-column-filter"
+            />
+          </th>
+          <th>
+            <input
+              pInputText
+              placeholder="Search by Member Group Name"
+              type="text"
+              (input)="
+                scoreTable.filter(
+                  $event.target.value,
+                  'memberGroupName',
+                  'startsWith'
+                )
+              "
+              class="p-column-filter"
+            />
+          </th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-columns="cols">
+        <tr
+          [pSelectableRow]="rowData"
+          [class.low]="
+            rowData.nearingSlaDays === 0 ||
+            rowData.nearingSlaDays === 1 ||
+            rowData.nearingSlaDays === 2 ||
+            rowData.nearingSlaDays === 3 ||
+            rowData.nearingSlaDays === 5
+          "
+          [class.medium]="
+            rowData.nearingSlaDays === 6 ||
+            rowData.nearingSlaDays === 7 ||
+            rowData.nearingSlaDays === 8 ||
+            rowData.nearingSlaDays === 9 ||
+            rowData.nearingSlaDays === 10 ||
+            rowData.nearingSlaDays === 11
+          "
+          [class.high]="rowData.nearingSlaDays > 11"
+          [class.verylow]="rowData.nearingSlaDays < 0"
+        >
+          <td
+            [style]="{ width: 'auto', display: col.display }"
+            *ngFor="let col of cols"
+            [hidden]="!col.visible"
+          >
+            <div
+              [class.color-inv]="
+                col.field === 'claimAge' || col.field === 'claimId'
+              "
+            >
+              {{ rowData[col.field] }}
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr style="text-align: center;">
+          <td [attr.colspan]="columns.length">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{
+            data?.length > 0
+              ? "Showing " +
+                (state.first + 1) +
+                " - " +
+                ((state.first + state.rows > state.totalRecords
+                  ? state.totalRecords
+                  : state.first + state.rows
+                ) | number) +
+                " of " +
+                state.totalRecords
+              : "Showing 0 - 0 of 0"
+          }}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <div class="result-no d-flex">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select
+            class="input100 result-no"
+            style="width: 50px;"
+            [(ngModel)]="scoreTable.rows"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+  <div
+    class="mt-30 text-center mb-30"
+    *ngIf="!gridData || gridData?.length < 1"
+  >
+    <p>No Claims found.</p>
+  </div>
+</div>

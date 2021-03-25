@@ -1,0 +1,77 @@
+<div class="position-relative d-flex scroll-graph-x p-1" #container>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    id="fullsvg"
+    [ngStyle]="{width: width}"
+    height="100%"
+  ></svg>
+  <div class="position-abosulte" [style.width.px]="width">
+    <div class="d-flex">
+      <div class="wrap-claim-volume" [ngStyle]="{width: (width - 250)/2}">
+        <div class="title-block map-content">Fields on File</div>
+        <div
+          class="d-flex map-content map-area justify-content-end"
+          *ngFor="let fileField of fileFields; index as i"
+        >
+          <ng-container *ngIf="fileField === '$inputNew'; else point">
+              <div class="wrap-input100 ml-15 mr-auto" style="min-width: 200px; max-width: 300px;">
+                <input class="input100" #newRow placeholder="Type New Field Name"/>
+                <div class="focus-input100"></div>
+              </div>
+              <div class="d-flex">
+                <img src="./../../../../../../assets/images-new/confirmation.png" class="mr-20 add-row-icon" pTooltip="Save" alt="save" (click)="saveNewRow(i, newRow.value)">
+                <img src="./../../../../../../assets/images-new/close-temp.png" class="add-row-icon" pTooltip="Cancel" alt="save" (click)="cancelAddRow(i)">
+              </div>
+          </ng-container>
+          <ng-template #point>
+            <div class="claim-value pl-3 mr-auto">
+              {{ fileField }}
+            </div>
+            <span class="hover-content mr-auto" *ngIf="!addOpen" (click)="addRowBelow(i)">Add Row Below</span>
+            <em
+              class="pi pi-times delete cursor-pointer"
+              style="height: 22px;"
+              *ngIf="mappedEntities[fileField] && !addOpen"
+              aria-hidden="true"
+              (click)="removeLink(i + 1)"
+              pTooltip="Delete Link"
+            ></em>
+            <input
+              type="radio"
+              id="{{ 'in-' + (i + 1) }}"
+              style=" margin-left: 8px; margin-top: 5px;"
+              (mousedown)="mouseDown(i + 1, $event)"
+            />
+          </ng-template>
+        </div>
+      </div>
+      <div class="w-250"></div>
+      <div class="wrap-claim-volume" [ngStyle]="{width: (width - 250)/2}">
+        <div class="title-block map-content">Map to PROMT Fields</div>
+        <div
+          class="d-flex map-content justify-content-start"
+          *ngFor="let fileField of mapFields; index as i"
+        >
+          <input
+            type="radio"
+            id="{{ 'out-' + (i + 1) }}"
+            style=" margin-right: 9px; margin-top: 5px;"
+          />
+          <!-- <div class="d-flex mt-10 pr-30"> -->
+            <div class="claim-value pl-3 mr-1">
+              {{ fileField }}
+            </div>
+            <div
+              *ngIf="mandatoryHeaders.includes(fileField)"
+              style=" color: red;
+            font-size: 20px;
+            "
+            >
+              *
+            </div>
+          <!-- </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

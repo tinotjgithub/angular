@@ -1,0 +1,15 @@
+.wrap-progress-bar{
+    font-size: 14px;
+    color: #323C47;
+  }
+  .progress-bar-bg{
+    background-color: #C4C4C4;
+    height:15px;
+    border-radius: 20px;
+    width: 500px;
+  }
+  .progress-bar{
+    background-color: #20558B;
+    height: 15px;
+    border-radius: 20px;
+  }

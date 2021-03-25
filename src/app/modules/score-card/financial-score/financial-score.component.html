@@ -1,0 +1,113 @@
+<form [formGroup]="financialGroup" (ngSubmit)="onSubmitMyFinance()">
+  <div class="d-flex space-between ">
+    <div class="section-label">My Financial Score</div>
+    <div>
+      <img
+        alt=" "
+        src="./../../../assets/images-new/max.png"
+        style="cursor: pointer;"
+        (click)="showDialog()"
+      />
+    </div>
+  </div>
+  <div class="mt-30">
+    <div class="d-flex scroll-graph-x">
+      <p class="pt-5 horizontal-axis">Score Percentage</p>
+      <google-chart
+        #chart
+        [title]="myTitleFinance"
+        *ngIf="isMyFinRendered"
+        [type]="myTypeFinance"
+        [data]="myDataFinance"
+        [options]="myOptionsFinance"
+        [columnNames]="myColumnNamesFinance"
+        [height]="myHeightFinance"
+        [width]="myWidthFinance"
+      >
+      </google-chart>
+    </div>
+    <p class="vertical-axis text-center">Date (M`YY)</p>
+  </div>
+  <div
+    *ngIf="!isDataPresent"
+    class="mr-3 d-flex space-between justify-content-center"
+  >
+    <p-message severity="warn" text="No Data Present!"></p-message>
+  </div>
+  <div class=" mt-15 d-flex space-between">
+    <div class="wrap-input100 mb-0 mr-30">
+      <span class="label-input100">Audit Date Range</span>
+      <p-calendar
+        [maxDate]="maxDate"
+        (onSelect)="validateDates()"
+        selectionMode="range"
+        rangeSeparator=" - "
+        [readonlyInput]="true"
+        [showIcon]="true"
+        formControlName="dateRange"
+        pTooltip="Audit Date Range"
+        tooltipPosition="bottom"
+        dateFormat="mm/dd/yy"
+        [monthNavigator]="true"
+        [yearNavigator]="true"
+        yearRange="1970:2099"
+        appendTo="body"
+        (onClose)="isValid ? onSubmitMyFinance() : ''"
+      >
+      </p-calendar>
+      <span class="focus-input100"></span>
+      <div class="error-msg" *ngIf="!isValid">
+        <span class="m-1 invalid-feedback d-inline-block"
+          >Date range should not exceed six months</span
+        >
+      </div>
+    </div>
+    <div class="excel-icon">
+      <img
+        alt=" "
+        src="./../../../../assets/images-new/download-excel.png"
+        (click)="!isValid ? '' : downloadExcel()"
+        pTooltip="Export to Excel"
+        alt="Export"
+      />
+    </div>
+  </div>
+
+  <p-dialog
+    *ngIf="enlargedDisplay"
+    width="800"
+    height="500"
+    modal="true"
+    dismissableMask="true"
+    [responsive]="true"
+    [(visible)]="enlargedDisplay"
+    [transitionOptions]="'0ms'"
+    header="My Financial Score"
+    [(visible)]="enlargedDisplay"
+  >
+    <div class="d-flex">
+      <p style="padding-top:120px;" class="horizontal-axis-enlarged">
+        Score Percentage
+      </p>
+      <google-chart
+        #chart
+        [title]="myTitleFinance"
+        *ngIf="isMyFinRendered"
+        [type]="myTypeFinance"
+        [data]="myDataFinance"
+        [options]="myOptionsFinance"
+        [width]="700"
+        [columnNames]="myColumnNamesFinance"
+        [height]="400"
+      >
+      </google-chart>
+    </div>
+    <p class="vertical-axis text-center">Date (M`YY)</p>
+    <div
+      *ngIf="!isDataPresent"
+      class="mr-3 mb-3 d-flex space-between justify-content-center"
+    >
+      <p-message severity="warn" text="No Data Present!"></p-message>
+    </div>
+  </p-dialog>
+</form>

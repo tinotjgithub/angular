@@ -1,0 +1,13 @@
+<app-navigation-bar *ngIf="isAuthenticated"></app-navigation-bar>
+<div id="main" [class.no-margin]="!isAuthenticated">
+  <app-header *ngIf="isAuthenticated"></app-header>
+  <div class="main-body" [class.no-padding]="!isAuthenticated">
+    <router-outlet></router-outlet>
+  </div>
+  <app-toasts></app-toasts>
+</div>
+<p-dialog [(visible)]="changePassword" modal=true header="Change Password"
+  [style]="{width: '50vw', overflow: 'hidden'}">
+  <app-change-password *ngIf="changePassword" [headerNeeded]="false" (resetSuccess)="resetSuccess($event)">
+  </app-change-password>
+</p-dialog>

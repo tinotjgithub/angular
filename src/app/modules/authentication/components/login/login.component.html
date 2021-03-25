@@ -1,0 +1,432 @@
+<!-- <div class="container-fluid p-0 d-flex" id="login_screen" [ngStyle]="{ height: winSize }">
+    <div class="side-panel position-relative">
+        <section class="login_section" *ngIf="!isReset" [@enter]>
+            <div class="login_header">
+                <h1>Login</h1>
+                <p>Hello! Lets get started</p>
+            </div>
+            <div class="login_form">
+                <form [formGroup]="form">
+                    <div class="row group">
+                        <input type="text" formControlName="username" autocomplete="off" placeholder="Username" [class.is_invalid]="form.get('username').touched && form.get('username').invalid" />
+                        <div *ngIf="form.get('username').touched && form.get('username').invalid" class="invalid-feedback d-block">
+                            <div *ngIf="form.get('username').errors.required">
+                                User name is required
+                            </div>
+                            <div *ngIf="form.get('username').errors.username">
+                                User name must be valid
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row group">
+                        <input type="password" formControlName="password" placeholder="Password" [class.is_invalid]="form.get('password').touched && form.get('password').invalid" />
+                        <div *ngIf="form.get('password').touched && form.get('password').invalid" class="invalid-feedback d-block">
+                            <div *ngIf="form.get('password').errors.required">
+                                Password is required
+                            </div>
+                            <div *ngIf="form.get('password').errors.minlength">
+                                Password must be atleast 8 characters
+                            </div>
+                            <div *ngIf="form.get('password').errors.maxlength">
+                                Password must be less than or equal to 18 characters
+                            </div>
+                            <div *ngIf="form.get('password').errors.pattern">
+                                <span style="word-wrap: break-word">
+                                    Password should contain atleast one special character, upper case letter, lower case letter and a number
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row group">
+                        <select aria-placeholder="Role" formControlName="roleSelected" [class.is_invalid]="form.get('roleSelected').touched && form.get('roleSelected').invalid">
+                          <option value="" disabled selected>Role</option>
+                          <option *ngFor="let user of roleList" value="{{ user.roleName }}">
+                            {{ user.roleName }}
+                          </option>
+                        </select>
+                        <em class="fa fa-chevron-down"></em>
+                        <div *ngIf="form.get('roleSelected').touched && form.get('roleSelected').invalid" class="invalid-feedback d-block">
+                            <div *ngIf="form.get('roleSelected').errors.required">
+                                User type is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row m-0 mt-5 justify-content-end">
+                      <div class="col pl-0" *ngIf="resetSuccess" style="font-size: 14px; color: #3fe23f;">
+                        Your password has been Reset Successfully! Please login.
+                      </div>
+                      <div>
+                        <button class="btn" [disabled]="form.invalid || loginStarted" (click)="onSubmit()">Login</button>
+                        <p class="mt-2 text-center forgot-password-link" (click)="forgotPassword()">Forgot Password?</p>
+                      </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <section class="reset_section" *ngIf="isReset" [@enter]>
+          <div class="login_header">
+              <h1>Reset Password</h1>
+          </div>
+          <div class="login_form">
+            <form name="form" [formGroup]="resetFrom">
+                <div class="row group">
+                    <input type="password" formControlName="currentPassword" [class.is_invalid]="resetFrom.get('currentPassword').touched && resetFrom.get('currentPassword').invalid" placeholder="Current Password"/>
+                    <div *ngIf="resetFrom.get('currentPassword').touched && resetFrom.get('currentPassword').invalid" class="invalid-feedback d-block">
+                        <div *ngIf="resetFrom.get('currentPassword').errors.required">
+                            Password is required
+                        </div>
+                        <div *ngIf="resetFrom.get('currentPassword').errors.minlength">
+                            Password must be atleast 8 characters
+                        </div>
+                        <div *ngIf="resetFrom.get('currentPassword').errors.maxlength">
+                            Password must be less than or equal to 18 characters
+                        </div>
+                        <div *ngIf="resetFrom.get('currentPassword').errors.pattern">
+                            <span style="word-wrap: break-word">
+                                Password should contain atleast one special character, upper case letter, lower case letter and a number
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row group" style="overflow:hidden">
+                    <input type="password" formControlName="newPassword" [class.is_invalid]="resetFrom.get('newPassword').touched && resetFrom.get('newPassword').invalid"  placeholder="New Password"/>
+                    <div *ngIf="resetFrom.get('newPassword').touched && resetFrom.get('newPassword').invalid" class="invalid-feedback d-block">
+                        <div *ngIf="resetFrom.get('newPassword').errors.required">
+                            New Password is required
+                        </div>
+                        <div *ngIf="resetFrom.get('newPassword').errors.minlength">
+                            Password must be atleast 8 characters
+                        </div>
+                        <div *ngIf="resetFrom.get('newPassword').errors.maxlength">
+                            Password must be less than or equal to 18 characters
+                        </div>
+                        <div *ngIf="resetFrom.get('newPassword').errors.password">
+                            <span style="word-wrap: break-word">
+                              Password should contain atleast one special character, upper case letter, lower case letter and a number
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row group" style="overflow:hidden">
+                    <input type="password" formControlName="confirmPassword"
+                    [class.is_invalid]="resetFrom.get('confirmPassword').touched && resetFrom.get('confirmPassword').invalid"  placeholder="Confirm Password"/>
+                    <div *ngIf="resetFrom.get('confirmPassword').touched && resetFrom.get('confirmPassword').invalid" class="invalid-feedback d-block">
+                        <div *ngIf="resetFrom.get('confirmPassword').errors.required">
+                            Confirm Password is required
+                        </div>
+                    </div>
+                    <div *ngIf="resetFrom.get('confirmPassword').touched && resetFrom.get('confirmPassword').valid && resetFrom.errors && resetFrom.errors['passwordMatch']" class="invalid-feedback d-block" style="display: block;">
+                        Password entered does not match.
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-6 py-1">
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-primary float-right" [disabled]="!resetFrom.valid || resetStarted" (click)="onResetSubmit()">
+                          Reset
+                        </button>
+                    </div>
+                </div>
+            </form>
+          </div>
+        </section>
+        <div *ngIf="supportDetails && (loginFailed || resetFailed)" class="helpline">
+            <div class="d-flex space-between">
+                <div *ngIf="supportDetails?.helpDeskNumber">
+                    HelpDesk No: {{supportDetails?.helpDeskNumber}}
+                </div>
+                <div *ngIf="supportDetails?.supportEmailDL">
+                    Email: {{supportDetails?.supportEmailDL}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="img-section" [@enter]>
+        <img alt = " " src="assets/images-new/login_model.jpg" style="width: 100%; height: 100%;" alt="Work_Flow_Management"/>
+    </div>
+    <div class="error-card" [class.error-visible]="loginFailed || resetFailed">
+        <div class="d-flex justify-content-center" style="width: 100%;">
+            {{ errorMessage }}
+        </div>
+    </div>
+</div>
+<p-confirmDialog header="Confirmation"></p-confirmDialog>
+<p-dialog [(visible)]="forgotPwd" modal=true [header]="'Forgot Password'" [style]="{width: '500px'}">
+    <form [formGroup]="forgotPwdForm" (ngSubmit)="resetForgotPassword()">
+        <div class="d-flex mt-15">
+            <div class="wrap-input100">
+                <span class="label-input100">User Name</span>
+                <input type="text" formControlName="username" placeholder="Username" class="input100"/>
+                <div class="error-msg" *ngIf="forgotPwdForm.controls.username.touched && forgotPwdForm.controls.username.invalid">
+                    <span *ngIf="forgotPwdForm.controls.username.hasError('required')">User Name is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="wrap-input100">
+                <span class="label-input100">Role</span>
+                <select formControlName="role" class="input100">
+                    <option value="" disabled selected>Role</option>
+                    <option *ngFor="let user of roleList" value="{{ user.id }}">
+                        {{ user.roleName }}
+                    </option>
+                </select>
+                <div class="error-msg" *ngIf="forgotPwdForm.controls.role.touched && forgotPwdForm.controls.role.invalid">
+                    <span *ngIf="forgotPwdForm.controls.role.hasError('required')">Role is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex">
+            <button pButton type="submit" [disabled]="forgotPwdForm.invalid || forgotLoading" class="promt_buttom ml-auto" label="Reset Password"></button>
+        </div>
+    </form>
+</p-dialog> -->
+<div id="login_screen" *ngIf="!isSSO">
+    <div class="limiter">
+        <div class="container-login100 justify-content-center">
+            <div class="d-block">
+                <div class="wrap-logo">
+                    <img src="./../../../../../assets/images-new/PROMT Logo 3.png" style="width:200px; margin-top: 10px; margin-bottom: 10px;">
+                </div>
+                <div class="d-flex wrap-inner-box position-relative">
+                    <div class="login100-more d-flex justify-content-center">
+                        <!--/ Carousel Star /-->
+                        <div class="w3-content w3-section my-auto">
+                            <div class="mySlides">
+                                <img src="./../../../../../assets/images-new/story-1.jpg" style="width:100%;">		
+                            </div>
+                            <div class="mySlides">
+                                <img src="./../../../../../assets/images-new/story-2.jpg" style="width:100%;">
+                            </div>
+                            <div class="mySlides">
+                                <img src="./../../../../../assets/images-new/story-3.jpg" style="width:100%; ">
+                            </div>
+                            <div class="mySlides">
+                                <img src="./../../../../../assets/images-new/story-4.jpg" style="width:100%; ">
+                            </div>
+                            <div class="mySlides">
+                                <img src="./../../../../../assets/images-new/story-5.jpg" style="width:100%;">
+                            </div>
+                        </div>
+                          
+                          <!--/ Carousel end /-->
+                    </div>
+                    <div class="wrap-login100 bg-container">
+                        <div class="d-flex h-100 align-items-center" *ngIf="isSSO" [@enter]>
+                                <div class="container-login100-form-btn">
+                                    <div>Login through the registered SSO client.</div>
+                                    <button class="login100-form-btn mt-15" (click)="navigateToSSO()">
+                                        Login
+                                    </button>
+                                </div>
+                        </div>
+                        <div class="wrap-login-form" *ngIf="!isReset && !isSSO" [@enter]>
+                            <form [formGroup]="form" class="login100-form validate-form">
+                                <span class="login100-form-title ">
+                                    Login
+                                </span>
+    
+                                <div class="wrap-input100">
+                                    <span class="label-input100">Username</span>
+                                    <input class="input100 input-username" formControlName="username" type="text"
+                                        name="name" placeholder="Username">
+                                    <span class="focus-input100"></span>
+                                    <div *ngIf="form.get('username').touched && form.get('username').invalid"
+                                        class="error-msg" style="top: 55px;">
+                                        <div *ngIf="form.get('username').errors.required">
+                                            User name is required
+                                        </div>
+                                        <div *ngIf="form.get('username').errors.username">
+                                            User name must be valid
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="wrap-input100">
+                                    <span class="label-input100">Password</span>
+                                    <input class="input100 input-password" formControlName="password" type="password"
+                                        name="pass" placeholder="********">
+                                    <span class="focus-input100"></span>
+                                    <div *ngIf="form.get('password').touched && form.get('password').invalid"
+                                        class="error-msg" style="top: 55px;">
+                                        <div *ngIf="form.get('password').errors.required">
+                                            Password is required
+                                        </div>
+                                        <div *ngIf="form.get('password').errors.minlength">
+                                            Password must be atleast 8 characters
+                                        </div>
+                                        <div *ngIf="form.get('password').errors.maxlength">
+                                            Password must be less than or equal to 18 characters
+                                        </div>
+                                        <div *ngIf="form.get('password').errors.pattern">
+                                            <span style="word-wrap: break-word">
+                                                Password should contain atleast one special character, upper case letter,
+                                                lower case letter and a number
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="wrap-input100">
+                                    <span class="label-input100">Role</span>
+                                    <select class="input100" type="password" formControlName="roleSelected" name="pass"
+                                        placeholder="*************">
+                                        <option value="" disabled selected>Role</option>
+                                        <option *ngFor="let user of roleList" value="{{ user.roleName }}">
+                                            {{ user.roleName }}
+                                        </option>
+                                    </select>
+                                    <div *ngIf="form.get('roleSelected').touched && form.get('roleSelected').invalid"
+                                        class="error-msg" style="top: 55px;">
+                                        <div *ngIf="form.get('roleSelected').errors.required">
+                                            User type is required
+                                        </div>
+                                    </div>
+                                    <span class="focus-input100"></span>
+                                </div>
+    
+                                <div class="container-login100-form-btn mt-15">
+                                    <button class="login100-form-btn" [disabled]="form.invalid || loginStarted"
+                                        (click)="onSubmit()">
+                                        Login
+                                    </button>
+                                </div>
+                                <div class="forgot-password-link">
+                                    <a (click)="forgotPassword()">Forgot Password</a>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="wrap-login-form" *ngIf="isReset && !isSSO" [@enter]>
+                            <form [formGroup]="resetFrom" class="login100-form validate-form">
+                                <span class="login100-form-title ">
+                                    Reset Password
+                                </span>
+    
+                                <div class="wrap-input100">
+                                    <span class="label-input100">Current Password</span>
+                                    <input class="input100 input-username" formControlName="currentPassword" type="password"
+                                        name="currentPassword" placeholder="Current Password">
+                                    <span class="focus-input100"></span>
+                                    <div *ngIf="resetFrom.get('currentPassword').touched && resetFrom.get('currentPassword').invalid"
+                                        class="error-msg" style="top: 55px;">
+                                        <div *ngIf="resetFrom.get('currentPassword').errors.required">
+                                            Password is required
+                                        </div>
+                                        <div *ngIf="resetFrom.get('currentPassword').errors.minlength">
+                                            Password must be atleast 8 characters
+                                        </div>
+                                        <div *ngIf="resetFrom.get('currentPassword').errors.maxlength">
+                                            Password must be less than or equal to 18 characters
+                                        </div>
+                                        <div *ngIf="resetFrom.get('currentPassword').errors.pattern">
+                                            <span style="word-wrap: break-word">
+                                                Password should contain atleast one special character, upper case letter,
+                                                lower case letter and a number
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <div class="wrap-input100" [class.mb-0]="resetFrom.get('newPassword').touched && resetFrom.get('newPassword').invalid">
+                                    <span class="label-input100">New Password</span>
+                                    <input class="input100 input-username" formControlName="newPassword" type="password"
+                                        name="newPassword" placeholder="New Password">
+                                    <span class="focus-input100"></span>
+                                </div>
+                                <div *ngIf="resetFrom.get('newPassword').touched && resetFrom.get('newPassword').invalid"
+                                    class="invalid-feedback d-block" style="font-size: 11px;">
+                                    <div *ngIf="resetFrom.get('newPassword').errors.required">
+                                        New Password is required
+                                    </div>
+                                    <div *ngIf="resetFrom.get('newPassword').errors.minlength">
+                                        Password must be atleast 8 characters
+                                    </div>
+                                    <div *ngIf="resetFrom.get('newPassword').errors.maxlength">
+                                        Password must be less than or equal to 18 characters
+                                    </div>
+                                    <div *ngIf="resetFrom.get('newPassword').errors.password">
+                                        <span style="word-wrap: break-word">
+                                            Password should contain atleast one special character, upper case letter,
+                                            lower case letter and a number
+                                        </span>
+                                    </div>
+                                </div>
+    
+                                <div class="wrap-input100">
+                                    <span class="label-input100">Confirm Password</span>
+                                    <input class="input100 input-username" formControlName="confirmPassword" type="password"
+                                        name="confirmPassword" placeholder="Confirm Password">
+                                    <span class="focus-input100"></span>
+                                    <div *ngIf="resetFrom.get('confirmPassword').touched && resetFrom.get('confirmPassword').invalid"
+                                        class="error-msg" style="top: 55px;">
+                                        <div *ngIf="resetFrom.get('confirmPassword').errors.required">
+                                            Confirm Password is required
+                                        </div>
+                                    </div>
+                                    <div *ngIf="resetFrom.get('confirmPassword').touched && resetFrom.get('confirmPassword').valid && resetFrom.errors && resetFrom.errors['passwordMatch']"
+                                        class="error-msg" style="top: 55px;" style="display: block;">
+                                        Password entered does not match.
+                                    </div>
+                                </div>
+    
+                                <div class="container-login100-form-btn mt-15">
+                                    <button class="login100-form-btn" [disabled]="!resetFrom.valid || resetStarted"
+                                        (click)="onResetSubmit()">
+                                        Login
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="supportDetails && (loginFailed || resetFailed || isSSO)">
+                        <div class="helpline-no" *ngIf="supportDetails?.helpDeskNumber">
+                            HelpDesk No: {{supportDetails?.helpDeskNumber}}
+                        </div>
+                        <div class="helpline-mail" *ngIf="supportDetails?.supportEmailDL">
+                            Email: {{supportDetails?.supportEmailDL}}
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="error-card" [class.error-visible]="loginFailed || resetFailed">
+        <div class="d-flex justify-content-center" style="width: 100%;">
+            {{ errorMessage }}
+        </div>
+    </div>
+</div>
+<p-confirmDialog header="Confirmation"></p-confirmDialog>
+<p-dialog [(visible)]="forgotPwd" modal=true [header]="'Forgot Password'" [style]="{width: '500px'}">
+    <form [formGroup]="forgotPwdForm">
+        <div class="d-flex mt-15">
+            <div class="wrap-input100">
+                <span class="label-input100">User Name</span>
+                <input type="text" formControlName="username" placeholder="Username" class="input100" />
+                <div class="error-msg" style="top: 55px;"
+                    *ngIf="forgotPwdForm.controls.username.touched && forgotPwdForm.controls.username.invalid">
+                    <span *ngIf="forgotPwdForm.controls.username.hasError('required')">User Name is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="wrap-input100">
+                <span class="label-input100">Role</span>
+                <select formControlName="role" class="input100">
+                    <option value="" disabled selected>Role</option>
+                    <option *ngFor="let user of roleList" value="{{ user.id }}">
+                        {{ user.roleName }}
+                    </option>
+                </select>
+                <div class="error-msg" style="top: 55px;"
+                    *ngIf="forgotPwdForm.controls.role.touched && forgotPwdForm.controls.role.invalid">
+                    <span *ngIf="forgotPwdForm.controls.role.hasError('required')">Role is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div [class.disabled]="forgotPwdForm.invalid || forgotLoading" (click)="(forgotPwdForm.invalid || forgotLoading) ? '' : resetForgotPassword()" class="outline-btn-blue ml-auto">Reset Password</div>
+        </div>
+    </form>
+</p-dialog>

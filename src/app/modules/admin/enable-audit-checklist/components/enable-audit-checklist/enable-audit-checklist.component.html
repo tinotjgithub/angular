@@ -1,0 +1,33 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+  <div tabindex="0" [routerLink]="'/admin-configuration'">
+    <img
+      alt=" "
+      src="./../../../../../assets/images-new/left.png"
+      style="margin-right: 15px; cursor: pointer;"
+    />
+  </div>
+  <div>Back To Configuration</div>
+</div>
+<div class="wrap-claim-volume mt-30 w-100">
+  <div class="section-title d-flex ">
+    <div>Manage Audit Checklist By Work Category</div>
+  </div>
+
+  <div
+    class="d-flex ml-30 mt-30 space-between w-75"
+    *ngFor="let item of workCategories"
+  >
+    <div class="mr-30 ">Disable {{ item.workCategory }}</div>
+    <p-inputSwitch
+      (onChange)="onChangeAuditConfig($event, item.workCategory)"
+      [(ngModel)]="savedConfig[item.workCategory]"
+    ></p-inputSwitch>
+    <div class="ml-30 ">Enable {{ item.workCategory }}</div>
+  </div>
+</div>
+
+<p-confirmDialog
+  header="Confirmation"
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+></p-confirmDialog>

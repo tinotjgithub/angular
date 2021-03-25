@@ -1,0 +1,108 @@
+<div class="mt-12">
+  <div class="d-flex space-between">
+    <div>
+      <span class="section-title" *ngIf="editUser.queueName"
+        >{{ editUser.queueName }} &nbsp;&nbsp;{{ header }}</span
+      >
+      <span
+        class="section-title"
+        *ngIf="editUser.paymentStatus && editUser.claimType"
+      >
+        {{ editUser.claimType }}&nbsp;({{ editUser.paymentStatus }})&nbsp;
+        {{ header }}</span
+      >
+      <span class="section-title-count" *ngIf="data?.length > 0">{{
+        data.length
+      }}</span>
+    </div>
+
+    <div class="outline-btn mr-30" (click)="exportExcel()">
+      Export to Excel
+    </div>
+  </div>
+  <div class="mt-12 mr-4 ml-4" *ngIf="gridData?.length > 0">
+    <div>
+      <p-table
+        #scoreTable
+        [responsive]="true"
+        [columns]="cols"
+        [tableStyle]="{ 'table-layout': 'auto' }"
+        [value]="gridData"
+        [paginator]="true"
+        [rows]="6"
+        [scrollable]="false"
+        class="flexcolumn"
+        [resizableColumns]="true"
+        [styleClass]="'td200'"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th
+              *ngFor="let col of cols"
+              id="{{ col.field }}"
+              [hidden]="!col.visible"
+            >
+              {{ col.header }}
+            </th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowData let-columns="cols">
+          <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of cols" [hidden]="!col.visible">
+              <div>
+                {{ rowData[col.field] }}
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" let-columns>
+          <tr style="text-align: center;">
+            <td [attr.colspan]="columns.length">
+              No records found
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft" let-state>
+          <div class="result-no">
+            {{
+              data?.length > 0
+                ? "Showing " +
+                  (state.first + 1) +
+                  " - " +
+                  ((state.first + state.rows > state.totalRecords
+                    ? state.totalRecords
+                    : state.first + state.rows
+                  ) | number) +
+                  " of " +
+                  state.totalRecords
+                : "Showing 0 - 0 of 0"
+            }}
+          </div>
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+          <div class="result-no d-flex">
+            <div>Rows per page &nbsp; &nbsp;</div>
+            <select
+              class="input100 result-no"
+              style="width: 50px;"
+              [(ngModel)]="scoreTable.rows"
+              [ngModelOptions]="{ standalone: true }"
+            >
+              <option>10</option>
+              <option>25</option>
+              <option>50</option>
+            </select>
+          </div>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+  <div
+    class="mt-30 text-center mb-30"
+    *ngIf="!gridData || gridData?.length < 1"
+  >
+    <p>No Details found!</p>
+  </div>
+</div>

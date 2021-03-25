@@ -1,0 +1,362 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+  <div>
+    <img alt=" " src="./../../../assets/images-new/left.png" [routerLink]="'/actions'"
+      style="margin-right: 15px; cursor: pointer;" />
+  </div>
+  <div>Back To Action Menu</div>
+</div>
+<div class="wrap-report mt-10">
+  <div class="promt-header-small d-flex space-between">
+    <div class="section-label">Manual Assignment</div>
+  </div>
+  <div class="popup-body">
+    <form [formGroup]="listForm" style="display: contents;">
+      <div class="d-flex pl-30 pr-30 mt-15">
+        <div class="d-flex w-100">
+          <div class="wrap-input100 mr-30 w-200">
+            <span class="label-input100">Work Category</span>            
+            <select class="input100" formControlName="workCategory" placeholder="Select Category">
+              <option value="" disabled selected hidden data-default>Select Category</option>
+              <option *ngFor="let type of requestTypes" value="{{ type.name }}">{{
+                  type.name
+                }}</option>
+            </select>
+            <span class="focus-input100"></span>
+          </div>
+          <div class="wrap-input100 mr-30 w-200">
+            <span class="label-input100">Processed From Date</span>
+            <p-calendar formControlName="from" appendTo="body" [maxDate]="listForm.controls.to.value || today"
+              [showIcon]="true">
+            </p-calendar>
+          </div>
+          <div class="wrap-input100 mr-auto w-200">
+            <span class="label-input100">Processed To Date</span>
+            <p-calendar formControlName="to" appendTo="body" [minDate]="listForm.controls.from.value" [maxDate]="today"
+              [showIcon]="true"></p-calendar>
+          </div>
+          <div class="d-flex flex-end mt-20">
+            <div class="solid-btn" (click)="listForm.invalid || subscriptionLoading ? '' : getSubscription()"
+              [class.disabled]="listForm.invalid || subscriptionLoading">
+              List Subscription
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="wrap-manage-user mt-20" *ngIf="!subscriptionLoading && subscriptionList?.length > 0">
+  <div class="d-flex space-between pr-30">
+    <div>
+      <span class="section-title">Subscriptions</span>
+      <span *ngIf="subscriptionList?.length > 0" class="section-title-count">
+        {{ subscriptionList?.length }}
+      </span>
+    </div>
+    <div class="d-flex">
+      <div class="search-bar d-flex space-between">
+        <input type="text" class="search-input" (input)="
+            pendReasonTable
+              ? pendReasonTable.filterGlobal($event.target.value, 'contains')
+              : ''
+          " placeholder="Search ..." />
+        <img alt=" " src="./../../../../../../../assets/images-new/search.png"
+          style="width: 20px; height: 20px; margin-top: 10px;" />
+      </div>
+    </div>
+  </div>
+  <div class="d-flex space-between pl-30 pr-30 mt-20">
+    <div class="d-flex claim-status">
+      <div class="wrap-label">Selected Items</div>
+      <div class="count">{{ selectedSubscription?.length || 0 }}</div>
+    </div>
+    <div class="d-flex">
+      <span style="padding-top: 6px;" class="mr-20" *ngIf="currentRole !== 'Enrollment Auditor'">Add To</span>
+      <div
+        class="outline-btn mr-20"
+        (click)="!selectedSubscription?.length || addingToQueue ? '' : showGeneral()"
+        [class.disabled]="!selectedSubscription?.length || addingToQueue"
+        *ngIf="currentRole !== 'Enrollment Auditor'"
+      >
+        General Queue
+      </div>
+      <div
+        class="outline-btn-blue"
+        (click)="!selectedSubscription?.length || addingToQueue ? '' : showAssign()"
+        [class.disabled]="!selectedSubscription?.length || addingToQueue"
+      >
+        {{currentRole === 'Enrollment Auditor' ? 'Assign to Auditor' : 'Specific Auditor'}}
+      </div>
+    </div>
+  </div>
+  <div class="mt-30">
+    <p-table [tableStyle]="{ 'table-layout': 'auto' }" #pendReasonTable editMode="row" [columns]="cols"
+      [responsive]="true" [value]="subscriptionList" [paginator]="true" [rows]="10" dataKey="enrollmentTaskId"
+      [resizableColumns]="true" [scrollable]="false" [(selection)]="selectedSubscription">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3em">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th *ngFor="let col of cols" style="min-width: 150px;">
+            {{ col.header }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-rowData let-ri>
+        <tr [pSelectableRow]="rowData">
+          <td>
+            <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+          </td>
+          <td *ngFor="let col of cols">
+            {{ rowData[col.field] }}
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="paginatorleft" let-state>
+        <div class="result-no">
+          {{
+            subscriptionList?.length > 0
+              ? "Showing " +
+                (pendReasonTable?.filteredValue
+                  ? pendReasonTable?.filteredValue?.length > 0
+                    ? state.first + 1
+                    : 0
+                  : state.first + 1) +
+                " - " +
+                ((state.first + state.rows >
+                (pendReasonTable?.filteredValue || subscriptionList)?.length
+                  ? (pendReasonTable?.filteredValue || subscriptionList).length
+                  : state.first + state.rows
+                ) | number) +
+                " of " +
+                (pendReasonTable?.filteredValue || subscriptionList)?.length
+              : "Showing 0 - 0 of 0"
+          }}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="paginatorright">
+        <div class="result-no d-flex">
+          <div>Rows per page &nbsp; &nbsp;</div>
+          <select class="input100 result-no" style="width: 50px;" [(ngModel)]="pendReasonTable.rows"
+            (change)="pendReasonTable.reset()" [ngModelOptions]="{ standalone: true }">
+            <option>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td class="" [attr.colSpan]="cols.length">
+            No transactions available.
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<div class="mt-20 text-center" *ngIf="noData && subscriptionList?.length < 1">
+  <div class="claim-value">No Transactions Available.</div>
+</div>
+
+<p-dialog [blockScroll]="true" [style]="{ width: '50vw' }" [modal]="true" header="Assign to General Queue"
+  [(visible)]="viewGeneralQueue" (onHide)="clearForm()">
+  <form [formGroup]="generalForm">
+    <div class="d-flex mt-20">
+      <div class="wrap-input100 w-250">
+        <span class="label-input100">Priority</span>
+        <select name="transCat" formControlName="priorityLevel" class="input100" placeholder="Select Type">
+          <option value="" disabled selected hidden data-default>Select Type</option>
+          <option *ngFor="let type of priorities" value="{{ type }}">{{ type }}
+          </option>
+        </select>
+      <span class="focus-input100"></span>
+      <div class="error-msg" style="top: 57px;" 
+        *ngIf="generalForm.get('priorityLevel').touched && generalForm.get('priorityLevel').invalid">
+        <div *ngIf="generalForm.get('priorityLevel').hasError('required')">
+          Priority is Required.
+        </div>
+      </div>
+      </div>
+    </div>
+    <div class="d-flex">
+      <div class="wrap-input100">
+        <div class="label-input100">Comments</div>
+        <textarea name="comments" formControlName="comment" class="input100" maxlength="256"></textarea>
+        <span class="focus-input100"></span>
+        <div class="error-msg" style="top: 57px;" 
+          *ngIf="generalForm.get('comment').touched && generalForm.get('comment').invalid">
+          <div *ngIf="generalForm.get('comment').hasError('required')">
+            Comment is Required.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-end">
+      <div class="solid-btn" [class.disabled]="generalForm.invalid" (click)="generalForm.invalid ? '' : assignToGeneral()">Assign</div>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog [(visible)]="showAuditorAssign" [style]="{
+    width: '90vw',
+    height: '90%',
+    maxHeight: '95vh',
+    paddingBottom: '10px'
+  }" modal="true" dismissableMask="true" [responsive]="true" (onHide)="clearForm()"
+  [contentStyle]="{ padding: 0, maxHeight: '100%', overflowY: 'auto' }" [transitionOptions]="'0ms'">
+  <p-header>
+    Assign Subscriptions
+    <span *ngIf="assignableSubscriptions?.length > 0" class="section-title-count">
+      {{ assignableSubscriptions?.length }}
+    </span>
+  </p-header>
+  <form [formGroup]="assignmentForm">
+    <div class="d-flex pl-30 pr-30 mt-20">
+      <div class="wrap-input100 w-25 mr-30">
+        <div class="label-input100">Auditor Name</div>
+        <p-multiSelect formControlName="auditorNames" showTransitionOptions="225ms ease-out" [options]="auditorDetails"
+          [selectedItemsLabel]="'{0} Selected'" [virtualScroll]="true" (onChange)="auditorNameChange()" appendTo="body">
+          <ng-template let-spec pTemplate="item">
+            <div style="width: 100%">
+              <div class="ui-helper-clearfix auditor-name">
+                {{ spec.label }}
+              </div>
+              <div class="d-flex space-between">
+                <div class="ui-helper-clearfix queue-count">
+                  {{ spec.value?.assignCount }} Assigned Subscriptions
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </p-multiSelect>
+        <span class="focus-input100"></span>
+      </div>
+      <div class="wrap-input100 w-25 mr-30">
+        <span class="label-input100">Priority</span>
+        <select name="transCat" formControlName="priorityLevel" class="input100" placeholder="Select Type">
+          <option value="" disabled selected hidden data-default>Select Type</option>
+          <option *ngFor="let type of priorities" value="{{ type }}">{{ type }}
+          </option>
+        </select>
+        <span class="focus-input100"></span>
+        <div class="error-msg" style="top: 57px;"
+          *ngIf="assignmentForm.get('priorityLevel').touched && assignmentForm.get('priorityLevel').invalid">
+          <div *ngIf="assignmentForm.get('priorityLevel').hasError('required')">
+            Priority is Required.
+          </div>
+        </div>
+      </div>
+      <div class="wrap-input100 w-50">
+        <div class="label-input100">Comments</div>
+        <textarea name="comments" formControlName="comment" class="input100" maxlength="256"></textarea>
+        <span class="focus-input100"></span>
+        <div class="error-msg" style="top: 57px;"
+          *ngIf="assignmentForm.get('comment').touched && assignmentForm.get('comment').invalid">
+          <div *ngIf="assignmentForm.get('comment').hasError('required')">
+            Comment is Required.
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <p-table #dtm [columns]="cols" [value]="assignableSubscriptions" [styleClass]="'no_border'"
+    [tableStyle]="{ 'table-layout': 'auto' }" dataKey="claimId" [responsive]="true" [paginator]="true" [rows]="10"
+    [resizableColumns]="true">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <th *ngIf="col.field !== 'select'" id="col">
+            {{ col.header }}
+          </th>
+        </ng-container>
+      </tr>
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <th *ngIf="col.field !== 'select'" [ngSwitch]="col.filter" id="col">
+            <div class="wrap-input100 my-auto" *ngSwitchCase="'text'">
+              <input class="input100" style="min-width: 100px;" pInputText type="text"
+                (input)="dtm.filter($event.target.value, col.field, 'contains')" />
+              <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 my-auto" *ngSwitchCase="'dropdown'">
+              <select class="input100" style="min-width: 200px;"
+                (change)="dtm.filter($event.target.value, col.field, 'equals')">
+                <option value="" selected>All</option>
+                <option *ngFor="let val of getOptions(col, assignableSubscriptions)" [value]="val">{{ val }}</option>
+              </select>
+            </div>
+            <div class="wrap-input100 my-auto" style="visibility: hidden;" *ngSwitchDefault>
+              <input class="input100" style="min-width: 200px;" pInputText type="text"
+                (input)="dtm.filter($event.target.value, col.field, 'contains')" />
+              <span class="focus-input100"></span>
+            </div>
+          </th>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <td *ngIf="col.field !== 'select'">
+            {{ rowData[col.field] }}
+          </td>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="paginatorleft" let-state>
+      <div class="result-no">
+        {{
+          assignableSubscriptions?.length > 0
+            ? "Showing " +
+              (dtm?.filteredValue
+                ? dtm?.filteredValue?.length > 0
+                  ? state.first + 1
+                  : 0
+                : state.first + 1) +
+              " - " +
+              ((state.first + state.rows >
+              (dtm?.filteredValue || assignableSubscriptions)?.length
+                ? (dtm?.filteredValue || assignableSubscriptions).length
+                : state.first + state.rows
+              ) | number) +
+              " of " +
+              (dtm?.filteredValue || assignableSubscriptions)?.length
+            : "Showing 0 - 0 of 0"
+        }}
+      </div>
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+      <div class="result-no d-flex">
+        <div>Rows per page &nbsp; &nbsp;</div>
+        <select class="input100 result-no" style="width: 50px;" [(ngModel)]="dtm.rows" (change)="dtm.reset()"
+          [ngModelOptions]="{ standalone: true }">
+          <option>10</option>
+          <option>25</option>
+          <option>50</option>
+        </select>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td class="" [attr.colSpan]="cols.length - 1">
+          No subscriptions available for selected Auditor.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <div class="d-flex mt-20 flex-end pr-30 mb-15">
+    <div class="solid-btn mr-20" [class.disabled]="assignableSubscriptions?.length < 1 || assignmentForm.invalid" (click)="
+      assignableSubscriptions?.length < 1 || assignmentForm.invalid ? '' : assigntoAuditor()
+      ">
+      Assign
+    </div>
+  </div>
+</p-dialog>
+
+<p-confirmDialog header="Confirmation" [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"></p-confirmDialog>

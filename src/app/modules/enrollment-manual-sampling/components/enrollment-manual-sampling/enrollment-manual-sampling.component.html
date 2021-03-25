@@ -1,0 +1,662 @@
+<form [formGroup]="formGroup">
+  <div class="d-flex space-between mt-60 mb-20" href="#">
+    <div class="d-flex">
+      <div [routerLink]="'/configuration-menu'">
+        <img
+          alt=" "
+          src="./../../../../assets/images-new/left.png"
+          style="margin-right: 15px; cursor: pointer;"
+        />
+      </div>
+
+      <div>Back To Configuration</div>
+    </div>
+    <div
+      class="solid-btn"
+      (click)="
+        this.formGroup.get('selectedQueue').value === 'auditorQueue'
+          ? ''
+          : saveSettings()
+      "
+    >
+      Save Settings
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume tab tab-1 mb-30"
+    style="padding: 20px 0px 0px 20px"
+  >
+    <div class="d-flex">
+      <span class="section-title">Processed Request Count</span>
+    </div>
+    <div class="d-flex pl-30 mt-15">
+      <div class="attachment-comment-head">Transaction Processed Date</div>
+    </div>
+    <div class="d-flex pl-30">
+      <div class="wrap-input100 w-200 mr-30">
+        <div class="label-input100">From</div>
+        <p-calendar
+          formControlName="processedFromDate"
+          appendTo="body"
+          [showIcon]="true"
+          dateFormat="mm/dd/yy"
+          [maxDate]="this.getFormControl('processedToDate').value"
+          [minDate]="minDate"
+          yearRange="1970:2099"
+          [monthNavigator]="true"
+          [yearNavigator]="true"
+        ></p-calendar>
+      </div>
+      <div class="wrap-input100 w-200 mr-30">
+        <div class="label-input100">To</div>
+        <p-calendar
+          formControlName="processedToDate"
+          dateFormat="mm/dd/yy"
+          [showIcon]="true"
+          dateFormat="mm/dd/yy"
+          yearRange="1970:2099"
+          appendTo="body"
+          [minDate]="this.getFormControl('processedFromDate').value"
+          [maxDate]="today"
+          [monthNavigator]="true"
+          [yearNavigator]="true"
+        >
+        </p-calendar>
+      </div>
+      <div class="d-flex claim-status mt-10 mr-20">
+        <div class="wrap-label" style="color: black;">Total Transactions</div>
+        <div class="count">{{ formGroup?.value?.total }}</div>
+      </div>
+
+      <div class="d-flex mt-10 mr-20">
+        <div class="outline-btn" (click)="closeAllAccordionTabs()">
+          Refresh Transaction Statistics
+        </div>
+      </div>
+    </div>
+    <div class="mb-30 pl-30">
+      <div class="grid-container" style="padding: 0px !important">
+        <div class="grid-item" *ngIf="isWorkCategoryConfigured('Work Basket')">
+          <div class="label-placeholder">Work Basket</div>
+          <input type="text" formControlName="workbasket" class="label-value" />
+        </div>
+        <div
+          class="grid-item"
+          *ngIf="isWorkCategoryConfigured('Reconciliation')"
+        >
+          <div class="label-placeholder">Reconciliation</div>
+          <input
+            type="text"
+            formControlName="reconciliation"
+            class="label-value"
+          />
+        </div>
+        <div class="grid-item" *ngIf="isWorkCategoryConfigured('Fallout')">
+          <div class="label-placeholder">Fallout</div>
+          <input type="text" formControlName="fallout" class="label-value" />
+        </div>
+        <div
+          class="grid-item"
+          *ngIf="isWorkCategoryConfigured('New Group Enrollment')"
+        >
+          <div class="label-placeholder">New Group</div>
+          <input type="text" formControlName="newGroup" class="label-value" />
+        </div>
+        <div
+          class="grid-item"
+          *ngIf="isWorkCategoryConfigured('Group Renewal')"
+        >
+          <div class="label-placeholder">Group Renewal</div>
+          <input
+            type="text"
+            formControlName="groupRenewal"
+            class="label-value"
+          />
+        </div>
+        <div
+          class="grid-item"
+          *ngIf="isWorkCategoryConfigured('ID Card Request')"
+        >
+          <div class="label-placeholder">ID Card Request</div>
+          <input
+            type="text"
+            formControlName="idCardRequest"
+            class="label-value"
+          />
+        </div>
+
+        <div
+          class="grid-item"
+          *ngIf="isWorkCategoryConfigured('Bulk Termination')"
+        >
+          <div class="label-placeholder">Bulk Termination</div>
+          <input
+            type="text"
+            formControlName="bulkTermination"
+            class="label-value"
+          />
+        </div>
+        <div
+          class="grid-item"
+          *ngIf="isWorkCategoryConfigured('Payment Posting')"
+        >
+          <div class="label-placeholder">Payment Posting</div>
+          <input
+            type="text"
+            formControlName="paymentPosting"
+            class="label-value"
+          />
+        </div>
+        <div
+          class="grid-item"
+          *ngIf="isWorkCategoryConfigured('Other Tickets')"
+        >
+          <div class="label-placeholder">Other Requests</div>
+          <input
+            type="text"
+            formControlName="otherTickets"
+            class="label-value"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex mt-15 mb-15" *ngIf="errorList.length !== 0">
+    <div *ngFor="let item of errorList" class="d-flex">
+      <ul class="m-0">
+        <li style="color: red">{{ item }}</li>
+      </ul>
+    </div>
+  </div>
+  <div>
+    <div class="md-stepper-horizontal blue bg-transperant">
+      <div
+        class="md-step"
+        for="tab-menu1"
+        [ngClass]="[
+          selectedWorkCategoryList.length === 0 ? 'active' : 'done',
+          divId === 2 ? 'editable pointer-div' : ''
+        ]"
+        style="border-left: none"
+        (click)="setDivId(2)"
+      >
+        <div class="md-step-circle">
+          1
+        </div>
+        <div class="md-step-title">Work Category</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div
+        class="md-step"
+        for="tab-menu1"
+        [ngClass]="[
+          selectedTransactionCategoryList.length === 0 ? 'active' : 'done',
+          divId === 1 ? 'editable pointer-div' : ''
+        ]"
+        style="border-left: none"
+        (click)="setDivId(1)"
+        [ngClass]="{ editable: divId === 1 }"
+      >
+        <div class="md-step-circle">
+          2
+        </div>
+        <div class="md-step-title">Transaction Category</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div
+        class="md-step"
+        [ngClass]="[
+          selectedBenefitPlanList.length === 0 ? 'active' : 'done',
+          divId === 3 ? 'editable pointer-div' : ''
+        ]"
+        for="tab-menu2"
+        (click)="setDivId(3)"
+        style="border-left: none"
+      >
+        <div class="md-step-circle">
+          3
+        </div>
+        <div class="md-step-title">Benefit Plan</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div
+        class="md-step"
+        for="tab-menu3"
+        [ngClass]="[
+          selectedBenefitPlanList.length === 0 ? 'active' : 'done',
+          divId === 4 ? 'editable pointer-div' : ''
+        ]"
+        style="border-left: none"
+        (click)="setDivId(4)"
+      >
+        <div class="md-step-circle">
+          4
+        </div>
+        <div class="md-step-title">Member Group</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+
+      <div
+        class="md-step"
+        for="tab-menu5"
+        [ngClass]="[
+          selectedUSerGroupsList.length === 0 ? 'active' : 'done',
+          divId === 6 ? 'editable pointer-div' : ''
+        ]"
+        style="border-left: none"
+        (click)="setDivId(6)"
+      >
+        <div class="md-step-circle">
+          5
+        </div>
+        <div class="md-step-title">User Group & Enrollment Specialist</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+      <div
+        class="md-step active"
+        for="tab-menu5"
+        [ngClass]="{ 'editable pointer-div': divId === 8 }"
+        style="border-left: none"
+        (click)="setDivId(8)"
+        x
+      >
+        <div class="md-step-circle">
+          6
+        </div>
+        <div class="md-step-title">Review</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0 "
+    style="border-radius: 8px;"
+    [hidden]="divId !== 2"
+  >
+    <div class="d-flex mt-30">
+      <p-pickList
+        filterBy="name"
+        [source]="this.getFormControl('availableWorkCategory').value"
+        class="w-100"
+        [sourceHeader]="'Work  Categories'"
+        [targetHeader]="'Selected Work Categories'"
+        [target]="this.getFormControl('selectedWorkCategory').value"
+      >
+        <ng-template let-item pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <p>{{ item.name }}</p>
+          </div>
+        </ng-template>
+      </p-pickList>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0"
+    style="border-radius: 8px;"
+    [hidden]="divId !== 1"
+  >
+    <div class="d-flex mt-30">
+      <p-pickList
+        filterBy="name"
+        [source]="this.getFormControl('availableTransactionCategory').value"
+        class="w-100"
+        [sourceHeader]="'Transaction Categories'"
+        [targetHeader]="'Selected Transaction Categories'"
+        [target]="this.getFormControl('selectedTransactionCategory').value"
+      >
+        <ng-template let-item pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <p>{{ item.name }}</p>
+          </div>
+        </ng-template>
+      </p-pickList>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0"
+    style="border-radius: 8px;"
+    [hidden]="divId !== 3"
+  >
+    <div class="d-flex mt-30">
+      <p-pickList
+        filterBy="name"
+        [source]="this.getFormControl('availableBenefitPlans').value"
+        class="w-100"
+        [sourceHeader]="'Benefit Plans'"
+        [targetHeader]="'Selected Benefit Plans'"
+        [target]="this.getFormControl('selectedBenefitPlan').value"
+      >
+        <ng-template let-item pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <p>{{ item.name }}</p>
+          </div>
+        </ng-template>
+      </p-pickList>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0"
+    style="border-radius: 8px;"
+    [hidden]="divId !== 4"
+  >
+    <div class="d-flex mt-30">
+      <p-pickList
+        filterBy="name"
+        [source]="this.getFormControl('availableMemberGroups').value"
+        [sourceHeader]="'Member Groups'"
+        class="w-100"
+        [targetHeader]="'Selected Member Groups'"
+        [target]="this.getFormControl('selectedMemberGroup').value"
+      >
+        <ng-template let-item pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <p>{{ item.name }}</p>
+          </div>
+        </ng-template>
+      </p-pickList>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0"
+    style="border-radius: 0 0 8px 8px;"
+    [hidden]="divId !== 6"
+  >
+    <div class="d-flex mt-15">
+      <div class="attachment-comment new">User Group</div>
+    </div>
+    <div class="d-flex">
+      <div class="wrap-input100 w-70">
+        <p-multiSelect
+          class="w-100"
+          [options]="this.getFormControl('avalaibelUSerGroups').value"
+          (onChange)="onMoveToTarget($event)"
+          appendTo="body"
+          formControlName="selectedUserGroup"
+          optionLabel="name"
+        ></p-multiSelect>
+      </div>
+    </div>
+    <div
+      class="d-flex mt-15"
+      *ngIf="
+        this.getFormControl('selectedUserGroup').value &&
+        this.getFormControl('selectedUserGroup').value.length > 0
+      "
+    >
+      <div class="attachment-comment new">Specialist</div>
+    </div>
+    <div
+      class="d-flex"
+      *ngIf="
+        this.getFormControl('selectedUserGroup').value &&
+        this.getFormControl('selectedUserGroup').value.length > 0
+      "
+    >
+      <p-pickList
+        filterBy="name"
+        [source]="this.getFormControl('availableEnrollmentSpecialist').value"
+        class="w-100"
+        [sourceHeader]="'Enrollment Specialists'"
+        [targetHeader]="'Selected For Audit'"
+        [target]="this.getFormControl('selectedEnrollmentSpecialist').value"
+      >
+        <ng-template let-item pTemplate="item">
+          <div class="ui-helper-clearfix">
+            <p>{{ item.name }}</p>
+          </div>
+        </ng-template>
+      </p-pickList>
+    </div>
+  </div>
+  <div
+    class="wrap-claim-volume pt-0 w-100"
+    style="border-radius: 8px;"
+    [hidden]="divId !== 8"
+  >
+    <div class="d-flex pl-30 pr-30 mt-30 space-between">
+      <div style="width: 33%">
+        <div class="attachment-comment new">Work Categories</div>
+        <div class="label-value" *ngIf="selectedWorkCategoryList?.length === 0">
+          <p class="">
+            All Work Categories Selected
+          </p>
+        </div>
+        <ng-container *ngIf="selectedWorkCategoryList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedWorkCategoryList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+      <div style="width: 33%">
+        <div class="attachment-comment new">Transaction Category</div>
+        <div
+          class="label-value"
+          *ngIf="selectedTransactionCategoryList?.length === 0"
+        >
+          All Transaction Categories Selected
+        </div>
+        <ng-container *ngIf="selectedTransactionCategoryList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedTransactionCategoryList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+      <div style="width: 33%">
+        <div class="attachment-comment new">Benefit Plan</div>
+        <div class="label-value" *ngIf="selectedBenefitPlanList?.length === 0">
+          All Benefit plans Selected
+        </div>
+        <ng-container *ngIf="selectedBenefitPlanList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedBenefitPlanList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="d-flex pl-30 pr-30 mt-30 space-between">
+      <div style="width: 33%">
+        <div class="attachment-comment new">Member Group</div>
+        <div class="label-value" *ngIf="selectedMemberGroupList?.length === 0">
+          All Member Groups Selected
+        </div>
+        <ng-container *ngIf="selectedMemberGroupList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedMemberGroupList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+      <div style="width: 33%">
+        <div class="attachment-comment new">User Groups</div>
+        <div class="label-value" *ngIf="selectedUSerGroupsList?.length === 0">
+          All User Groups Selected
+        </div>
+        <ng-container *ngIf="selectedUSerGroupsList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedUSerGroupsList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+      <div style="width: 33%">
+        <div class="attachment-comment new">Enrollment Specialist</div>
+        <div
+          class="label-value"
+          *ngIf="selectedEnrollmentSpecialistList?.length === 0"
+        >
+          All Enrollment Specialists Selected
+        </div>
+        <ng-container *ngIf="selectedEnrollmentSpecialistList?.length > 0">
+          <div
+            class="label-value"
+            *ngFor="let val of splitValue(selectedEnrollmentSpecialistList)"
+          >
+            {{ val }}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div
+    class="mt-30 d-flex space-between"
+    [hidden]="divId !== 8"
+    style="margin-bottom: 30px"
+  >
+    <div class="wrap-claim-volume w-100" [hidden]="divId !== 8">
+      <div class="d-flex mb-30">
+        <div class="outline-btn" (click)="onRefreshClick()">
+          Refresh Transaction Count
+        </div>
+      </div>
+      <div class="d-flex space-between mb-20">
+        <div class="d-flex claim-status mt-10">
+          <div
+            class="wrap-label label-value"
+            style="color: black;min-width: 15vw"
+          >
+            Total Transaction Count
+          </div>
+          <div class="count">{{ formGroup?.value?.totalCount || 0 }}</div>
+        </div>
+        <div class="d-flex claim-status mt-10">
+          <div
+            class="wrap-label  label-value"
+            style="color: black;min-width: 15vw"
+          >
+            Audit Transaction Count
+          </div>
+          <div class="count">{{ formGroup?.value?.auditClaimsCount || 0 }}</div>
+        </div>
+        <div class="d-flex claim-status mt-10">
+          <div
+            class="wrap-label  label-value"
+            style="color: black;min-width: 15vw"
+          >
+            Current Audit Queue Count
+          </div>
+          <div class="count">{{ formGroup?.value?.auditQueueCount || 0 }}</div>
+        </div>
+        <!-- <div class="d-flex w-30 space-between mr-30">
+          <div class="card-title-examiner pt-3">Total Claims Count</div>
+          <input
+            class="block-input"
+            readonly
+            formControlName="totalCount"
+          />
+        </div>
+        <div class="d-flex w-30 space-between mr-30">
+          <div class="card-title-examiner pt-3">Apply Sample %</div>
+          <div class="wrap-input100" style="width: 60px">
+            <input
+              class="input100"
+              (input)="calculatePercentage()"
+              type="number"
+              formControlName="samplePercentage"
+              max="100"
+              min="0"
+            />
+            <span class="focus-input100"></span>
+          </div>
+        </div>
+        <div class="d-flex w-30 space-between">
+          <div class="card-title-examiner pt-3">Audit Claims Count</div>
+          <input
+            class="block-input"
+            readonly
+            formControlName="auditClaimsCount"
+          />
+        </div> -->
+      </div>
+      <div class="d-flex flex-end mb-30">
+        <div class="d-flex flex-end w-100">
+          <div class="card-title-examiner pt-3 mr-30" style="color: #20558b">
+            Total Sampling %
+          </div>
+          <div class="wrap-input100 mb-0" style="width: 60px">
+            <input
+              class="input100"
+              (input)="calculatePercentage()"
+              type="number"
+              formControlName="samplePercentage"
+              style="font-size: 18px; color: cadetblue;"
+              pattern="^(?!0*(\.0+)?$)(\d{0,2}(\.\d{1,2})?|100(\.00?)?)$"
+            />
+
+            <span class="focus-input100"></span>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-end">
+        <div class="wrap-input100 w-25">
+          <span class="label-input100">Priority Level</span>
+          <select class="input100" formControlName="priority">
+            <option value="Low" selected>Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+          </select>
+          <span class="focus-input100"></span>
+        </div>
+      </div>
+      <div class="d-flex flex-end" *ngIf="!isAuditor; else auditor">
+        <div
+          class="outline-btn-blue  mr-30"
+          (click)="addToAuditQueue('generalQueue')"
+        >
+          Add to General Queue
+        </div>
+        <div class="outline-btn" (click)="addToAuditQueue('auditorQueue')">
+          Add to Auditor Queue
+        </div>
+      </div>
+      <ng-template #auditor>
+        <div class="d-flex flex-end">
+          <div
+            class="outline-btn"
+            (click)="addToAuditQueue('auditorsOwnQueue')"
+          >
+            Add to My Queue
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  <div class="d-flex flex-end">
+    <div
+      class="solid-btn"
+      (click)="
+        this.formGroup.get('selectedQueue').value === 'auditorQueue'
+          ? ''
+          : saveSettings()
+      "
+    >
+      Save Settings
+    </div>
+  </div>
+</form>
+
+<app-loader [showSpinner]="showSpinner"></app-loader>
+<p-confirmDialog
+  header="Confirmation"
+  [acceptButtonStyleClass]="'accept-button'"
+  [rejectButtonStyleClass]="'reject-button'"
+></p-confirmDialog>

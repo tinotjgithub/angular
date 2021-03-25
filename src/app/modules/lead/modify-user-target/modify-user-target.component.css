@@ -1,0 +1,130 @@
+/* @import '../../../../../assets/styles/input.scss'; */
+
+.btn {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-width: 0;
+    outline: none;
+    border-radius: 2px;
+    transition: background-color .3s;
+    min-width: 140px;
+    height: 38px !important;
+    padding: 2px;
+    color: white;
+    background-color: #197ec0;
+    box-shadow: 0px 5px 7px #333333b0;
+  }
+
+  .btn-small {
+    min-width: 80px;
+  }
+  
+  .btn:hover {
+    filter: brightness(85%);
+  }
+  
+  .btn > * {
+    position: relative;
+  }
+  
+  .btn span {
+    display: block;
+    padding: 12px 24px;
+  }
+  
+  .btn:before {
+    content: "";
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    
+    display: block;
+    width: 0;
+    padding-top: 0;
+      
+    border-radius: 100%;
+    
+    background-color: rgba(236, 240, 241, .3);
+    
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+  
+  .btn:active:before {
+    width: 120%;
+    padding-top: 120%;
+    
+    transition: width .2s ease-out, padding-top .2s ease-out;
+  }
+
+  .btn-primary {
+      background-color: #197ec0;
+  }
+
+  .heading {    
+    font-size: 24px;
+    color: #636363;
+    line-height: -5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .container-card {
+    background-color: #ffffff;
+    border: none;
+    padding: 0.571em 1em;
+    margin: 10px;
+    border-radius: 4px;
+  }
+  .actions_link {
+    margin-right: 5px;
+    display: flex;
+  }
+  .actions_link i {
+    padding-top: 4px;
+  }
+
+  ::ng-deep .ui-table {
+    background: #ffffff;
+    border: none;
+    /* box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.24); */
+  }
+
+  ::ng-deep body .ui-table .ui-table-thead > tr > th {
+    border: none;
+    border-bottom: 1px solid #212121;
+    font-weight: 400;
+    color: #fff;
+    background-color: #3394cb;
+  }
+
+  ::ng-deep body .ui-table .ui-table-tbody > tr > td {
+    border: none;
+  }
+
+  ::ng-deep body .ui-table .ui-table-caption {
+    background-color: #ffffff;
+    border: none;
+  }
+
+  ::ng-deep body #searchtable .ui-table .ui-table-wrapper {
+    border: 1px solid #212121;
+  }
+
+  ::ng-deep body .ui-paginator {
+    border: 1px solid #212121;
+  }
+
+  .btn-green {
+    background-color: #28a745;
+  }
+
+  .excel_icon {
+    padding: 0px;
+    display: inline;
+    top: 3px;
+  }

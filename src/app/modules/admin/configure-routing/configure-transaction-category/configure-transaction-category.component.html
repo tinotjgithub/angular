@@ -1,0 +1,105 @@
+<div class="d-flex cursor-pointer mt-60" href="#">
+    <div [routerLink]="'/admin-configuration'">
+      <img alt = " " src="./../../../../../assets/images-new/left.png" style="margin-right: 15px; cursor: pointer;">
+    </div>
+    <div>Back To Configuration</div>
+  </div>
+  <div class="d-flex mt-30">
+    <div class="wrap-pend-reason w-70 mr-30">
+      <div class="d-flex space-between">
+        <div>
+          <span class="section-title">Transaction Category</span><span *ngIf="categoryList?.length > 0" class="section-title-count">{{categoryList.length}}</span>
+        </div>
+        <div class="search-bar d-flex space-between mr-30">
+          <input type="text" class="search-input" (input)="filteTable($event.target.value)" placeholder="Search Category">
+          <img alt = " " src="./../../../../../assets/images-new/search.png" style="width: 20px; height: 20px; margin-top: 10px;">
+        </div>
+      </div>
+      <div class="mt-30" *ngIf="categoryList.length > 0">
+        <p-table [tableStyle]="{ 'table-layout': 'auto' }" #reasonTable editMode="row" [columns]="cols"
+          [value]="categoryList" [paginator]="true" [rows]="10" dataKey="transactionCategoryCode" [resizableColumns]="true"
+          [scrollable]="false">
+          <ng-template pTemplate="body" let-rowData let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="rowData">
+              <td>
+                <p-cellEditor>
+                  <ng-template pTemplate="input">
+                    <div class="wrap-input100 mb-0">
+                      <input class="input100" type="text" name="name" maxlength="30" [(ngModel)]="rowData.category" required
+                        placeholder="Enter Reassignment Reason">
+                      <span class="focus-input100"></span>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="output">
+                    {{ rowData.category }}
+                  </ng-template>
+                </p-cellEditor>
+              </td>
+              <td style="width: 115px;">
+                <div *ngIf="!editing">
+                  <img alt = " " src="./../../../../../assets/images-new/edit-form.png" pTooltip="Edit" pInitEditableRow
+                    title="Edit" (click)="onRowEditInit(rowData, ri)" style="cursor: pointer;margin-top: 12px;">
+                </div>
+                <div *ngIf="editing">
+                  <em pSaveEditableRow class="pi pi-check" pTooltip="Save" (click)="onRowEditSave(rowData, ri)"
+                    style="cursor: pointer; font-size: 30px; color:#20bc55; margin-top: 12px;"></em>
+                  <em pSaveEditableRow class="pi pi-times" pTooltip="Cancel" (click)="onRowEditCancel(rowData, ri)"
+                    style="cursor: pointer; margin-left: 20px; margin-top: 12px;"></em>
+                </div>
+              </td>
+              <td style="width: 115px;">
+                <div>
+                  <img alt = " " src="./../../../../../assets/images-new/delete.png" pTooltip="Delete"
+                    style="cursor: pointer; margin-top: 12px;" (click)="deleteRow(ri)">
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td class="text-center" [attr.colSpan]="3">
+                No categories available.
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="paginatorleft" let-state>
+            <div class="result-no">
+              {{categoryList?.length > 0 ? ('Showing ' + (state.first + 1) +' - ' + (((state.first + state.rows) > categoryList?.length ? (categoryList?.length) : (state.first + state.rows) ) | number) + ' of '+ categoryList?.length) : 'Showing 0 - 0 of 0'}}
+            </div>
+          </ng-template>
+          <ng-template pTemplate="paginatorright">
+            <div class="result-no d-flex">
+              <div>Rows per page &nbsp; &nbsp;</div>
+              <select class="input100 result-no" style="width: 50px;" [(ngModel)]="reasonTable.rows" [ngModelOptions]="{standalone: true}">
+                <option>10</option>
+                <option>25</option>
+                <option>50</option>
+              </select>
+            </div>
+          </ng-template>
+        </p-table>
+      </div>
+      <div class="mt-60 text-center" *ngIf="categoryList?.length < 1">
+        <p>No Transaction Category Present!! Please Add A Transaction Category.</p>
+      </div>
+    </div>
+  
+    <div class="wrap-pend-reason-form w-40">
+      <div class="pend-reason-form-header d-flex space-between">
+        <div>Add Transaction Category</div>
+      </div>
+      <div class="pend-reason-body">
+        <div class="pl-30 pr-30 mt-15">
+          <div class="wrap-input100">
+            <span class="label-input100">Category</span>
+            <input class="input100" maxlength="30" (keyup.enter)="category ? addReason() : ''" [(ngModel)]="category" type="text" placeholder="Enter Transaction Category">
+            <span class="focus-input100"></span>
+          </div>
+        </div>
+        <div class="d-flex flex-end mt-15 pr-30">
+          <div class="outline-btn-blue" (click)="category ? addReason() : ''" [class.disabled]="!category">Add</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-confirmDialog header="Confirmation" [acceptButtonStyleClass]="'accept-button'" [rejectButtonStyleClass]="'reject-button'"></p-confirmDialog>

@@ -1,0 +1,364 @@
+<div class="d-flex space-between mt-60" href="#">
+  <div class="d-flex">
+    <div [routerLink]="'/configuration-menu'">
+      <img
+        alt=" "
+        src="./../../../../assets/images-new/left.png"
+        style="margin-right: 15px; cursor: pointer;"
+      />
+    </div>
+
+    <div>Back To Configuration</div>
+  </div>
+</div>
+<div class="d-flex mt-30 space-between">
+  <div>
+    <span class="section-title ml-0">Audit Rebuttal Workflow</span>
+  </div>
+  <div
+    class="solid-btn"
+    [class.disabled]="
+      formGroupLevel1.invalid ||
+      formGroupLevel2.invalid ||
+      formGroupLevel3.invalid
+    "
+    (click)="
+      formGroupLevel1.invalid ||
+      formGroupLevel2.invalid ||
+      formGroupLevel3.invalid
+        ? ''
+        : onSave()
+    "
+  >
+    Save
+  </div>
+</div>
+<div class="mt-30">
+  <div class="wrap-pend-reason">
+    <div class="d-flex space-between">
+      <div>
+        <span class="section-title">Level 1</span>
+      </div>
+    </div>
+    <form [formGroup]="formGroupLevel1">
+      <div class="d-flex mt-20 pl-30">
+        <div class="d-flex mr-30">
+          <div class="card-title-specialist pt-1 mr-20">Enrollment Lead</div>
+          <div class="toggle-switch">
+            <input
+              type="checkbox"
+              formControlName="isLevelOneFlowEnabledForLead"
+              name="lead"
+            />
+            <label for="lead" class="toggle"></label>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="card-title-specialist pt-1 mr-20">Enrollment Manager</div>
+          <div class="toggle-switch">
+            <input
+              type="checkbox"
+              formControlName="isLevelOneFlowEnabledForManager"
+              name="manager"
+            />
+            <label for="manager" class="toggle"></label>
+          </div>
+        </div>
+      </div>
+      <div
+        class="d-flex justify-content-center workflow pl-30 pr-30 pb-30 mt-20 mb-30"
+      >
+        <div class="card-with-icon-boderless stage card-blue">
+          <div class="small-icon">
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/examiner.png"
+              class="w-100 h-auto"
+            />
+          </div>
+          <div class="ml-10 card-content">
+            <div class="card-title-specialist">Enrollment Specialist</div>
+          </div>
+        </div>
+        <div class="stage-connector"></div>
+        <ng-container
+          *ngIf="formGroupLevel1.value?.isLevelOneFlowEnabledForLead"
+        >
+          <div class="card-with-icon-boderless stage enrollmentlead">
+            <div class="small-icon">
+              <img
+                alt=" "
+                src="./../../../../../assets/images-new/lead.png"
+                class="w-100 h-auto"
+              />
+            </div>
+            <div class="ml-10 card-content">
+              <div class="card-title-specialist">Enrollment Lead</div>
+            </div>
+          </div>
+          <div class="stage-connector"></div>
+        </ng-container>
+        <ng-container
+          *ngIf="formGroupLevel1.value?.isLevelOneFlowEnabledForManager"
+        >
+          <div class="card-with-icon-boderless stage manager">
+            <div class="small-icon">
+              <img
+                alt=" "
+                src="./../../../../../assets/images-new/manager.png"
+                class="w-100 h-auto"
+              />
+            </div>
+            <div class="ml-10 card-content">
+              <div class="card-title-specialist">Enrollment Manager</div>
+            </div>
+          </div>
+          <div class="stage-connector"></div>
+        </ng-container>
+        <div class="card-with-icon-boderless stage enrollmentauditor">
+          <div class="small-icon">
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/auditor.png"
+              class="w-100 h-auto"
+            />
+          </div>
+          <div class="ml-10 card-content">
+            <div class="card-title-specialist">Enrollment Auditor</div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="wrap-pend-reason mt-30">
+    <div class="d-flex space-between">
+      <div>
+        <span class="section-title">Level 2</span>
+      </div>
+    </div>
+    <form [formGroup]="formGroupLevel2">
+      <div class="d-flex mt-20 pl-30">
+        <div class="d-flex mr-30">
+          <div class="card-title-specialist pt-1 mr-20">Enrollment Lead</div>
+          <div class="toggle-switch">
+            <input
+              type="checkbox"
+              formControlName="isLevelTwoFlowEnabledForLead"
+              name="lead"
+            />
+            <label for="lead" class="toggle"></label>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="card-title-specialist pt-1 mr-20">Enrollment Manager</div>
+          <div class="toggle-switch">
+            <input
+              type="checkbox"
+              formControlName="isLevelTwoFlowEnabledForManager"
+              name="manager"
+            />
+            <label for="manager" class="toggle"></label>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center workflow pl-30 pr-30 mt-20">
+        <div class="card-with-icon-boderless stage enrollmentauditor">
+          <div class="small-icon">
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/auditor.png"
+              class="w-100 h-auto"
+            />
+          </div>
+          <div class="ml-10 card-content">
+            <div class="card-title-specialist">Enrollment Auditor</div>
+          </div>
+        </div>
+        <div class="stage-connector"></div>       
+        <ng-container
+          *ngIf="formGroupLevel2.value?.isLevelTwoFlowEnabledForLead"
+        >
+          <div class="card-with-icon-boderless stage enrollmentlead">
+            <div class="small-icon">
+              <img
+                alt=" "
+                src="./../../../../../assets/images-new/lead.png"
+                class="w-100 h-auto"
+              />
+            </div>
+            <div class="ml-10 card-content">
+              <div class="card-title-specialist">Enrollment Lead</div>
+            </div>
+          </div>
+          <div class="stage-connector"></div>
+        </ng-container>
+        <ng-container
+        *ngIf="formGroupLevel2.value?.isLevelTwoFlowEnabledForManager"
+      >
+        <div class="card-with-icon-boderless stage manager">
+          <div class="small-icon">
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/manager.png"
+              class="w-100 h-auto"
+            />
+          </div>
+          <div class="ml-10 card-content">
+            <div class="card-title-specialist">Enrollment Manager</div>
+          </div>
+        </div>
+        <div class="stage-connector"></div>
+      </ng-container>
+        <div class="card-with-icon-boderless stage enrollmentauditor">
+          <div class="small-icon">
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/auditor.png"
+              class="w-100 h-auto"
+            />
+          </div>
+          <div class="ml-10 card-content">
+            <div class="card-title-specialist">Enrollment Auditor</div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="pl-30 mt-10 mb-12"
+        style="color: red;"
+        [ngStyle]="{
+          visibility: formGroupLevel2.invalid ? 'visible' : 'hidden'
+        }"
+      >
+        Atleast one Role should be selected in Level 2
+      </div>
+    </form>
+  </div>
+  <div class="wrap-pend-reason mt-30">
+    <div class="d-flex space-between">
+      <div>
+        <span class="section-title">Level 3</span>
+      </div>
+    </div>
+    <form [formGroup]="formGroupLevel3">
+      <div class="d-flex mt-20 pl-30">
+        <div class="d-flex mr-30">
+          <div class="card-title-specialist pt-1 mr-20">Enrollment Lead</div>
+          <div class="toggle-switch">
+            <input
+              type="checkbox"
+              formControlName="isLevelThreeFlowEnabledForLead"
+              name="lead"
+            />
+            <label for="lead" class="toggle"></label>
+          </div>
+        </div>
+        <div class="d-flex">
+          <div class="card-title-specialist pt-1 mr-20">Enrollment Manager</div>
+          <div class="toggle-switch">
+            <input
+              type="checkbox"
+              formControlName="isLevelThreeFlowEnabledForManager"
+              name="manager"
+            />
+            <label for="manager" class="toggle"></label>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center workflow pl-30 pr-30 mt-20">
+        <div
+          class="card-with-icon-boderless stage enrollmentauditor"
+          [ngStyle]="
+            formGroupLevel3.value?.isLevelThreeFlowEnabledForLead &&
+            formGroupLevel3.value?.isLevelThreeFlowEnabledForManager
+              ? { marginTop: '34px' }
+              : ''
+          "
+        >
+          <div class="small-icon">
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/auditor.png"
+              class="w-100 h-auto"
+            />
+          </div>
+          <div class="ml-10 card-content">
+            <div class="card-title-specialist">Enrollment Auditor</div>
+          </div>
+        </div>
+        <div class="stage-connector"></div>
+        <ng-container
+          *ngIf="
+            formGroupLevel3.value?.isLevelThreeFlowEnabledForLead ||
+            formGroupLevel3.value?.isLevelThreeFlowEnabledForManager
+          "
+        >
+          <div class="mr-30">
+            <div
+              class="card-with-icon-boderless stage enrollmentlead"
+              [class.mb-15]="
+                formGroupLevel3.value?.isLevelThreeFlowEnabledForManager
+              "
+              *ngIf="formGroupLevel3.value?.isLevelThreeFlowEnabledForLead"
+            >
+              <div class="small-icon">
+                <img
+                  alt=" "
+                  src="./../../../../../assets/images-new/lead.png"
+                  class="w-100 h-auto"
+                />
+              </div>
+              <div class="ml-10 card-content">
+                <div class="card-title-specialist">Enrollment Lead</div>
+              </div>
+            </div>
+            <div
+              class="card-with-icon-boderless stage manager"
+              *ngIf="formGroupLevel3.value?.isLevelThreeFlowEnabledForManager"
+            >
+              <div class="small-icon">
+                <img
+                  alt=" "
+                  src="./../../../../../assets/images-new/manager.png"
+                  class="w-100 h-auto"
+                />
+              </div>
+              <div class="ml-10 card-content">
+                <div class="card-title-specialist">Enrollment Manager</div>
+              </div>
+            </div>
+          </div>
+          <div class="stage-connector"></div>
+        </ng-container>
+        <div
+          class="card-with-icon-boderless stage enrollmentauditor"
+          [ngStyle]="
+            formGroupLevel3.value?.isLevelThreeFlowEnabledForLead &&
+            formGroupLevel3.value?.isLevelThreeFlowEnabledForManager
+              ? { marginTop: '34px' }
+              : ''
+          "
+        >
+          <div class="small-icon">
+            <img
+              alt=" "
+              src="./../../../../../assets/images-new/auditor.png"
+              class="w-100 h-auto"
+            />
+          </div>
+          <div class="ml-10 card-content">
+            <div class="card-title-specialist">Enrollment Auditor</div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="pl-30 mt-10 mb-12"
+        style="color: red;"
+        [ngStyle]="{
+          visibility: formGroupLevel3.invalid ? 'visible' : 'hidden'
+        }"
+      >
+        Atleast one Role should be selected in Level 3
+      </div>
+    </form>
+  </div>
+</div>
